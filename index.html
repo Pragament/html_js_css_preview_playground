@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Playground</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/theme/material.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+        }
+
+        .file-explorer {
+            width: 200px;
+            background: #2d2d2d;
+            color: #fff;
+            padding: 10px;
+            overflow-y: auto;
+        }
+
+        .file-explorer ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .file-explorer li {
+            padding: 5px;
+            cursor: pointer;
+        }
+
+        .file-explorer li:hover {
+            background: #444;
+        }
+
+        .file-explorer img {
+            width: 50%;
+            height: auto;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+
+        .editor-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .CodeMirror {
+            height: 33.33vh;
+            border-bottom: 1px solid #444;
+        }
+
+        .preview-container {
+            flex: 1;
+            display: flex;
+        }
+
+        .preview {
+            flex: 1;
+            border-left: 1px solid #444;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="file-explorer">
+        <ul>
+            <li onclick="toggleFile('html')">index.html</li>
+            <li onclick="toggleFile('css')">style.css</li>
+            <li onclick="toggleFile('js')">script.js</li>
+            <li><strong>Images</strong></li>
+            <li onclick="insertImagePath('images/400x400.png')">
+                <img src="images/400x400.png" alt="Sample 1">
+                sample1.jpg
+            </li>
+            <li onclick="insertImagePath('images/600x400.png')">
+                <img src="images/600x400.png" alt="Sample 2">
+                sample2.jpg
+            </li>
+            <li onclick="insertImagePath('images/400x600.png')">
+                <img src="images/400x600.png" alt="Sample 3">
+                sample3.jpg
+            </li>
+        </ul>
+    </div>
+    <div class="editor-container">
+        <textarea id="html-code" class="hidden">
+<!-- Add your HTML code here -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello World</title>
+</head>
+<body>
+    <h1>Hello, World!</h1>
+</body>
+</html>
+        </textarea>
+        <textarea id="css-code" class="hidden">
+/* Add your CSS here */
+        </textarea>
+        <textarea id="js-code" class="hidden">
+// Add your JavaScript here
+        </textarea>
+        <div class="preview-container">
+            <iframe id="preview"></iframe>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/mode/xml/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/mode/css/css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/mode/htmlmixed/htmlmixed.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/hint/show-hint.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/hint/javascript-hint.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/hint/html-hint.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/hint/css-hint.min.js"></script>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/hint/show-hint.min.css">
+    <script>
+        // Default sample code
+        const defaultHTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Playground</title>
+    <!-- Uncomment the following line to include an external CSS file -->
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <style>
+        /* Add your internal CSS here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            text-align: center;
+            padding: 50px;
+        }
+        h1 {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hello, World!</h1>
+    <p>Welcome to the Code Playground.</p>
+    <!-- Uncomment the following line to include an external JS file -->
+    <!-- <script src="script.js"><\/script> -->
+    <script>
+        // Add your internal JavaScript here
+        console.log('Hello from the script!');
+    <\/script>
+</body>
+</html>`;
+
+        const defaultCSS = `/* Add your CSS here */
+body {
+    background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+}
+
+p {
+    color: #666;
+}`;
+
+        const defaultJS = `// Add your JavaScript here
+console.log('Hello from script.js!');
+
+document.querySelector('h1').addEventListener('click', () => {
+    alert('You clicked the heading!');
+});`;
+
+        // Initialize CodeMirror editors with default content
+        const htmlEditor = CodeMirror.fromTextArea(document.getElementById('html-code'), {
+            mode: 'htmlmixed',
+            theme: 'material',
+            lineNumbers: true,
+            autoCloseTags: true,
+            value: defaultHTML,
+            extraKeys: { "Ctrl-Space": "autocomplete" },
+        });
+        const cssEditor = CodeMirror.fromTextArea(document.getElementById('css-code'), {
+            mode: 'css',
+            theme: 'material',
+            lineNumbers: true,
+            value: defaultCSS,
+            extraKeys: { "Ctrl-Space": "autocomplete" },
+        });
+        const jsEditor = CodeMirror.fromTextArea(document.getElementById('js-code'), {
+            mode: 'javascript',
+            theme: 'material',
+            lineNumbers: true,
+            value: defaultJS,
+            extraKeys: { "Ctrl-Space": "autocomplete" },
+        });
+
+        // Automatically show hints while typing
+        cssEditor.on("inputRead", function (cm, event) {
+            if (!cm.state.completionActive) {  // Prevent multiple popups
+                CodeMirror.commands.autocomplete(cm, null, { completeSingle: false });
+            }
+        });
+
+        // Automatically show hints while typing
+        htmlEditor.on("inputRead", function (cm, event) {
+            if (!cm.state.completionActive) {  // Prevent multiple popups
+                CodeMirror.commands.autocomplete(cm, null, { completeSingle: false });
+            }
+        });
+
+        // Automatically show hints while typing
+        jsEditor.on("inputRead", function (cm, event) {
+            if (!cm.state.completionActive) {  // Prevent multiple popups
+                CodeMirror.commands.autocomplete(cm, null, { completeSingle: false });
+            }
+        });
+
+        // Function to update the preview
+        function updatePreview() {
+            const html = htmlEditor.getValue();
+            const css = `<style>${cssEditor.getValue()}</style>`;
+            const js = `<script>
+                try {
+                    ${jsEditor.getValue()}
+                } catch (error) {
+                    console.error(error);
+                }
+            <\/script>`;
+            const preview = document.getElementById('preview');
+            preview.srcdoc = html + css + js;
+        }
+
+        // Update preview on editor change
+        htmlEditor.on('change', updatePreview);
+        cssEditor.on('change', updatePreview);
+        jsEditor.on('change', updatePreview);
+
+        // Function to toggle files
+        function toggleFile(type) {
+            const htmlEditorElement = htmlEditor.getWrapperElement();
+            const cssEditorElement = cssEditor.getWrapperElement();
+            const jsEditorElement = jsEditor.getWrapperElement();
+
+            htmlEditorElement.classList.add('hidden');
+            cssEditorElement.classList.add('hidden');
+            jsEditorElement.classList.add('hidden');
+
+            if (type === 'html') {
+                htmlEditorElement.classList.remove('hidden');
+            } else if (type === 'css') {
+                cssEditorElement.classList.remove('hidden');
+            } else if (type === 'js') {
+                jsEditorElement.classList.remove('hidden');
+            }
+        }
+
+        // Function to insert image path at cursor position
+        function insertImagePath(imagePath) {
+            const activeEditor = getActiveEditor();
+            if (activeEditor) {
+                const cursor = activeEditor.getCursor();
+                activeEditor.replaceRange(imagePath, cursor);
+            }
+        }
+
+        // Function to get the active editor
+        function getActiveEditor() {
+            const htmlEditorElement = htmlEditor.getWrapperElement();
+            const cssEditorElement = cssEditor.getWrapperElement();
+            const jsEditorElement = jsEditor.getWrapperElement();
+
+            if (!htmlEditorElement.classList.contains('hidden')) {
+                return htmlEditor;
+            } else if (!cssEditorElement.classList.contains('hidden')) {
+                return cssEditor;
+            } else if (!jsEditorElement.classList.contains('hidden')) {
+                return jsEditor;
+            }
+            return null;
+        }
+
+        // Show HTML editor by default
+        toggleFile('html');
+
+        // Initialize preview with default content
+        updatePreview();
+    </script>
+</body>
+
+</html>
