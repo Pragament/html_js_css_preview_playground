@@ -14,6 +14,32 @@
             padding: 0;
             display: flex;
             height: 100vh;
+            flex-direction: column;
+        }
+
+        .toolbar {
+            display: flex;
+            background: #2d2d2d;
+            padding: 10px;
+            gap: 10px;
+        }
+
+        .toolbar button {
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .toolbar button:hover {
+            background: #0056b3;
+        }
+
+        .main-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
         }
 
         .file-explorer {
@@ -27,6 +53,7 @@
         .file-explorer ul {
             list-style: none;
             padding: 0;
+            margin: 0;
         }
 
         .file-explorer li {
@@ -34,7 +61,7 @@
             cursor: pointer;
         }
 
-        .file-explorer li:hover {
+        .file-explorer li.hover:hover {
             background: #444;
         }
 
@@ -75,32 +102,267 @@
         .hidden {
             display: none;
         }
+
+        .divider-text {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 0;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .divider-text::before,
+        .divider-text::after {
+            content: "";
+            flex: 1;
+            border-bottom: 1px solid #ccc;
+            margin: 0 10px;
+        }
+
+        /* Floating Help Button */
+        .help-button {
+            visibility: hidden;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Chat Window */
+        .chat-window {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 300px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: none;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            background: #007bff;
+            color: white;
+            padding: 10px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            font-weight: bold;
+        }
+
+        .chat-body {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+            max-height: 300px;
+        }
+
+        .chat-footer {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ccc;
+        }
+
+        .chat-footer input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        .chat-footer button {
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+
+        .message {
+            margin-bottom: 10px;
+        }
+
+        .message.user {
+            text-align: right;
+        }
+
+        .message.bot {
+            text-align: left;
+        }
+
+        .message p {
+            display: inline-block;
+            padding: 8px;
+            border-radius: 10px;
+            max-width: 80%;
+        }
+
+        .message.user p {
+            background: #007bff;
+            color: white;
+        }
+
+        .message.bot p {
+            background: #f1f1f1;
+            color: #333;
+        }
+
+        /* Responsive Design for 7-inch Tablet */
+        @media (max-width: 600px) {
+            .toolbar {
+                gap: 3px;
+                padding: 5px;
+            }
+
+            .toolbar button {
+                padding: 4px 8px;
+                font-size: 10px;
+            }
+
+            .main-container {
+                flex-direction: column;
+            }
+
+            .file-explorer {
+                width: 100%;
+                height: 150px;
+            }
+
+            .editor-container {
+                height: 50vh;
+            }
+
+            .preview-container {
+                height: 30vh;
+            }
+
+            .help-button {
+                bottom: 10px;
+                right: 10px;
+            }
+
+            .chat-window {
+                width: 90%;
+                right: 5%;
+                bottom: 70px;
+            }
+        }
+
+        .toolbar button:disabled {
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 5px;
+        }
+
+        .divider {
+            width: 2px;
+            height: 24px;
+            background-color: #ccc;
+            margin: 0 10px;
+        }
     </style>
 </head>
 
 <body>
-    <div class="file-explorer">
-        <ul>
-            <li onclick="toggleFile('html')">index.html</li>
-            <li onclick="toggleFile('css')">style.css</li>
-            <li onclick="toggleFile('js')">script.js</li>
-            <li><strong>Images</strong></li>
-            <li onclick="insertImagePath('images/400x400.png')">
-                <img src="images/400x400.png" alt="Sample 1">
-                sample1.jpg
-            </li>
-            <li onclick="insertImagePath('images/600x400.png')">
-                <img src="images/600x400.png" alt="Sample 2">
-                sample2.jpg
-            </li>
-            <li onclick="insertImagePath('images/400x600.png')">
-                <img src="images/400x600.png" alt="Sample 3">
-                sample3.jpg
-            </li>
-        </ul>
+    <!-- Toolbar with Undo/Redo Buttons -->
+    <div class="toolbar">
+        <!-- Undo/Redo Button Group -->
+        <div class="button-group">
+            <button id="undo-button" onclick="undo()" disabled title="Undo the last action">↩️</button>
+            <button id="redo-button" onclick="redo()" disabled title="Redo the last undone action">↪️</button>
+            <button onclick="zoomIn()" title="Zoom in">🔍➕</button>
+            <button onclick="zoomOut()" title="Zoom out">🔍➖</button>
+        </div>
+    
+        <!-- Divider -->
+        <div class="divider"></div>
+    
+        <!-- Special Character Button Group -->
+        <div class="button-group">
+            <!-- Non-alphanumeric character buttons with hints -->
+            <button onclick="insertLoremIpsum('<')" title="Less-than sign: <">&lt;</button>
+            <button onclick="insertLoremIpsum('>')" title="Greater-than sign: >">&gt;</button>
+            <button onclick="insertLoremIpsum('/')" title="Forward slash: /">/</button>
+            <button onclick="insertLoremIpsum('&quot;')" title="Double quote: &quot;">"</button>
+            <button onclick="insertLoremIpsum('\'')" title="Single quote: '">'</button>
+            <button onclick="insertLoremIpsum('=')" title="Equals sign: =">=</button>
+            <button onclick="insertLoremIpsum('&')" title="Ampersand: &">&amp;</button>
+            <button onclick="insertLoremIpsum(';')" title="Semicolon: ;">;</button>
+            <button onclick="insertLoremIpsum('#')" title="Hash/Pound sign: #">#</button>
+            <button onclick="insertLoremIpsum('.')" title="Period/Dot: .">.</button>
+            <button onclick="insertLoremIpsum(':')" title="Colon: :">:</button>
+            <button onclick="insertLoremIpsum('-')" title="Hyphen: -">-</button>
+            <button onclick="insertLoremIpsum('_')" title="Underscore: _">_</button>
+            <button onclick="insertLoremIpsum('{')" title="Opening curly brace: {">{</button>
+            <button onclick="insertLoremIpsum('}')" title="Closing curly brace: }">}</button>
+            <button onclick="insertLoremIpsum('[')" title="Opening square bracket: [">[</button>
+            <button onclick="insertLoremIpsum(']')" title="Closing square bracket: ]">]</button>
+            <button onclick="insertLoremIpsum('(')" title="Opening parenthesis: (">(</button>
+            <button onclick="insertLoremIpsum(')')" title="Closing parenthesis: )">)</button>
+            <button onclick="insertLoremIpsum('!')" title="Exclamation mark: !">!</button>
+            <button onclick="insertLoremIpsum('*')" title="Asterisk: *">*</button>
+            <button onclick="insertLoremIpsum('|')" title="Vertical bar/Pipe: |">|</button>
+            <button onclick="insertLoremIpsum('?')" title="Question mark: ?">?</button>
+            <button onclick="insertLoremIpsum('@')" title="At symbol: @">@</button>
+            <button onclick="insertLoremIpsum('~')" title="Tilde: ~">~</button>
+            <button onclick="insertLoremIpsum('&copy;')" title="Copyright symbol: &copy;">&copy;</button>
+            <button onclick="insertLoremIpsum('&reg;')" title="Registered trademark symbol: &reg;">&reg;</button>
+            <button onclick="insertLoremIpsum('₹')" title="Indian Rupee symbol: ₹">₹</button>
+            <button onclick="insertLoremIpsum('$')" title="Dollar sign: $">$</button>
+        </div>
     </div>
-    <div class="editor-container">
-        <textarea id="html-code" class="hidden">
+
+    <div class="main-container">
+        <div class="file-explorer">
+            <ul>
+                <li class="hover" onclick="toggleFile('html')">index.html</li>
+                <li class="hover" onclick="toggleFile('css')">style.css</li>
+                <li class="hover" onclick="toggleFile('js')">script.js</li>
+            </ul>
+            <div class="divider-text">Text</div>
+
+            <strong></strong>
+            <ul>
+                <li class="hover"
+                    onclick="insertLoremIpsum('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.')">
+                    Insert Lorem Ipsum placeholder text
+                </li>
+            </ul>
+            <div class="divider-text">Images</div>
+            <strong></strong>
+            <ul>
+                <li class="hover" onclick="insertImagePath('./images/sample1.jpg')">
+                    sample1.jpg
+                    <img src="images/sample1.jpg" alt="Sample 1">
+                </li>
+                <li class="hover" onclick="insertImagePath('./images/sample2.jpg')">
+                    sample2.jpg
+                    <img src="images/sample2.jpg" alt="Sample 2">
+                </li>
+                <li class="hover" onclick="insertImagePath('./images/sample3.jpg')">
+                    sample3.jpg
+                    <img src="images/sample3.jpg" alt="Sample 3">
+                </li>
+            </ul>
+        </div>
+        <div class="editor-container">
+            <textarea id="html-code" class="hidden">
 <!-- Add your HTML code here -->
 <!DOCTYPE html>
 <html lang="en">
@@ -113,14 +375,35 @@
     <h1>Hello, World!</h1>
 </body>
 </html></textarea>
-        <textarea id="css-code" class="hidden">
+            <textarea id="css-code" class="hidden">
 /* Add your CSS here */
 </textarea>
-        <textarea id="js-code" class="hidden">
+            <textarea id="js-code" class="hidden">
 // Add your JavaScript here
 </textarea>
-        <div class="preview-container">
-            <iframe id="preview"></iframe>
+            <div class="preview-container">
+                <iframe id="preview"></iframe>
+            </div>
+        </div>
+    </div>
+    <!-- Floating Help Button -->
+    <button class="help-button" onclick="toggleChat()">?</button>
+
+    <!-- Chat Window -->
+    <div class="chat-window">
+        <div class="chat-header">Help Chat</div>
+        <div class="chat-body" id="chat-body">
+            <div class="message bot">
+                <p>Hello! How can I help you today?</p>
+            </div>
+            <div class="action-buttons">
+                <button onclick="showFAQs()">View FAQs</button>
+                <button onclick="showCustomMessageInput()">Send Custom Message</button>
+            </div>
+        </div>
+        <div class="chat-footer">
+            <input type="text" id="chat-input" placeholder="Type your message...">
+            <button onclick="sendMessage()">Send</button>
         </div>
     </div>
 
@@ -134,8 +417,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/javascript-hint.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/html-hint.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/css-hint.min.js"></script>
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/show-hint.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/show-hint.min.css">
     <script>
         // Default sample code
         const defaultHTML = `<!DOCTYPE html>
@@ -287,6 +569,17 @@ document.querySelector('h1').addEventListener('click', () => {
             }
         }
 
+        // Function to insert Lorem Ipsum at cursor position
+        function insertLoremIpsum(dummyText) {
+            const activeEditor = getActiveEditor();
+            if (activeEditor) {
+                const wrappedText = dummyText.replace(/(.{80})/g, "$1\n"); // Wrap every 80 characters
+                const cursor = activeEditor.getCursor();
+                activeEditor.replaceRange(wrappedText, cursor);
+                activeEditor.focus(); // Focus back on the editor
+            }
+        }
+
         // Function to get the active editor
         function getActiveEditor() {
             const htmlEditorElement = htmlEditor.getWrapperElement();
@@ -303,11 +596,138 @@ document.querySelector('h1').addEventListener('click', () => {
             return null;
         }
 
+        // Undo/Redo Functions
+        function undo() {
+            const activeEditor = getActiveEditor();
+            if (activeEditor) {
+                activeEditor.undo();
+                updateUndoRedoButtons(); // Update button states after undo
+            }
+        }
+
+        function redo() {
+            const activeEditor = getActiveEditor();
+            if (activeEditor) {
+                activeEditor.redo();
+                updateUndoRedoButtons(); // Update button states after undo
+            }
+        }
+
+        function zoomIn() {
+            document.body.style.zoom = (parseFloat(document.body.style.zoom || 1) + 0.1).toFixed(1);
+        }
+
+        function zoomOut() {
+            document.body.style.zoom = (parseFloat(document.body.style.zoom || 1) - 0.1).toFixed(1);
+        }
+
+        // Function to update undo/redo button states
+        function updateUndoRedoButtons() {
+            const activeEditor = getActiveEditor();
+            if (activeEditor) {
+                const undoButton = document.getElementById('undo-button');
+                const redoButton = document.getElementById('redo-button');
+                const history = activeEditor.historySize();
+                undoButton.disabled = !history.undo;
+                redoButton.disabled = !history.redo;
+            }
+        }
+
+        // Listen for changes in editors to update undo/redo buttons
+        htmlEditor.on('change', updateUndoRedoButtons);
+        cssEditor.on('change', updateUndoRedoButtons);
+        jsEditor.on('change', updateUndoRedoButtons);
+
         // Show HTML editor by default
         toggleFile('html');
 
         // Initialize preview with default content
         updatePreview();
+
+        // Chat Window Functions
+        function toggleChat() {
+            const chatWindow = document.querySelector('.chat-window');
+            chatWindow.style.display = chatWindow.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        function showFAQs() {
+            const chatBody = document.getElementById('chat-body');
+            chatBody.innerHTML = `
+        <div class="message bot">
+            <p>Here are some FAQs:</p>
+        </div>
+        <div class="action-buttons">
+            <button onclick="selectFAQ('How do I add an image?')">How do I add an image?</button>
+            <button onclick="selectFAQ('How do I style my page?')">How do I style my page?</button>
+            <button onclick="selectFAQ('How do I add JavaScript?')">How do I add JavaScript?</button>
+        </div>
+    `;
+        }
+
+        function selectFAQ(faq) {
+            const chatBody = document.getElementById('chat-body');
+            chatBody.innerHTML += `
+        <div class="message user">
+            <p>${faq}</p>
+        </div>
+    `;
+            // Simulate a bot response
+            setTimeout(() => {
+                chatBody.innerHTML += `
+            <div class="message bot">
+                <p>This is a response to: "${faq}".</p>
+            </div>
+        `;
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }, 1000);
+        }
+
+        function showCustomMessageInput() {
+            const chatFooter = document.getElementById('chat-footer');
+            chatFooter.style.display = 'flex';
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            if (!message) return;
+
+            // Add user message to chat
+            const chatBody = document.getElementById('chat-body');
+            chatBody.innerHTML += `
+        <div class="message user">
+            <p>${message}</p>
+        </div>
+    `;
+
+            // Clear input
+            input.value = '';
+
+            // Scroll to bottom
+            chatBody.scrollTop = chatBody.scrollHeight;
+
+            // Send message to API (mock API for demonstration)
+            const response = await mockApiCall(message);
+
+            // Add bot response to chat
+            chatBody.innerHTML += `
+        <div class="message bot">
+            <p>${response}</p>
+        </div>
+    `;
+
+            // Scroll to bottom
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        // Mock API call (replace with actual API call)
+        async function mockApiCall(message) {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve(`You said: "${message}". This is a mock response.`);
+                }, 1000);
+            });
+        }
     </script>
 </body>
 
