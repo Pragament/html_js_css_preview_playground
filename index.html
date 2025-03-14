@@ -19,6 +19,7 @@
 
         .toolbar {
             display: flex;
+            flex-direction: column;
             background: #2d2d2d;
             padding: 10px;
             gap: 10px;
@@ -100,7 +101,7 @@
         }
 
         .hidden {
-            display: none;
+            display: none !important;
         }
 
         .divider-text {
@@ -290,6 +291,11 @@
             border-left: none;
             border-top: 1px solid #444;
         }
+
+        #special-char-buttons {
+            flex-basis: 100%;
+            /* Forces it to take full width and move to the next line */
+        }
     </style>
 </head>
 
@@ -298,18 +304,27 @@
     <div class="toolbar">
         <!-- Undo/Redo Button Group -->
         <div class="button-group">
-            <button onclick="togglePreviewLayout()" disabled id="preview-toggle-button">👁️🔄</button>
+            <button onclick="togglePreviewLayout()" disabled id="preview-toggle-button"
+                title="Toggle Preview Layout">👁️🔄</button>
             <button id="undo-button" onclick="undo()" disabled title="Undo the last action">↩️</button>
             <button id="redo-button" onclick="redo()" disabled title="Redo the last undone action">↪️</button>
             <button onclick="zoomIn()" title="Zoom in">🔍➕</button>
             <button onclick="zoomOut()" title="Zoom out">🔍➖</button>
+            <button onclick="insertTemplate()" title="Insert Template">🔥📄</button>
+            <button onclick="selectAll()" title="Select All">Select All</button>
+            <button onclick="copyText()" title="Copy">Copy</button>
+            <button onclick="pasteText()" title="Paste">Paste</button>
+            <button onclick="clearEditor()" title="Clear Editor">Clear</button>
+            <button onclick="toggleAutocomplete()" id="autocomplete-button" title="Toggle Autocomplete">Autocomplete:
+                Off</button>
+            <button onclick="prettifyCode()" title="Prettify Code">Prettify</button>
+            <button onclick="createNewFile()" title="Create New File">New File</button>
+            <button onclick="viewAutosavedFiles()" title="View Autosaved Files">View Autosaved Files</button>
+            <button onclick="toggleSpecialChars()" title="Show/Hide Special Characters">👁️🎹</button>
         </div>
 
-        <!-- Divider -->
-        <div class="divider"></div>
-
         <!-- Special Character Button Group -->
-        <div class="button-group">
+        <div class="button-group" id="special-char-buttons">
             <!-- Non-alphanumeric character buttons with hints -->
             <button onclick="insertLoremIpsum('<')" title="Less-than sign: <">&lt;</button>
             <button onclick="insertLoremIpsum('>')" title="Greater-than sign: >">&gt;</button>
@@ -379,17 +394,7 @@
         <div class="editor-container">
             <textarea id="html-code" class="hidden">
 <!-- Add your HTML code here -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello World</title>
-</head>
-<body>
-    <h1>Hello, World!</h1>
-</body>
-</html></textarea>
+</textarea>
             <textarea id="css-code" class="hidden">
 /* Add your CSS here */
 </textarea>
@@ -585,6 +590,29 @@ document.querySelector('h1').addEventListener('click', () => {
         }
 
         // Function to insert Lorem Ipsum at cursor position
+        function insertTemplate() {
+            const activeEditor = getActiveEditor();
+            if (activeEditor) {
+                const wrappedText = `<!-- Add your HTML code here -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello World</title>
+</head>
+<body>
+    <h1>Hello, World!</h1>
+</body>
+</html>`;
+                const cursor = activeEditor.getCursor();
+                clearEditor();
+                activeEditor.replaceRange(wrappedText, cursor);
+                activeEditor.focus(); // Focus back on the editor
+            }
+        }
+
+        // Function to insert Lorem Ipsum at cursor position
         function insertLoremIpsum(dummyText) {
             const activeEditor = getActiveEditor();
             if (activeEditor) {
@@ -755,6 +783,58 @@ document.querySelector('h1').addEventListener('click', () => {
             } else {
                 mainContainer.classList.remove('preview-bottom');
                 mainContainer.classList.add('preview-right');
+            }
+        }
+
+        // Function to select all text in the active editor
+        function selectAll() {
+            const activeEditor = getActiveEditor();
+            if (activeEditor) {
+                activeEditor.execCommand('selectAll');
+            }
+        }
+
+        // Function to copy selected text in the active editor
+        function copyText() {
+            const activeEditor = getActiveEditor();
+            if (activeEditor) {
+                const selectedText = activeEditor.getSelection();
+                if (selectedText) {
+                    navigator.clipboard.writeText(selectedText).then(() => {
+                        console.log('Text copied to clipboard');
+                    }).catch(err => {
+                        console.error('Failed to copy text: ', err);
+                    });
+                }
+            }
+        }
+
+        // Function to paste text into the active editor
+        function pasteText() {
+            const activeEditor = getActiveEditor();
+            if (activeEditor) {
+                navigator.clipboard.readText().then(text => {
+                    const cursor = activeEditor.getCursor();
+                    activeEditor.replaceRange(text, cursor);
+                });
+            }
+        }
+
+        // Function to clear the active editor
+        function clearEditor() {
+            const activeEditor = getActiveEditor();
+            if (activeEditor) {
+                activeEditor.setValue('');
+            }
+        }
+
+        // Function to toggle the visibility of the special character buttons
+        function toggleSpecialChars() {
+            const specialCharButtons = document.getElementById('special-char-buttons');
+            if (specialCharButtons.classList.contains('hidden')) {
+                specialCharButtons.classList.remove('hidden');
+            } else {
+                specialCharButtons.classList.add('hidden');
             }
         }
     </script>
