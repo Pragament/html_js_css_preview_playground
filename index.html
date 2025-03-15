@@ -31,6 +31,8 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            padding: 6px 10px;;
+            font-size: x-large;
         }
 
         .toolbar button:hover {
@@ -77,11 +79,14 @@
             flex: 1;
             display: flex;
             flex-direction: column;
+            /*max-width: 93%;*/
         }
 
         .CodeMirror {
             /*height: 33.33vh;*/
             border-bottom: 1px solid #444;
+            /*white-space: pre-wrap;*/
+            /* Wrap text */
         }
 
         .preview-container {
@@ -296,7 +301,31 @@
             flex-basis: 100%;
             /* Forces it to take full width and move to the next line */
         }
+
+        #capsWarning {
+            display: none;
+            color: red;
+            font-weight: bold;
+            animation: blink 1s infinite alternate;
+        }
+
+        @keyframes blink {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify-html.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify-css.min.js"></script>
 </head>
 
 <body>
@@ -304,7 +333,7 @@
     <div class="toolbar">
         <!-- Undo/Redo Button Group -->
         <div class="button-group">
-            <button onclick="togglePreviewLayout()" disabled id="preview-toggle-button"
+            <button onclick="togglePreviewLayout()" hidden id="preview-toggle-button"
                 title="Toggle Preview Layout">👁️🔄</button>
             <button id="undo-button" onclick="undo()" disabled title="Undo the last action">↩️</button>
             <button id="redo-button" onclick="redo()" disabled title="Redo the last undone action">↪️</button>
@@ -314,13 +343,14 @@
             <button onclick="selectAll()" title="Select All">Select All</button>
             <button onclick="copyText()" title="Copy">Copy</button>
             <button onclick="pasteText()" title="Paste">Paste</button>
-            <button onclick="clearEditor()" title="Clear Editor">Clear</button>
-            <button onclick="toggleAutocomplete()" id="autocomplete-button" title="Toggle Autocomplete">Autocomplete:
-                Off</button>
-            <button onclick="prettifyCode()" title="Prettify Code">Prettify</button>
-            <button onclick="createNewFile()" title="Create New File">New File</button>
-            <button onclick="viewAutosavedFiles()" title="View Autosaved Files">View Autosaved Files</button>
+            <button onclick="clearEditor()" title="Clear Editor">Clear🚫📝</button>
+            <button onclick="toggleAutocomplete()" id="autocomplete-button" title="Toggle Autocomplete">💡:❌Off</button>
+            <button onclick="prettifyCode()" title="Prettify Code">✨ Prettify</button>
+            <button hidden onclick="createNewFile()" title="Create New File">🆕📄➕</button>
+            <button hidden onclick="saveFile()" title="Create New File">Save 💾📄</button>
+            <button hidden onclick="viewAutosavedFiles()" title="View Saved Files">👁️📄</button>
             <button onclick="toggleSpecialChars()" title="Show/Hide Special Characters">👁️🎹</button>
+            <p id="capsWarning">⚠️ Caps Lock is ON!</p>
         </div>
 
         <!-- Special Character Button Group -->
@@ -528,7 +558,9 @@ document.querySelector('h1').addEventListener('click', () => {
 
         // Automatically show hints while typing
         htmlEditor.on("inputRead", function (cm, event) {
-            if (!cm.state.completionActive) {  // Prevent multiple popups
+            const autocompleteButton = document.getElementById('autocomplete-button');
+            const isOn = autocompleteButton.textContent.includes('On');
+            if (isOn && !cm.state.completionActive) {  // Prevent multiple popups
                 CodeMirror.commands.autocomplete(cm, null, { completeSingle: false });
             }
         });
@@ -665,7 +697,7 @@ document.querySelector('h1').addEventListener('click', () => {
         }
 
         // Function to update undo/redo button states
-        function updateUndoRedoButtons() {
+        function updateUndoRedoButtons(event) {
             const activeEditor = getActiveEditor();
             if (activeEditor) {
                 const undoButton = document.getElementById('undo-button');
@@ -673,6 +705,50 @@ document.querySelector('h1').addEventListener('click', () => {
                 const history = activeEditor.historySize();
                 undoButton.disabled = !history.undo;
                 redoButton.disabled = !history.redo;
+                checkCapsLock();
+            }
+        }
+
+        function checkCapsLock() {
+            document.addEventListener('keydown', function (event) {
+                if (event.getModifierState("CapsLock")) {
+                    showCapsLockWarning();
+                } else {
+                    hideCapsLockWarning();
+                }
+            });
+
+            document.addEventListener('keyup', function (event) {
+                if (!event.getModifierState("CapsLock")) {
+                    hideCapsLockWarning();
+                }
+            });
+        }
+
+        function showCapsLockWarning() {
+            let warning = document.getElementById("capsWarning");
+            if (!warning) {
+                warning = document.createElement("div");
+                warning.id = "capsWarning";
+                warning.innerHTML = "⚠️ Caps Lock is ON!";
+                warning.style.position = "fixed";
+                warning.style.top = "10px";
+                warning.style.right = "10px";
+                warning.style.color = "red";
+                warning.style.background = "yellow";
+                warning.style.padding = "10px";
+                warning.style.border = "2px solid red";
+                warning.style.borderRadius = "5px";
+                warning.style.animation = "blink 0.3s infinite alternate";
+                document.body.appendChild(warning);
+            }
+            warning.style.display = "block";
+        }
+
+        function hideCapsLockWarning() {
+            const warning = document.getElementById("capsWarning");
+            if (warning) {
+                warning.style.display = "none";
             }
         }
 
@@ -835,6 +911,85 @@ document.querySelector('h1').addEventListener('click', () => {
                 specialCharButtons.classList.remove('hidden');
             } else {
                 specialCharButtons.classList.add('hidden');
+            }
+        }
+
+        // Function to toggle autocomplete on/off
+        function toggleAutocomplete() {
+            const autocompleteButton = document.getElementById('autocomplete-button');
+            const isOn = autocompleteButton.textContent.includes('On');
+            autocompleteButton.textContent = `💡: ${isOn ? '❌Off' : '✅On'}`;
+        }
+
+        // Function to prettify code in the active editor
+        function prettifyCode() {
+            const activeEditor = getActiveEditor();
+            if (activeEditor) {
+                const code = activeEditor.getValue();
+                const mode = activeEditor.getOption('mode');
+                let formattedCode;
+                if (mode === 'htmlmixed') {
+                    formattedCode = html_beautify(code);
+                } else if (mode === 'css') {
+                    formattedCode = css_beautify(code);
+                } else if (mode === 'javascript') {
+                    formattedCode = js_beautify(code);
+                }
+                activeEditor.setValue(formattedCode);
+            }
+        }
+
+        // Function to create a new file and autosave in local storage
+        function createNewFile() {
+            // If there's text in active editor, ask user to save it
+            const activeEditor = getActiveEditor();
+            if (activeEditor) {
+                const code = activeEditor.getValue();
+                if (code) {
+                    saveFile();
+                    // Clear the active editor
+                    clearEditor();
+                }
+            }
+        }
+
+        // Function to view autosaved files in the file explorer
+        function viewAutosavedFiles() {
+            const fileExplorer = document.querySelector('.file-explorer ul');
+            fileExplorer.innerHTML = '';
+            for (let i = 0; i < localStorage.length; i++) {
+                const fileName = localStorage.key(i);
+                const li = document.createElement('li');
+                li.className = 'hover';
+                li.textContent = fileName;
+                li.onclick = () => loadFile(fileName);
+                fileExplorer.appendChild(li);
+            }
+        }
+
+        // Function to load a file from local storage
+        function loadFile(fileName) {
+            console.log("loadFile " + fileName)
+            const content = localStorage.getItem(fileName);
+            console.log("content " + content)
+            const activeEditor = getActiveEditor();
+            if (activeEditor) {
+                activeEditor.setValue(content);
+            }
+        }
+
+        // Save the content of the active editor to local storage
+        function saveFile(fileName) {
+            console.log("saveFile " + fileName)
+            const activeEditor = getActiveEditor();
+            if (activeEditor) {
+                const fileName = prompt('Enter the name of the new file:');
+                if (fileName) {
+                    const content = activeEditor.getValue();
+                    console.log("content " + content)
+                    localStorage.setItem(fileName, content);
+                    viewAutosavedFiles();
+                }
             }
         }
     </script>
