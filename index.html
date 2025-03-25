@@ -6,37 +6,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Code Playground</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/codemirror.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/theme/material.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/theme/monokai.min.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
             display: flex;
             height: 100vh;
             flex-direction: column;
+            background-color: #1a1a2e;
+            color: #f8f8f2;
         }
 
         .toolbar {
             display: flex;
             flex-direction: column;
-            background: #2d2d2d;
-            padding: 10px;
-            gap: 10px;
+            background: #22223b;
+            padding: 15px;
+            gap: 12px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
         }
 
         .toolbar button {
-            background: #007bff;
-            color: white;
+            background: linear-gradient(135deg, #4a148c, #6a1b9a);
+            color: #fff;
             border: none;
-            border-radius: 5px;
+            border-radius: 10px;
             cursor: pointer;
-            padding: 6px 10px;;
-            font-size: x-large;
+            padding: 12px 20px;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-weight: 500;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+            border: 1px solid #512da8;
         }
 
         .toolbar button:hover {
-            background: #0056b3;
+            background: linear-gradient(135deg, #5e35b1, #7e57c2);
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .toolbar button:active {
+            background: linear-gradient(135deg, #4a148c, #6a1b9a);
+            transform: translateY(0) scale(0.95);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
         }
 
         .main-container {
@@ -46,11 +66,12 @@
         }
 
         .file-explorer {
-            width: 104px;
-            background: #2d2d2d;
+            width: 200px;
+            background: #22223b;
             color: #fff;
-            padding: 10px;
+            padding: 20px;
             overflow-y: auto;
+            border-right: 1px solid #444;
         }
 
         .file-explorer ul {
@@ -60,33 +81,42 @@
         }
 
         .file-explorer li {
-            padding: 5px;
+            padding: 12px 16px;
             cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .file-explorer li.hover:hover {
-            background: #444;
+            background: linear-gradient(135deg, #4a148c, #6a1b9a);
+            transform: translateX(4px);
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
         }
 
         .file-explorer img {
-            width: 90%;
+            width: 80%;
             height: auto;
-            border-radius: 5px;
-            margin-top: 5px;
+            border-radius: 6px;
+            margin-top: 10px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
         }
 
         .editor-container {
             flex: 1;
             display: flex;
             flex-direction: column;
-            /*max-width: 93%;*/
         }
 
         .CodeMirror {
-            /*height: 33.33vh;*/
             border-bottom: 1px solid #444;
-            /*white-space: pre-wrap;*/
-            /* Wrap text */
+            font-family: 'Fira Mono', monospace;
+            font-size: 16px;
+            background: #1a1a2e;
+            color: #f8f8f2;
         }
 
         .preview-container {
@@ -103,6 +133,7 @@
             width: 100%;
             height: 100%;
             border: none;
+            background-color: #fff;
         }
 
         .hidden {
@@ -113,128 +144,163 @@
             display: flex;
             align-items: center;
             text-align: center;
-            margin: 0;
+            margin: 15px 0;
             font-weight: bold;
-            color: #555;
+            color: #6c757d;
         }
 
         .divider-text::before,
         .divider-text::after {
             content: "";
             flex: 1;
-            border-bottom: 1px solid #ccc;
-            margin: 0 10px;
+            border-bottom: 1px solid #6c757d;
+            margin: 0 15px;
         }
 
-        /* Floating Help Button */
         .help-button {
             visibility: hidden;
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #007bff;
+            bottom: 30px;
+            right: 30px;
+            background-color: #ff6f61;
             color: white;
             border: none;
             border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            font-size: 24px;
+            width: 60px;
+            height: 60px;
+            font-size: 30px;
             cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s ease;
         }
 
-        /* Chat Window */
+        .help-button:hover {
+            background-color: #e53935;
+        }
+
+        .help-button:active {
+            background-color: #ff6f61;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
         .chat-window {
             position: fixed;
-            bottom: 80px;
-            right: 20px;
-            width: 300px;
-            background: white;
+            bottom: 90px;
+            right: 30px;
+            width: 350px;
+            background: #fff;
             border: 1px solid #ccc;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             display: none;
             flex-direction: column;
+            z-index: 1000;
         }
 
         .chat-header {
-            background: #007bff;
+            background: linear-gradient(135deg, #4a148c, #6a1b9a);
             color: white;
-            padding: 10px;
+            padding: 15px;
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
             font-weight: bold;
+            font-size: 20px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
         }
 
         .chat-body {
             flex: 1;
-            padding: 10px;
+            padding: 15px;
             overflow-y: auto;
             max-height: 300px;
+            background-color: #f5f5f5;
+            border-bottom: 1px solid #ccc;
         }
 
         .chat-footer {
             display: flex;
             padding: 10px;
-            border-top: 1px solid #ccc;
         }
 
         .chat-footer input {
             flex: 1;
-            padding: 8px;
+            padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
             margin-right: 10px;
+            font-size: 16px;
         }
 
         .chat-footer button {
-            background: #007bff;
+            background: linear-gradient(135deg, #4a148c, #6a1b9a);
             color: white;
             border: none;
             border-radius: 5px;
-            padding: 8px 12px;
+            padding: 10px 16px;
             cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .chat-footer button:hover {
+            background: linear-gradient(135deg, #5e35b1, #7e57c2);
+            transform: scale(1.05);
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .chat-footer button:active {
+            background: linear-gradient(135deg, #4a148c, #6a1b9a);
+            transform: scale(0.95);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
         }
 
         .message {
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
         }
 
         .message.user {
-            text-align: right;
+            align-items: flex-end;
         }
 
         .message.bot {
-            text-align: left;
+            align-items: flex-start;
         }
 
         .message p {
             display: inline-block;
-            padding: 8px;
-            border-radius: 10px;
+            padding: 12px;
+            border-radius: 18px;
             max-width: 80%;
+            font-size: 16px;
+            line-height: 1.4;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
         }
 
         .message.user p {
-            background: #007bff;
+            background: linear-gradient(135deg, #4a148c, #6a1b9a);
             color: white;
+            border-bottom-right-radius: 4px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
         }
 
         .message.bot p {
-            background: #f1f1f1;
+            background: #e0e0e0;
             color: #333;
+            border-bottom-left-radius: 4px;
         }
 
-        /* Responsive Design for 7-inch Tablet */
         @media (max-width: 600px) {
             .toolbar {
-                gap: 3px;
-                padding: 5px;
+                gap: 8px;
+                padding: 10px;
             }
 
             .toolbar button {
-                padding: 4px 8px;
-                font-size: 10px;
+                padding: 10px 16px;
+                font-size: 14px;
             }
 
             .main-container {
@@ -243,7 +309,9 @@
 
             .file-explorer {
                 width: 100%;
-                height: 150px;
+                height: 180px;
+                border-right: none;
+                border-bottom: 1px solid #444;
             }
 
             .editor-container {
@@ -255,35 +323,70 @@
             }
 
             .help-button {
-                bottom: 10px;
-                right: 10px;
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
             }
 
             .chat-window {
-                width: 90%;
-                right: 5%;
-                bottom: 70px;
+                width: 95%;
+                right: 2.5%;
+                bottom: 80px;
+            }
+
+            .chat-header {
+                font-size: 18px;
+                padding: 12px;
+            }
+
+            .chat-footer input {
+                padding: 8px;
+                font-size: 14px;
+            }
+
+            .chat-footer button {
+                padding: 8px 14px;
+                font-size: 14px;
+            }
+
+            .message p {
+                font-size: 14px;
+                padding: 10px;
             }
         }
 
         .toolbar button:disabled {
             pointer-events: none;
-            opacity: 0.5;
+            opacity: 0.6;
+            cursor: not-allowed;
+            background: #9e9e9e;
+            color: #fff;
+            text-shadow: none;
+            box-shadow: none;
+            border: none;
+        }
+
+        .toolbar button:disabled:hover {
+            transform: none;
+            box-shadow: none;
         }
 
         .button-group {
             display: flex;
-            gap: 5px;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: flex-start;
         }
 
         .divider {
             width: 2px;
-            height: 24px;
-            background-color: #ccc;
-            margin: 0 10px;
+            height: 30px;
+            background-color: #6c757d;
+            margin: 0 15px;
         }
 
-        /* Preview Layout Toggle */
         .preview-right {
             flex-direction: row;
         }
@@ -299,14 +402,53 @@
 
         #special-char-buttons {
             flex-basis: 100%;
-            /* Forces it to take full width and move to the next line */
+            display: none;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+        }
+
+        #special-char-buttons button {
+            padding: 10px 14px;
+            font-size: 14px;
+            background: linear-gradient(135deg, #34495e, #4267b2);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            font-weight: 500;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+            border: 1px solid #2c3e50;
+        }
+
+        #special-char-buttons button:hover {
+            background: linear-gradient(135deg, #2c3e50, #3b5998);
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+        }
+
+        #special-char-buttons button:active {
+            background: linear-gradient(135deg, #34495e, #4267b2);
+            transform: translateY(0) scale(0.95);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
         }
 
         #capsWarning {
             display: none;
-            color: red;
+            color: #ffeb3b;
             font-weight: bold;
             animation: blink 1s infinite alternate;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 15px;
+            background-color: #d32f2f;
+            border-radius: 5px;
+            z-index: 1000;
         }
 
         @keyframes blink {
@@ -323,39 +465,67 @@
             }
         }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify-html.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify-css.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
-    <!-- Toolbar with Undo/Redo Buttons -->
     <div class="toolbar">
-        <!-- Undo/Redo Button Group -->
         <div class="button-group">
-            <button onclick="togglePreviewLayout()" hidden id="preview-toggle-button"
-                title="Toggle Preview Layout">👁️🔄</button>
-            <button id="undo-button" onclick="undo()" disabled title="Undo the last action">↩️</button>
-            <button id="redo-button" onclick="redo()" disabled title="Redo the last undone action">↪️</button>
-            <button onclick="zoomIn()" title="Zoom in">🔍➕</button>
-            <button onclick="zoomOut()" title="Zoom out">🔍➖</button>
-            <button onclick="insertTemplate()" title="Insert Template">🔥📄</button>
-            <button onclick="selectAll()" title="Select All">Select All</button>
-            <button onclick="copyText()" title="Copy">Copy</button>
-            <button onclick="pasteText()" title="Paste">Paste</button>
-            <button onclick="clearEditor()" title="Clear Editor">Clear🚫📝</button>
-            <button onclick="toggleAutocomplete()" id="autocomplete-button" title="Toggle Autocomplete">💡:❌Off</button>
-            <button onclick="prettifyCode()" title="Prettify Code">✨ Prettify</button>
-            <button hidden onclick="createNewFile()" title="Create New File">🆕📄➕</button>
-            <button hidden onclick="saveFile()" title="Create New File">Save 💾📄</button>
-            <button hidden onclick="viewAutosavedFiles()" title="View Saved Files">👁️📄</button>
-            <button onclick="toggleSpecialChars()" title="Show/Hide Special Characters">👁️🎹</button>
+            <button onclick="togglePreviewLayout()" hidden id="preview-toggle-button" title="Toggle Preview Layout">
+                <i class="fas fa-eye-slash"></i> <span class="button-text">Preview</span>
+            </button>
+            <button id="undo-button" onclick="undo()" disabled title="Undo the last action">
+                <i class="fas fa-undo"></i> <span class="button-text">Undo</span>
+            </button>
+            <button id="redo-button" onclick="redo()" disabled title="Redo the last undone action">
+                <i class="fas fa-redo"></i> <span class="button-text">Redo</span>
+            </button>
+            <button onclick="zoomIn()" title="Zoom in">
+                <i class="fas fa-search-plus"></i> <span class="button-text">Zoom In</span>
+            </button>
+            <button onclick="zoomOut()" title="Zoom out">
+                <i class="fas fa-search-minus"></i> <span class="button-text">Zoom Out</span>
+            </button>
+            <button onclick="insertTemplate()" title="Insert Template">
+                <i class="fas fa-file-code"></i> <span class="button-text">Template</span>
+            </button>
+            <button onclick="selectAll()" title="Select All">
+                <i class="fas fa-file-alt"></i> <span class="button-text">Select All</span>
+            </button>
+            <button onclick="copyText()" title="Copy">
+                <i class="fas fa-copy"></i> <span class="button-text">Copy</span>
+            </button>
+            <button onclick="pasteText()" title="Paste">
+                <i class="fas fa-paste"></i> <span class="button-text">Paste</span>
+            </button>
+            <button onclick="clearEditor()" title="Clear Editor">
+                <i class="fas fa-trash"></i> <span class="button-text">Clear</span>
+            </button>
+            <button onclick="toggleAutocomplete()" id="autocomplete-button" title="Toggle Autocomplete">
+                <i class="fas fa-lightbulb"></i> <span class="button-text">Autocomplete: ❌Off</span>
+            </button>
+            <button onclick="prettifyCode()" title="Prettify Code">
+                <i class="fas fa-code"></i> <span class="button-text">Prettify</span>
+            </button>
+            <button onclick="saveFile()" title="Save File">
+                <i class="fas fa-save"></i> <span class="button-text">Save</span>
+            </button>
+            <button onclick="createNewFile()" title="Create New File">
+                <i class="fas fa-plus-circle"></i> <span class="button-text">New File</span>
+            </button>
+            <button onclick="viewAutosavedFiles()" title="View Saved Files">
+                <i class="fas fa-eye"></i> <span class="button-text">View Saved</span>
+            </button>
+            <button onclick="toggleSpecialChars()" title="Show/Hide Special Characters">
+                <i class="fas fa-keyboard"></i> <span class="button-text">Special Chars</span>
+            </button>
             <p id="capsWarning">⚠️ Caps Lock is ON!</p>
         </div>
 
-        <!-- Special Character Button Group -->
         <div class="button-group" id="special-char-buttons">
-            <!-- Non-alphanumeric character buttons with hints -->
             <button onclick="insertLoremIpsum('<')" title="Less-than sign: <">&lt;</button>
             <button onclick="insertLoremIpsum('>')" title="Greater-than sign: >">&gt;</button>
             <button onclick="insertLoremIpsum('/')" title="Forward slash: /">/</button>
@@ -391,39 +561,43 @@
     <div class="main-container preview-right" id="main-container">
         <div class="file-explorer">
             <ul>
-                <li class="hover" onclick="toggleFile('html')">index.html</li>
-                <li class="hover" onclick="toggleFile('css')">style.css</li>
-                <li class="hover" onclick="toggleFile('js')">script.js</li>
+                <li class="hover" onclick="toggleFile('html')">
+                    <i class="fab fa-html5"></i> <span class="file-name">index.html</span>
+                </li>
+                <li class="hover" onclick="toggleFile('css')">
+                    <i class="fab fa-css3-alt"></i> <span class="file-name">style.css</span>
+                </li>
+                <li class="hover" onclick="toggleFile('js')">
+                    <i class="fab fa-js"></i> <span class="file-name">script.js</span>
+                </li>
             </ul>
             <div class="divider-text">Text</div>
 
             <strong></strong>
             <ul>
-                <li class="hover"
-                    onclick="insertLoremIpsum('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.')">
-                    Insert sample text
+                <li class="hover" onclick="insertLoremIpsum('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.')">
+                    <i class="fas fa-file-word"></i> <span class="file-name">Sample Text</span>
                 </li>
             </ul>
             <div class="divider-text">Images</div>
             <strong></strong>
             <ul>
                 <li class="hover" onclick="insertImagePath('./images/sample1.jpg')">
-                    sample1.jpg
+                    <i class="fas fa-image"></i> <span class="file-name">sample1.jpg</span>
                     <img src="images/sample1.jpg" alt="Sample 1">
                 </li>
                 <li class="hover" onclick="insertImagePath('./images/sample2.jpg')">
-                    sample2.jpg
+                    <i class="fas fa-image"></i> <span class="file-name">sample2.jpg</span>
                     <img src="images/sample2.jpg" alt="Sample 2">
                 </li>
                 <li class="hover" onclick="insertImagePath('./images/sample3.jpg')">
-                    sample3.jpg
+                    <i class="fas fa-image"></i> <span class="file-name">sample3.jpg</span>
                     <img src="images/sample3.jpg" alt="Sample 3">
                 </li>
             </ul>
         </div>
         <div class="editor-container">
             <textarea id="html-code" class="hidden">
-<!-- Add your HTML code here -->
 </textarea>
             <textarea id="css-code" class="hidden">
 /* Add your CSS here */
@@ -436,10 +610,8 @@
             </div>
         </div>
     </div>
-    <!-- Floating Help Button -->
     <button class="help-button" onclick="toggleChat()">?</button>
 
-    <!-- Chat Window -->
     <div class="chat-window">
         <div class="chat-header">Help Chat</div>
         <div class="chat-body" id="chat-body">
@@ -476,8 +648,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Playground</title>
-    <!-- Uncomment the following line to include an external CSS file -->
-    <!-- <link rel="stylesheet" href="style.css"> -->
     <style>
         /* Add your internal CSS here */
         body {
@@ -494,8 +664,6 @@
 <body>
     <h1>Hello, World!</h1>
     <p>Welcome to the Code Playground.</p>
-    <!-- Uncomment the following line to include an external JS file -->
-    <!-- <script src="script.js"><\/script> -->
     <script>
         // Add your internal JavaScript here
         console.log('Hello from the script!');
@@ -528,7 +696,7 @@ document.querySelector('h1').addEventListener('click', () => {
         // Initialize CodeMirror editors with default content
         const htmlEditor = CodeMirror.fromTextArea(document.getElementById('html-code'), {
             mode: 'htmlmixed',
-            theme: 'material',
+            theme: 'monokai',
             lineNumbers: true,
             autoCloseTags: true,
             value: defaultHTML,
@@ -536,14 +704,14 @@ document.querySelector('h1').addEventListener('click', () => {
         });
         const cssEditor = CodeMirror.fromTextArea(document.getElementById('css-code'), {
             mode: 'css',
-            theme: 'material',
+            theme: 'monokai',
             lineNumbers: true,
             value: defaultCSS,
             extraKeys: { "Ctrl-Space": "autocomplete" },
         });
         const jsEditor = CodeMirror.fromTextArea(document.getElementById('js-code'), {
             mode: 'javascript',
-            theme: 'material',
+            theme: 'monokai',
             lineNumbers: true,
             value: defaultJS,
             extraKeys: { "Ctrl-Space": "autocomplete" },
@@ -625,8 +793,7 @@ document.querySelector('h1').addEventListener('click', () => {
         function insertTemplate() {
             const activeEditor = getActiveEditor();
             if (activeEditor) {
-                const wrappedText = `<!-- Add your HTML code here -->
-<!DOCTYPE html>
+                const wrappedText = `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -906,93 +1073,88 @@ document.querySelector('h1').addEventListener('click', () => {
 
         // Function to toggle the visibility of the special character buttons
         function toggleSpecialChars() {
-            const specialCharButtons = document.getElementById('special-char-buttons');
-            if (specialCharButtons.classList.contains('hidden')) {
-                specialCharButtons.classList.remove('hidden');
-            } else {
-                specialCharButtons.classList.add('hidden');
-            }
+            const specialCharsButtons = document.getElementById('special-char-buttons');
+            specialCharsButtons.style.display = specialCharsButtons.style.display === 'flex' ? 'none' : 'flex';
         }
 
-        // Function to toggle autocomplete on/off
+        // Function to toggle autocomplete
         function toggleAutocomplete() {
             const autocompleteButton = document.getElementById('autocomplete-button');
-            const isOn = autocompleteButton.textContent.includes('On');
-            autocompleteButton.textContent = `💡: ${isOn ? '❌Off' : '✅On'}`;
+            const editor = getActiveEditor();
+
+            if (autocompleteButton.textContent.includes('On')) {
+                autocompleteButton.textContent = '💡: ❌Off';
+                editor.setOption('hintOptions', { completeSingle: false });
+            } else {
+                autocompleteButton.textContent = '💡: ✅On';
+                editor.setOption('hintOptions', { completeSingle: true });
+            }
+            editor.focus();
         }
 
-        // Function to prettify code in the active editor
         function prettifyCode() {
             const activeEditor = getActiveEditor();
             if (activeEditor) {
-                const code = activeEditor.getValue();
-                const mode = activeEditor.getOption('mode');
-                let formattedCode;
-                if (mode === 'htmlmixed') {
-                    formattedCode = html_beautify(code);
-                } else if (mode === 'css') {
-                    formattedCode = css_beautify(code);
-                } else if (mode === 'javascript') {
-                    formattedCode = js_beautify(code);
+                let code = activeEditor.getValue();
+                let beautifiedCode;
+                if (activeEditor.getMode().name === "htmlmixed") {
+                    beautifiedCode = html_beautify(code, {
+                        "wrap_line_length": 120,
+                        "indent_size": 4,
+                        "preserve_newlines": true,
+                        "unformatted": ['pre', 'code', 'textarea']
+                    });
+                } else if (activeEditor.getMode().name === "css") {
+                    beautifiedCode = css_beautify(code, {
+                        "indent_size": 4
+                    });
+                } else if (activeEditor.getMode().name === "javascript") {
+                    beautifiedCode = js_beautify(code, {
+                        "indent_size": 4
+                    });
                 }
-                activeEditor.setValue(formattedCode);
-            }
-        }
-
-        // Function to create a new file and autosave in local storage
-        function createNewFile() {
-            // If there's text in active editor, ask user to save it
-            const activeEditor = getActiveEditor();
-            if (activeEditor) {
-                const code = activeEditor.getValue();
-                if (code) {
-                    saveFile();
-                    // Clear the active editor
-                    clearEditor();
+                if (beautifiedCode) {
+                    activeEditor.setValue(beautifiedCode);
+                } else {
+                    alert("The selected editor does not support code formatting.");
                 }
             }
         }
 
-        // Function to view autosaved files in the file explorer
-        function viewAutosavedFiles() {
-            const fileExplorer = document.querySelector('.file-explorer ul');
-            fileExplorer.innerHTML = '';
-            for (let i = 0; i < localStorage.length; i++) {
-                const fileName = localStorage.key(i);
-                const li = document.createElement('li');
-                li.className = 'hover';
-                li.textContent = fileName;
-                li.onclick = () => loadFile(fileName);
-                fileExplorer.appendChild(li);
-            }
-        }
-
-        // Function to load a file from local storage
-        function loadFile(fileName) {
-            console.log("loadFile " + fileName)
-            const content = localStorage.getItem(fileName);
-            console.log("content " + content)
+        // Function to save the content of the active editor to a file
+        function saveFile() {
             const activeEditor = getActiveEditor();
-            if (activeEditor) {
-                activeEditor.setValue(content);
+            if (!activeEditor) {
+                alert('No active editor to save.');
+                return;
             }
-        }
 
-        // Save the content of the active editor to local storage
-        function saveFile(fileName) {
-            console.log("saveFile " + fileName)
-            const activeEditor = getActiveEditor();
-            if (activeEditor) {
-                const fileName = prompt('Enter the name of the new file:');
-                if (fileName) {
-                    const content = activeEditor.getValue();
-                    console.log("content " + content)
-                    localStorage.setItem(fileName, content);
-                    viewAutosavedFiles();
-                }
+            const content = activeEditor.getValue();
+            const fileName = prompt('Enter file name:', 'code.txt');
+            if (!fileName) {
+                alert('File save cancelled.');
+                return;
             }
+
+            // Create a Blob (Binary Large Object) with the content
+            const blob = new Blob([content], { type: 'text/plain' });
+
+            // Create a URL for the Blob
+            const url = URL.createObjectURL(blob);
+
+            // Create a link element to trigger the download
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName; // Set the file name
+            a.style.display = 'none'; // Hide the link
+
+            // Append the link to the body, trigger the download, and remove the link
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url); // Clean up the URL object
+            alert(`File "${fileName}" saved successfully.`);
         }
     </script>
 </body>
-
 </html>
