@@ -7,6 +7,7 @@
     <title>Code Playground</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/codemirror.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/theme/material.min.css">
+    <link rel="stylesheet" href="index.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -41,8 +42,8 @@
 
         .main-container {
             display: flex;
-            flex: 1;
-            overflow: hidden;
+            flex-grow: 1;
+           
         }
 
         .file-explorer {
@@ -76,10 +77,9 @@
         }
 
         .editor-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            /*max-width: 93%;*/
+            flex-grow: 1; /* Allow editor to take up space */
+            
+            
         }
 
         .CodeMirror {
@@ -90,8 +90,13 @@
         }
 
         .preview-container {
-            flex: 1;
-            display: flex;
+              flex-grow: 1; /* Allow preview to take up space */
+              height: 700px;
+        }
+        textarea, iframe {
+        padding: 0;
+        margin: 0;
+        border: none; /* Remove default border */
         }
 
         .preview {
@@ -282,10 +287,21 @@
             background-color: #ccc;
             margin: 0 10px;
         }
+        .editor-preview-wrapper {
+         display: flex; /* Make the wrapper a flex container */
+         flex-grow: 1; /* Allow it to take up remaining space */
+         height: 700px;
+         width: 30%;
+        }
+        .editor-preview-wrapper.preview-bottom {
+        flex-direction: column; /* Editor and preview stacked vertically */
+        
+        }
 
         /* Preview Layout Toggle */
         .preview-right {
             flex-direction: row;
+            
         }
 
         .preview-bottom {
@@ -295,6 +311,7 @@
         .preview-bottom .preview {
             border-left: none;
             border-top: 1px solid #444;
+            background-color: #b30000;
         }
 
         #special-char-buttons {
@@ -326,14 +343,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify-html.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify-css.min.js"></script>
+    
 </head>
 
-<body>
+<body>  
     <!-- Toolbar with Undo/Redo Buttons -->
     <div class="toolbar">
         <!-- Undo/Redo Button Group -->
         <div class="button-group">
-            <button onclick="togglePreviewLayout()" hidden id="preview-toggle-button"
+            <button onclick="togglePreviewLayout()" 
                 title="Toggle Preview Layout">👁️🔄</button>
             <button id="undo-button" onclick="undo()" disabled title="Undo the last action">↩️</button>
             <button id="redo-button" onclick="redo()" disabled title="Redo the last undone action">↪️</button>
@@ -389,6 +407,27 @@
     </div>
 
     <div class="main-container preview-right" id="main-container">
+        <!-------------------CHAPTERS--------------->
+        <div class="container">
+            <div class="header">
+                <button class="arrow" id="prev">&lt;</button>
+                <div class="steps" id="step-container"></div>
+                <button class="arrow" id="next">&gt;</button>
+            </div>
+            <div class="content">
+                <div class="title">Create Messages</div>
+                <div class="step-info">Chapter 1 of 77</div>
+                <div class="message-box">
+                    
+                </div>
+            </div>
+            <div class="footer">
+                <button class="back-button">Back to course</button>
+                <button class="next-button">Next</button>
+            </div>
+            <div class="resize-handle"></div>
+        </div>
+        <!-------------------FILE EXPLORER--------------->
         <div class="file-explorer">
             <ul>
                 <li class="hover" onclick="toggleFile('html')">index.html</li>
@@ -396,11 +435,9 @@
                 <li class="hover" onclick="toggleFile('js')">script.js</li>
             </ul>
             <div class="divider-text">Text</div>
-
             <strong></strong>
             <ul>
-                <li class="hover"
-                    onclick="insertLoremIpsum('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.')">
+                <li class="hover" onclick="insertLoremIpsum('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.')">
                     Insert sample text
                 </li>
             </ul>
@@ -421,18 +458,19 @@
                 </li>
             </ul>
         </div>
-        <div class="editor-container">
-            <textarea id="html-code" class="hidden">
-<!-- Add your HTML code here -->
-</textarea>
-            <textarea id="css-code" class="hidden">
-/* Add your CSS here */
-</textarea>
-            <textarea id="js-code" class="hidden">
-// Add your JavaScript here
-</textarea>
+        <div class="editor-preview-wrapper"> 
+            <div class="editor-container">
+                <textarea id="html-code" class="hidden">
+                    </textarea>
+                <textarea id="css-code" class="hidden">
+                    /* Add your CSS here */
+                </textarea>
+                <textarea id="js-code" class="hidden">
+                    // Add your JavaScript here
+                </textarea>
+            </div>
             <div class="preview-container">
-                <iframe id="preview"></iframe>
+                <iframe id="preview" style="background-color: #8ab9ef;"></iframe>
             </div>
         </div>
     </div>
@@ -467,6 +505,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/javascript-hint.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/html-hint.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/css-hint.min.js"></script>
+    <script src="index.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/show-hint.min.css">
     <script>
         // Default sample code
@@ -849,18 +888,17 @@ document.querySelector('h1').addEventListener('click', () => {
         }
 
         // Toggle Preview Layout
-        function togglePreviewLayout() {
-            const mainContainer = document.getElementById('main-container');
-            const previewToggleButton = document.getElementById('preview-toggle-button');
+    function togglePreviewLayout() {
+    const editorPreviewWrapper = document.querySelector('.editor-preview-wrapper');
 
-            if (mainContainer.classList.contains('preview-right')) {
-                mainContainer.classList.remove('preview-right');
-                mainContainer.classList.add('preview-bottom');
-            } else {
-                mainContainer.classList.remove('preview-bottom');
-                mainContainer.classList.add('preview-right');
-            }
-        }
+    if (editorPreviewWrapper.classList.contains('preview-right')) {
+        editorPreviewWrapper.classList.remove('preview-right');
+        editorPreviewWrapper.classList.add('preview-bottom');
+    } else {
+        editorPreviewWrapper.classList.remove('preview-bottom');
+        editorPreviewWrapper.classList.add('preview-right');
+    }
+}
 
         // Function to select all text in the active editor
         function selectAll() {
