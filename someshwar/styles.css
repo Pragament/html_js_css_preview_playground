@@ -1,0 +1,1514 @@
+/* --- Base Styles & Variables --- */
+:root {
+    /* Color Palette (Light Theme) */
+    --bg-color: #ffffff;
+    --text-color: #24292e;
+    --text-color-secondary: #586069;
+    --text-color-active: #0366d6;
+    --header-bg: #f6f8fa;
+    --sidebar-bg: #f6f8fa;
+    --editor-bg: #ffffff;
+    --output-bg: #ffffff;
+    --border-color: #e1e4e8;
+    --editor-border: #d1d5da;
+    --button-bg: #fafbfc;
+    --button-text: #24292e;
+    --button-border: rgba(27, 31, 35, 0.15);
+    --button-hover-bg: #f3f4f6;
+    --button-hover-border: rgba(27, 31, 35, 0.35);
+    --run-button-bg: #2ea44f;
+    --run-button-text: #ffffff;
+    --run-button-hover-bg: #2c974b;
+    --reset-button-bg: #d73a49;
+    --reset-button-text: #ffffff;
+    --reset-button-hover-bg: #cb2431;
+    --link-color: #0366d6;
+    --link-hover-color: #005cc5;
+    --modal-bg: #ffffff;
+    --modal-overlay-bg: rgba(27, 31, 35, 0.5);
+    --modal-border: #e1e4e8;
+    --error-text: #d73a49;
+    --error-bg: #fce8e6;
+    --hover-bg: #f1f1f1; /* General hover background */
+    --active-bg: #e1e4e8; /* General active background */
+    --scrollbar-thumb: #c1c1c1;
+    --scrollbar-track: #f1f1f1;
+
+    /* NEW Theme Variables for Learn Panel & Code */
+    --text-heading: #1b1f23; /* Darker heading text */
+    --text-muted: #586069; /* Muted text for quotes, etc. */
+    --border-color-light: #eaecef; /* Lighter border for internal elements */
+    --accent-color: #0366d6; /* Accent color (e.g., blockquote border) */
+    --mono-font: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    --inline-code-bg: rgba(27, 31, 35, 0.05);
+    --inline-code-text: var(--text-color);
+    --button-secondary-bg: #f6f8fa;
+    --button-secondary-text: var(--text-color);
+    --button-secondary-border: rgba(27, 31, 35, 0.15);
+    --button-secondary-hover-bg: #f3f4f6;
+
+    /* Layout Variables */
+    --activity-bar-width: 50px;
+    --file-sidebar-width: 250px;
+    --file-sidebar-min-width: 150px;
+    --file-sidebar-max-width: 500px;
+    --top-header-height: 50px;
+    --editor-controls-header-height: 45px;
+    --sidebar-transition-speed: 0.3s;
+}
+
+/* Dark Theme Variables */
+body.dark-theme {
+    --bg-color: #0d1117;
+    --text-color: #c9d1d9;
+    --text-color-secondary: #8b949e;
+    --text-color-active: #58a6ff;
+    --header-bg: #161b22;
+    --sidebar-bg: #161b22;
+    --editor-bg: #0d1117;
+    --output-bg: #161b22; /* Slightly different for contrast */
+    --border-color: #30363d;
+    --editor-border: #21262d;
+    --button-bg: #21262d;
+    --button-text: #c9d1d9;
+    --button-border: #30363d;
+    --button-hover-bg: #30363d;
+    --button-hover-border: #8b949e;
+    --run-button-bg: #238636;
+    --run-button-text: #ffffff;
+    --run-button-hover-bg: #2ea043;
+    --reset-button-bg: #da3633;
+    --reset-button-text: #ffffff;
+    --reset-button-hover-bg: #f85149;
+    --link-color: #58a6ff;
+    --link-hover-color: #79c0ff;
+    --modal-bg: #161b22;
+    --modal-overlay-bg: rgba(0, 0, 0, 0.6);
+    --modal-border: #30363d;
+    --error-text: #f85149;
+    --error-bg: rgba(248, 81, 73, 0.1);
+    --hover-bg: #21262d;
+    --active-bg: #30363d;
+    --scrollbar-thumb: #444;
+    --scrollbar-track: #222;
+
+    /* NEW Dark Theme Variables for Learn Panel & Code */
+    --text-heading: #c9d1d9; /* Same as main text for dark */
+    --text-muted: #8b949e;
+    --border-color-light: #21262d;
+    --accent-color: #58a6ff;
+    --inline-code-bg: rgba(110, 118, 129, 0.2);
+    --inline-code-text: var(--text-color);
+    --button-secondary-bg: #21262d;
+    --button-secondary-text: var(--text-color);
+    --button-secondary-border: #30363d;
+    --button-secondary-hover-bg: #30363d;
+}
+
+/* --- General Styles --- */
+body {
+    padding-left: var(--activity-bar-width); /* Make space for the fixed activity bar */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+    margin: 0;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-size: 14px;
+    line-height: 1.5;
+    display: flex; /* Use flex for overall layout */
+    flex-direction: column; /* Stack headers and main content */
+    height: 100vh;
+    overflow: hidden; /* Prevent body scrollbars */
+}
+
+button {
+    cursor: pointer;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+input[type="text"] {
+    font-family: inherit;
+    font-size: inherit;
+    padding: 8px 12px;
+    border: 1px solid var(--editor-border);
+    border-radius: 6px;
+    background-color: var(--editor-bg);
+    color: var(--text-color);
+}
+input[type="text"]:focus {
+    outline: none;
+    border-color: var(--link-color);
+    box-shadow: 0 0 0 3px rgba(3, 102, 214, 0.3); /* Adjust focus color if needed */
+}
+body.dark-theme input[type="text"]:focus {
+    box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.3);
+}
+
+a {
+    color: var(--link-color);
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+    color: var(--link-hover-color);
+}
+
+/* --- Scrollbar Styles --- */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #a1a1a1; /* Slightly darker on hover */
+}
+body.dark-theme ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* --- Top Header --- */
+.top-header {
+    /* Adjust positioning since body has padding now */
+    position: fixed;
+    top: 0;
+    left: var(--activity-bar-width); /* Start after activity bar */
+    right: 0; /* Stretch to the right edge */
+    height: var(--top-header-height);
+    background-color: var(--header-bg);
+    border-bottom: 1px solid var(--border-color);
+    z-index: 1030; /* Above other content */
+    display: flex; /* Use flex for internal alignment */
+    align-items: center;
+    padding: 0 15px;
+}
+
+.top-header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Space out title and controls */
+    width: 100%;
+}
+
+.editor-title {
+    font-weight: 600;
+    font-size: 1.1em;
+    /* margin-left: 15px; */ /* No longer needed */
+    color: var(--text-color);
+    white-space: nowrap;
+}
+
+.top-header-controls {
+    margin-left: auto; /* Pushes controls to the right */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* General Header Button Style */
+.header-button {
+    background: none;
+    border: none;
+    padding: 5px;
+    color: var(--text-color-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+}
+.header-button:hover {
+    background-color: var(--hover-bg);
+    color: var(--text-color);
+}
+.header-button svg {
+    display: block; /* Prevents extra space below SVG */
+}
+
+/* --- NEW: Activity Bar --- */
+.activity-bar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: var(--activity-bar-width);
+    background-color: var(--sidebar-bg); /* Match sidebar or use a distinct color */
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 10px;
+    z-index: 1040; /* Highest */
+}
+
+.activity-bar-button {
+    background: none;
+    border: none;
+    color: var(--text-color-secondary);
+    padding: 10px;
+    margin-bottom: 5px;
+    cursor: pointer;
+    border-radius: 4px;
+    width: calc(100% - 16px); /* Button width within padding */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative; /* For potential indicators */
+}
+.activity-bar-button svg {
+    width: 24px; /* Icon size */
+    height: 24px;
+}
+.activity-bar-button:hover {
+    background-color: var(--hover-bg);
+    color: var(--text-color);
+}
+.activity-bar-button.active { /* Style for when the corresponding sidebar is open */
+    background-color: var(--active-bg);
+    color: var(--text-color-active);
+    /* Add a visual indicator like a left border */
+    box-shadow: inset 3px 0 0 0 var(--text-color-active);
+}
+
+/* Theme Toggle Icons */
+.theme-toggle-button .icon { display: none; }
+body:not(.dark-theme) .theme-toggle-button .icon-moon { display: block; }
+body.dark-theme .theme-toggle-button .icon-sun { display: block; }
+
+/* --- Left GitHub Sidebar --- */
+.left-sidebar-nav {
+    position: fixed;
+    top: 0; /* Align with top */
+    left: var(--activity-bar-width); /* Position next to activity bar */
+    width: 280px;
+    height: 100vh; /* Full height */
+    background-color: var(--sidebar-bg);
+    border-right: 1px solid var(--border-color);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+    z-index: 1020; /* Below top header, above file sidebar toggle */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+.left-sidebar-nav.open {
+    transform: translateX(0);
+}
+.left-sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    border-bottom: 1px solid var(--border-color);
+    flex-shrink: 0;
+}
+.left-sidebar-header h3 {
+    margin: 0;
+    font-size: 1em;
+    font-weight: 600;
+}
+.close-sidebar-btn {
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    line-height: 1;
+    padding: 0 5px;
+    color: var(--text-color-secondary);
+    cursor: pointer;
+}
+.close-sidebar-btn:hover {
+    color: var(--text-color);
+}
+.left-sidebar-content {
+    padding: 15px;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+.sidebar-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 8px 12px;
+    margin-bottom: 10px;
+    border: 1px solid var(--button-border);
+    background-color: var(--button-bg);
+    color: var(--button-text);
+    border-radius: 6px;
+    text-align: left;
+    font-size: 0.95em;
+}
+.sidebar-button:hover {
+    background-color: var(--button-hover-bg);
+}
+.sidebar-button.login-button {
+    /* Specific styles if needed */
+}
+.sidebar-button.logout-button {
+    margin-top: 15px; /* Space above logout */
+    border-color: var(--error-text); /* Use error color for emphasis */
+    color: var(--error-text);
+}
+body.dark-theme .sidebar-button.logout-button {
+    border-color: var(--error-text);
+}
+.sidebar-button.logout-button:hover {
+    background-color: var(--error-bg);
+}
+.user-profile {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+.user-profile img {
+    border-radius: 50%;
+    margin-right: 10px;
+    border: 1px solid var(--border-color);
+}
+.profile-info {
+    display: flex;
+    flex-direction: column;
+}
+.profile-info span {
+    display: block;
+    line-height: 1.3;
+}
+#userProfileName {
+    font-weight: 600;
+}
+#userProfileEmail {
+    font-size: 0.9em;
+    color: var(--text-color-secondary);
+}
+.user-repos h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1em;
+    font-weight: 600;
+}
+.user-repos ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 250px; /* Limit height and allow scroll */
+    overflow-y: auto;
+}
+/* Style individual repo list items for hover effect */
+.user-repos li {
+    margin-bottom: 5px;
+    font-size: 0.9em;
+    position: relative; /* Needed for absolute positioning of the icon */
+    padding: 4px 8px; /* Add padding to make hover area larger */
+    border-radius: 4px;
+    display: flex; /* Use flex to align link and icon */
+    justify-content: space-between;
+    align-items: center;
+}
+.user-repos li:hover {
+    background-color: var(--hover-bg);
+}
+/* Style the repo link within the list item */
+.user-repos li a {
+    /* display: block; */ /* No longer needed due to flex on li */
+    /* padding: 4px 8px; */ /* Padding moved to li */
+    /* border-radius: 4px; */ /* Radius moved to li */
+    flex-grow: 1; /* Allow link to take available space */
+    overflow: hidden; /* Prevent long names from breaking layout */
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-right: 5px; /* Space between link and icon */
+}
+.user-repos li a:hover {
+    background-color: var(--hover-bg);
+    text-decoration: none;
+}
+
+/* --- Sidebar Overlay --- */
+.user-repos li .import-repo-icon {
+    display: none; /* Hidden by default */
+    cursor: pointer;
+    color: var(--link-color);
+    padding: 2px 4px;
+    border-radius: 3px;
+    flex-shrink: 0; /* Prevent icon from shrinking */
+    line-height: 1; /* Ensure consistent vertical alignment */
+}
+
+.user-repos li:hover .import-repo-icon {
+    display: inline-block; /* Show on li hover */
+}
+
+.user-repos li .import-repo-icon:hover {
+    background-color: var(--active-bg); /* Slightly darker background on icon hover */
+    color: var(--text-color-active);
+}
+
+
+/* --- Sidebar Overlay --- */
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 1015; /* Below sidebar, above content */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+.sidebar-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* --- NEW: File Sidebar --- */
+.file-sidebar {
+    position: fixed; /* Keep fixed */
+    left: var(--activity-bar-width); /* Position next to activity bar */
+    top: var(--top-header-height); /* Position below top header */
+    bottom: 0; /* Stretch to bottom */
+    width: var(--file-sidebar-width);
+    background-color: var(--sidebar-bg);
+    border-right: 1px solid var(--editor-border);
+    display: flex;
+    flex-direction: column;
+    z-index: 1000; /* Below overlays and other sidebars */
+    transition: transform var(--sidebar-transition-speed) ease-in-out, width 0s; /* Animate transform, not width */
+    transform: translateX(0); /* Start expanded relative to its left position */
+    overflow: hidden; /* Hide content overflowing during resize/collapse */
+}
+
+.file-sidebar.collapsed {
+    /* Slide out completely to the left, relative to its starting position */
+    transform: translateX(calc(-1 * var(--file-sidebar-width)));
+    border-right: none; /* Hide border when collapsed */
+}
+
+.file-sidebar-header {
+    padding: 10px 15px;
+    border-bottom: 1px solid var(--editor-border);
+    flex-shrink: 0; /* Prevent header from shrinking */
+}
+
+.file-sidebar-header h4 {
+    margin: 0;
+    font-size: 1em;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.file-sidebar-content {
+    flex-grow: 1; /* Take remaining vertical space */
+    overflow-y: auto; /* Allow vertical scrolling for tabs/controls */
+    overflow-x: hidden;
+    padding: 5px 0; /* Add some padding */
+}
+
+/* Adjust editor tabs for vertical layout in sidebar */
+.editor-tabs {
+    display: flex;
+    flex-direction: column; /* Stack tabs vertically */
+    padding: 0 5px; /* Padding inside the content area */
+}
+
+.editor-tabs .tab-button {
+    width: 100%; /* Make tabs fill width */
+    text-align: left;
+    padding: 8px 10px 8px 10px; /* Adjust padding */
+    border: none;
+    /* border-bottom: 1px solid transparent; */ /* Remove bottom border */
+    background-color: transparent;
+    color: var(--text-color-secondary);
+    cursor: pointer;
+    font-size: 0.9em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-radius: 4px; /* Slightly rounded corners */
+    margin-bottom: 2px; /* Space between tabs */
+    position: relative; /* For close button positioning */
+    line-height: 1.4; /* Ensure text fits */
+    display: flex; /* Use flex to align text and close button */
+    justify-content: space-between; /* Push close button to the right */
+    align-items: center;
+}
+
+.editor-tabs .tab-button:hover {
+    background-color: var(--hover-bg);
+    color: var(--text-color);
+}
+
+.editor-tabs .tab-button.active {
+    background-color: var(--active-bg);
+    color: var(--text-color-active);
+    font-weight: 500; /* Slightly less bold */
+}
+
+/* Adjust close button position for vertical tabs */
+.tab-close-button {
+    /* position: absolute; */ /* No longer absolute */
+    /* right: 5px; */
+    /* top: 50%; */
+    /* transform: translateY(-50%); */
+    padding: 0 5px;
+    font-size: 1.3em; /* Slightly larger */
+    line-height: 1;
+    color: var(--text-color-secondary);
+    border-radius: 50%;
+    margin-left: 5px; /* Space between filename and close button */
+    flex-shrink: 0; /* Prevent shrinking */
+    opacity: 0.6; /* Slightly transparent */
+    transition: opacity 0.15s ease;
+}
+.tab-button:hover .tab-close-button {
+    color: var(--text-color); /* Make visible on hover */
+    opacity: 1;
+}
+.tab-button.active .tab-close-button {
+    color: var(--text-color-active);
+    opacity: 1;
+}
+.tab-close-button:hover {
+    background-color: rgba(128, 128, 128, 0.3);
+}
+
+
+.file-sidebar-controls {
+    padding: 10px 15px;
+    border-top: 1px solid var(--editor-border);
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0; /* Prevent controls from shrinking */
+}
+
+.file-sidebar-controls .new-file-button,
+.file-sidebar-controls .image-button {
+    padding: 5px 10px;
+    background-color: var(--button-bg);
+    color: var(--button-text);
+    border: 1px solid var(--button-border);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+.file-sidebar-controls .new-file-button {
+    font-weight: bold;
+    font-size: 1.1em;
+    padding: 3px 10px; /* Adjust padding for '+' */
+}
+.file-sidebar-controls .new-file-button:hover,
+.file-sidebar-controls .image-button:hover {
+    background-color: var(--button-hover-bg);
+}
+
+
+/* --- Resize Handle --- */
+.resize-handle-horizontal {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 6px; /* Handle width */
+    cursor: ew-resize; /* East-West resize cursor */
+    background-color: transparent; /* Make it invisible but functional */
+    z-index: 1001; /* Above sidebar content */
+    transition: background-color 0.2s ease;
+}
+.resize-handle-horizontal:hover {
+     background-color: var(--link-color); /* Optional visual feedback */
+     opacity: 0.3;
+}
+body.resizing-ew {
+    cursor: ew-resize !important; /* Force cursor during resize */
+    user-select: none !important; /* Prevent text selection */
+}
+body.resizing-ew .resize-handle-horizontal {
+    background-color: var(--link-color); /* Ensure visibility during resize */
+    opacity: 0.5;
+}
+
+
+/* --- Old File Sidebar Toggle Button Styles Removed --- */
+/* .file-sidebar-toggle { ... } */
+/* .file-sidebar-toggle:hover { ... } */
+/* ... etc ... */
+
+
+/* --- Main Content Area --- */
+.main-content-area {
+    /* Default margin when file-sidebar is OPEN (relative to body's content box, which is already past activity bar) */
+    margin-left: var(--file-sidebar-width);
+    flex-grow: 1; /* Take remaining vertical space */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Prevent scrollbars here, handled within */
+    transition: margin-left var(--sidebar-transition-speed) ease-in-out; /* Transition margin */
+    height: calc(100vh - var(--top-header-height)); /* Full height below top header */
+    margin-top: var(--top-header-height); /* Push content below fixed top header */
+}
+
+/* When file sidebar is collapsed, main-content-area margin is 0 (relative to body's content box) */
+.file-sidebar.collapsed ~ .main-content-area {
+    margin-left: 0;
+}
+
+/* --- Editor Controls Header --- */
+.editor-controls-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* Align controls to the right */
+    padding: 0 15px; /* Reduced vertical padding */
+    background-color: var(--header-bg); /* Same as old main header */
+    border-bottom: 1px solid var(--editor-border);
+    height: var(--editor-controls-header-height);
+    flex-shrink: 0; /* Prevent shrinking */
+    gap: 5px; /* Space between buttons */
+}
+/* Move styles for buttons previously in .main-header .header-right here */
+.editor-controls-header .header-button,
+.editor-controls-header .run-button {
+    /* Apply existing styles */
+    padding: 6px 8px; /* Adjust padding */
+}
+.editor-controls-header .run-button {
+    background-color: var(--run-button-bg);
+    color: var(--run-button-text);
+    border: 1px solid rgba(27, 31, 36, 0.15);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.95em;
+}
+.editor-controls-header .run-button:hover {
+    background-color: var(--run-button-hover-bg);
+}
+.editor-controls-header .edit-mode-button {
+    /* Assumes HTML will be <button class="header-button edit-mode-button">Edit</button> or similar */
+    /* It will inherit base styles from .header-button if applied in HTML */
+    display: none; /* Hidden by default, JS will make it visible */
+    margin-right: 5px; /* Space before the next button (e.g., special chars toggle) */
+    padding: 6px 10px; /* Adjust padding if it's a text button */
+    font-weight: 500;
+}
+
+/* NEW: Style for the active edit mode button icon */
+.editor-controls-header .header-button#editModeBtn.editing-active svg {
+    color: var(--text-color-active); /* Use the theme's active text color for the icon */
+}
+
+
+/* --- Special Characters Container --- */
+.special-char-container {
+    background-color: var(--header-bg); /* Match header bg */
+    border-bottom: 1px solid var(--editor-border);
+    flex-shrink: 0; /* Prevent shrinking */
+    padding: 5px 15px;
+    overflow-x: auto; /* Allow horizontal scroll if needed */
+    display: none; /* Hidden by default */
+}
+.special-char-container.visible {
+    display: block;
+}
+.button-group {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping */
+    gap: 4px;
+}
+.button-group button {
+    background-color: var(--button-bg);
+    border: 1px solid var(--button-border);
+    color: var(--button-text);
+    padding: 4px 8px;
+    border-radius: 4px;
+    min-width: 30px;
+    text-align: center;
+    font-size: 0.9em;
+}
+.button-group button:hover {
+    background-color: var(--button-hover-bg);
+}
+.insertDefaultCodeBtn {
+    font-weight: bold;
+}
+
+
+/* --- Editor Layout Container (Editor + Output) --- */
+.editor-layout-container {
+    flex-grow: 1; /* Take remaining space */
+    display: flex;
+    overflow: hidden; /* Prevent its own scrollbars */
+    background-color: var(--bg-color); /* Background for the container */
+}
+
+.editor-layout-container.side-by-side-view {
+    flex-direction: row;
+}
+.editor-layout-container.side-by-side-view .editor-section {
+    width: 50%;
+    border-right: 1px solid var(--editor-border);
+}
+.editor-layout-container.side-by-side-view .output-container {
+    width: 50%;
+}
+
+.editor-layout-container.stacked-view {
+    flex-direction: column;
+}
+.editor-layout-container.stacked-view .editor-section {
+    height: 60%; /* Adjust ratio as needed */
+    border-bottom: 1px solid var(--editor-border);
+}
+.editor-layout-container.stacked-view .output-container {
+    height: 40%; /* Adjust ratio as needed */
+}
+
+.editor-section, .output-container {
+    display: flex; /* Use flex for internal layout */
+    flex-direction: column;
+    overflow: hidden; /* Important */
+    position: relative; /* For absolute positioning inside */
+}
+
+/* Editor Panes */
+.editor-panes {
+    flex-grow: 1; /* Take available space */
+    position: relative; /* For absolute positioning of panes */
+    overflow: hidden; /* Hide inactive panes */
+}
+.editor-pane {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    visibility: hidden; /* Hide inactive panes */
+    opacity: 0;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+    background-color: var(--editor-bg); /* Ensure background */
+    display: flex; /* Allow content to fill */
+    flex-direction: column;
+}
+.editor-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--text-color-secondary);
+    font-style: italic;
+    padding: 20px;
+    text-align: center;
+}
+.editor-pane.active {
+    visibility: visible;
+    opacity: 1;
+    z-index: 1; /* Bring active pane to front */
+}
+.editor-pane textarea {
+    /* Hide the original textarea used by CodeMirror */
+    display: none;
+}
+.image-pane {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    text-align: center;
+    overflow: auto; /* Allow scrolling for large images */
+}
+.image-pane img {
+    max-width: 90%;
+    max-height: 80%;
+    margin-top: 15px;
+    border: 1px solid var(--editor-border);
+    object-fit: contain; /* Ensure image aspect ratio is maintained */
+}
+.image-pane p {
+    margin: 5px 0;
+    font-size: 0.9em;
+    color: var(--text-color-secondary);
+}
+.image-pane code {
+    background-color: var(--hover-bg);
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-size: 0.95em;
+}
+
+/* CodeMirror Styles */
+.CodeMirror {
+    flex-grow: 1; /* Make CodeMirror fill the pane */
+    height: 100% !important; /* Override default */
+    width: 100% !important;
+    border: none; /* Remove default border if any */
+    font-size: 14px; /* Adjust font size */
+    line-height: 1.5;
+}
+.CodeMirror-scroll {
+    background-color: var(--editor-bg); /* Ensure background matches */
+}
+/* Ensure gutters match theme */
+.CodeMirror-gutters {
+    background-color: var(--editor-bg) !important; /* Match editor background */
+    border-right: 1px solid var(--editor-border);
+}
+body.dark-theme .CodeMirror-gutters {
+    background-color: var(--editor-bg) !important;
+    border-right: 1px solid var(--editor-border);
+}
+.CodeMirror-linenumber {
+    color: var(--text-color-secondary) !important; /* Style line numbers */
+}
+
+
+/* Output Section */
+.output-label {
+    padding: 5px 15px;
+    font-size: 0.85em;
+    font-weight: 600;
+    color: var(--text-color-secondary);
+    background-color: var(--header-bg);
+    border-bottom: 1px solid var(--editor-border);
+    flex-shrink: 0;
+}
+.output-screen {
+    flex-grow: 1;
+    border: none;
+    width: 100%;
+    height: 100%; /* Ensure iframe takes full height */
+    background-color: var(--output-bg);
+}
+
+/* View Toggle Button Icons */
+.view-toggle-button .icon { display: none; }
+.editor-layout-container.side-by-side-view + * .view-toggle-button .icon-stacked, /* Target button outside container */
+.editor-controls-header .view-toggle-button .icon-stacked { /* Target button inside container */
+    display: block; /* Show stacked icon when in side-by-side */
+}
+.editor-layout-container.stacked-view + * .view-toggle-button .icon-side-by-side, /* Target button outside container */
+.editor-controls-header .view-toggle-button .icon-side-by-side { /* Target button inside container */
+    display: block; /* Show side-by-side icon when in stacked */
+}
+
+/* --- Vertical Nav Menu (Right Side) --- */
+.vertical-nav-container {
+    position: relative;
+}
+.menu-toggle-button {
+    /* Inherits .header-button styles */
+}
+.vertical-nav {
+    position: absolute;
+    top: calc(100% + 5px); /* Position below the button */
+    right: 0;
+    background-color: var(--sidebar-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(27, 31, 35, 0.15);
+    padding: 5px 0;
+    min-width: 180px;
+    z-index: 1100; /* Above everything else */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+}
+.vertical-nav.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+.vertical-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.vertical-nav li button {
+    display: block;
+    width: 100%;
+    padding: 8px 15px;
+    background: none;
+    border: none;
+    text-align: left;
+    color: var(--text-color);
+    font-size: 0.95em;
+}
+.vertical-nav li button:hover {
+    background-color: var(--hover-bg);
+    color: var(--link-color); /* Use link color on hover */
+}
+.vertical-nav li button.reset-button {
+    color: var(--error-text);
+}
+.vertical-nav li button.reset-button:hover {
+    background-color: var(--error-bg);
+    color: var(--error-text); /* Keep error color */
+}
+
+/* --- Learn Panel --- */
+.learn-panel {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 350px;
+    max-width: 90vw;
+    max-height: 70vh;
+    background-color: var(--sidebar-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(27, 31, 35, 0.1);
+    z-index: 1011; /* Above file toggle, below nav menu */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Prevent content overflow */
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+    cursor: grab; /* Indicate draggable */
+}
+.learn-panel.visible {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+}
+.learn-panel:active {
+    cursor: grabbing;
+}
+
+.learn-panel-header {
+    display: flex;
+    justify-content: flex-end; /* Move close button to right */
+    align-items: center;
+    padding: 5px 10px; /* Reduced padding */
+    border-bottom: 1px solid var(--border-color);
+    background-color: var(--header-bg); /* Match header */
+    cursor: move; /* Indicate draggable area */
+    flex-shrink: 0;
+}
+
+.close-learn-panel {
+    background: none;
+    border: none;
+    font-size: 1.6em;
+    line-height: 1;
+    padding: 0 5px;
+    color: var(--text-color-secondary);
+    cursor: pointer;
+}
+.close-learn-panel:hover {
+    color: var(--text-color);
+}
+
+.learn-panel-content {
+    padding: 15px;
+    overflow-y: auto; /* Allow scrolling */
+    flex-grow: 1;
+}
+.learn-panel-content .container {
+    margin-bottom: 15px;
+}
+.learn-panel-content .header {
+    margin-bottom: 10px;
+}
+/* Style Select2 within Learn Panel */
+.learn-panel .select2-container .select2-selection--single {
+    height: 36px; /* Match input height */
+    border: 1px solid var(--editor-border);
+    border-radius: 6px;
+    background-color: var(--editor-bg);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Add subtle shadow */
+}
+.learn-panel .select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: var(--text-color);
+    line-height: 34px; /* Vertically center */
+    padding-left: 12px;
+}
+.learn-panel .select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 34px;
+}
+/* Style the dropdown itself */
+.learn-panel .select2-dropdown {
+    background-color: var(--editor-bg); /* Revert to standard editor background */
+    border: 1px solid var(--editor-border);
+    border-radius: 6px;
+    color: var(--text-color); /* Use theme text color */
+    box-shadow: 0 4px 12px rgba(27, 31, 35, 0.1); /* More prominent shadow for dropdown */
+    margin-top: 4px; /* Add a small gap */
+    /* Animation properties */
+    opacity: 0; /* Start hidden for animation */
+    transform: scaleY(0.95) translateY(-5px); /* Start slightly scaled down and moved up */
+    transform-origin: top center; /* Animate scale from the top */
+    transition: opacity 0.15s ease-out, transform 0.15s ease-out, visibility 0.15s ease-out; /* Smooth transition */
+    visibility: hidden; /* Start hidden */
+}
+/* Style the search input within the dropdown */
+.learn-panel .select2-search--dropdown .select2-search__field {
+    background-color: var(--editor-bg);
+    color: var(--text-color); /* Keep input text standard */
+    border: 1px solid var(--editor-border);
+    border-radius: 4px;
+    padding: 6px 10px;
+    margin: 5px; /* Add some margin around the search box */
+    width: calc(100% - 10px); /* Adjust width considering margin */
+    box-sizing: border-box;
+}
+.learn-panel .select2-search--dropdown .select2-search__field:focus {
+    outline: none;
+    border-color: var(--link-color);
+    box-shadow: 0 0 0 2px rgba(3, 102, 214, 0.2);
+}
+body.dark-theme .learn-panel .select2-search--dropdown .select2-search__field:focus {
+    box-shadow: 0 0 0 2px rgba(88, 166, 255, 0.2);
+}
+.learn-panel .select2-results__option--highlighted[aria-selected] {
+    background-color: var(--link-color);
+    color: #000000; /* Ensure highlighted text is white */
+}
+body.dark-theme .learn-panel .select2-results__option--highlighted[aria-selected] {
+    color: #ffffff; /* Ensure white text on dark theme highlight */
+    background-color: var(--link-color);
+}
+/* Style the group headers (Chapter names) */
+.learn-panel .select2-results__option--group {
+    padding: 8px 12px;
+    font-weight: 600;
+    color: var(--text-color-secondary);
+    background-color: var(--header-bg); /* Use header background for separation */
+    border-top: 1px solid var(--border-color-light);
+    border-bottom: 1px solid var(--border-color-light);
+    margin-top: 5px; /* Space above group header */
+}
+/* Style individual result options */
+.learn-panel .select2-results__option {
+    padding: 8px 12px; /* Consistent padding */
+    color: var(--text-color); /* Use theme text color for options */
+    transition: background-color 0.15s ease; /* Smooth hover */
+}
+/* Style for nested options (topics under chapters) */
+.learn-panel .select2-results__option .select2-results__option {
+    padding-left: 25px; /* Indent topics */
+}
+/* Style for when the dropdown is open (Select2 adds this class) */
+.learn-panel .select2-container--open .select2-dropdown {
+    opacity: 1;
+    transform: scaleY(1) translateY(0);
+    visibility: visible;
+}
+
+
+/* --- Learn Panel Message Box Styling (NEW/ENHANCED) --- */
+
+/* General container */
+#learnPanel .message-box {
+    padding: 15px 20px;
+    font-size: 1rem; /* Base font size */
+    line-height: 1.6; /* Improve readability */
+    color: var(--text-color); /* Use theme variable */
+    /* Remove previous default styling */
+    background-color: transparent;
+    border: none;
+    text-align: left;
+    font-style: normal;
+}
+
+/* Loading state */
+#learnPanel .message-box.loading {
+    text-align: center;
+    color: var(--text-muted);
+}
+
+.spinner {
+    display: inline-block; /* Center inline */
+    border: 4px solid rgba(128, 128, 128, 0.2); /* Lighter border */
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border-left-color: var(--accent-color); /* Use theme accent */
+    animation: spin 1s ease infinite;
+    margin-bottom: 10px; /* Space between spinner and text */
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Error message box */
+#learnPanel .message-box.error {
+    background-color: rgba(255, 0, 0, 0.1); /* Light red background */
+    border: 1px solid rgba(200, 0, 0, 0.4);
+    color: #c00; /* Darker red text */
+    padding: 10px 15px;
+    border-radius: 4px;
+    margin-bottom: 1em; /* Add margin if needed */
+}
+#learnPanel .message-box.error strong {
+    color: #a00; /* Even darker red for emphasis */
+}
+body.dark-theme #learnPanel .message-box.error {
+    background-color: var(--error-bg);
+    border-color: var(--error-text);
+    color: var(--error-text);
+}
+body.dark-theme #learnPanel .message-box.error strong {
+    color: #ff8984; /* Lighter red for dark theme */
+}
+
+
+/* Info message box (e.g., for 'not found') */
+#learnPanel .message-box.info {
+    background-color: rgba(0, 100, 200, 0.1);
+    border: 1px solid rgba(0, 100, 200, 0.4);
+    color: #059;
+    padding: 10px 15px;
+    border-radius: 4px;
+    margin-bottom: 1em;
+}
+body.dark-theme #learnPanel .message-box.info {
+    background-color: rgba(88, 166, 255, 0.1);
+    border-color: rgba(88, 166, 255, 0.4);
+    color: var(--link-color);
+}
+
+
+/* Headings */
+#learnPanel .message-box h1,
+#learnPanel .message-box h2,
+#learnPanel .message-box h3,
+#learnPanel .message-box h4 {
+    margin-top: 1.8em;
+    margin-bottom: 0.6em;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--border-color-light); /* Subtle separator */
+    color: var(--text-heading); /* Use a heading color variable if you have one */
+    font-weight: 600; /* Make headings bolder */
+}
+#learnPanel .message-box h1 { font-size: 1.6em; }
+#learnPanel .message-box h2 { font-size: 1.4em; }
+#learnPanel .message-box h3 { font-size: 1.2em; }
+#learnPanel .message-box h4 { font-size: 1.1em; }
+
+/* Paragraphs */
+#learnPanel .message-box p {
+    margin-bottom: 1.2em; /* Slightly more space after paragraphs */
+}
+
+/* Lists */
+#learnPanel .message-box ul,
+#learnPanel .message-box ol {
+    margin-left: 1.5em; /* Standard indentation */
+    margin-bottom: 1.2em;
+    padding-left: 1em; /* Add padding for list markers */
+}
+#learnPanel .message-box li {
+    margin-bottom: 0.5em; /* Space between list items */
+}
+
+/* Code blocks */
+#learnPanel .message-box pre {
+    background-color: var(--editor-bg); /* Match editor background */
+    border: 1px solid var(--editor-border); /* Match editor border */
+    border-radius: 5px;
+    padding: 1em;
+    margin: 1.5em 0; /* More vertical space around code blocks */
+    position: relative; /* For copy button positioning */
+    overflow-x: auto; /* Ensure horizontal scroll for long lines */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Subtle shadow */
+}
+body.dark-theme #learnPanel .message-box pre {
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3); /* Darker shadow for dark theme */
+}
+
+
+/* Add language name (optional, requires JS to add it based on class) */
+/* #learnPanel .message-box pre::before {
+    content: attr(data-language);
+    display: block;
+    text-align: right;
+    font-size: 0.8em;
+    color: var(--text-muted);
+    margin-bottom: 5px;
+    text-transform: uppercase;
+} */
+
+#learnPanel .message-box pre code {
+    font-family: var(--mono-font); /* Use monospace font variable */
+    font-size: 0.95em; /* Slightly larger code font */
+    line-height: 1.5;
+    background: none !important; /* Override potential inline styles from hljs */
+    padding: 0 !important; /* Override potential inline styles from hljs */
+    border: none !important; /* Override potential inline styles from hljs */
+    color: inherit; /* Inherit color from hljs theme */
+}
+
+/* Inline code */
+#learnPanel .message-box code:not(pre code) {
+    background-color: var(--inline-code-bg); /* Use theme variable */
+    color: var(--inline-code-text); /* Use theme variable */
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+    font-size: 0.9em;
+    font-family: var(--mono-font);
+}
+
+/* Copy button */
+#learnPanel .message-box .copy-code-button {
+    position: absolute;
+    top: 8px;
+    right: 10px; /* Slightly more offset */
+    background-color: var(--button-bg); /* Use a slightly more prominent background */
+    color: var(--text-color-secondary);
+    border: 1px solid var(--button-border);
+    border-radius: 5px; /* Slightly more rounded */
+    padding: 5px 10px; /* A bit more padding */
+    cursor: pointer;
+    opacity: 0; /* Hidden by default */
+    visibility: hidden; /* Hidden by default */
+    transition: opacity 0.2s ease, visibility 0.2s ease, background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+    font-size: 0.85em;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05); /* Subtle shadow */
+}
+#learnPanel .message-box .copy-code-button svg {
+    width: 14px;
+    height: 14px;
+    margin-right: 5px;
+    fill: currentColor; /* Ensure SVG color matches text color */
+}
+
+#learnPanel .message-box pre:hover .copy-code-button {
+    opacity: 1; /* Fully visible on pre hover */
+    visibility: visible; /* Make it visible on pre hover */
+}
+#learnPanel .message-box .copy-code-button:hover {
+    background-color: var(--accent-color); /* Use accent color on hover */
+    color: var(--run-button-text); /* Ensure text is readable (often white on accent) */
+    border-color: var(--accent-color);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Slightly more pronounced shadow on hover */
+}
+
+/* Links */
+#learnPanel .message-box a {
+    color: var(--link-color); /* Use theme variable */
+    text-decoration: none;
+    border-bottom: 1px dotted var(--link-color);
+}
+#learnPanel .message-box a:hover {
+    color: var(--link-hover-color); /* Use theme variable */
+    border-bottom-style: solid;
+}
+
+/* Blockquotes */
+#learnPanel .message-box blockquote {
+    border-left: 4px solid var(--accent-color); /* Use theme accent */
+    margin-left: 0;
+    padding-left: 1em;
+    color: var(--text-muted); /* Muted text for quotes */
+    font-style: italic;
+    margin-bottom: 1.2em;
+}
+/* --- End Learn Panel Message Box Styling --- */
+
+/* --- Editor Notification Pop-up --- */
+.editor-notification-popup {
+    position: fixed;
+    bottom: 20px; /* Position at the bottom-center */
+    left: 50%;
+    transform: translateX(-50%) translateY(20px); /* Initial state for animation */
+    background-color: var(--modal-bg); /* Consistent with modal styling */
+    color: var(--text-color);
+    padding: 12px 20px;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1300; /* High z-index to be on top of most elements */
+    font-size: 0.95em;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+    text-align: center;
+}
+
+.editor-notification-popup.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0); /* Final state for animation */
+}
+
+/* Style for informational pop-ups (e.g., "now you are able to edit") */
+.editor-notification-popup.info {
+    background-color: var(--run-button-bg); /* Using run button color for positive feedback */
+    color: var(--run-button-text);
+}
+
+/* Style for warning pop-ups (e.g., "click on Edit to make changes") */
+.editor-notification-popup.warning {
+    background-color: var(--error-bg);
+    color: var(--error-text);
+    border: 1px solid var(--error-text); /* Optional: add a border for more emphasis */
+}
+
+
+/* --- New File Modal --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--modal-overlay-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1200; /* Highest */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+.modal-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+}
+.modal-dialog {
+    background-color: var(--modal-bg);
+    border-radius: 8px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 450px;
+    overflow: hidden;
+    transform: scale(0.95);
+    transition: transform 0.2s ease;
+}
+.modal-overlay.visible .modal-dialog {
+    transform: scale(1);
+}
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--modal-border);
+}
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.1em;
+    font-weight: 600;
+}
+.modal-close-btn {
+    background: none;
+    border: none;
+    font-size: 1.6em;
+    line-height: 1;
+    padding: 0 5px;
+    color: var(--text-color-secondary);
+    cursor: pointer;
+}
+.modal-close-btn:hover {
+    color: var(--text-color);
+}
+.modal-body {
+    padding: 20px;
+}
+.modal-body label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    font-size: 0.95em;
+}
+.modal-body input[type="text"] {
+    width: 100%;
+    box-sizing: border-box; /* Include padding and border in width */
+}
+.modal-error {
+    color: var(--error-text);
+    font-size: 0.9em;
+    margin-top: 10px;
+    min-height: 1.2em; /* Prevent layout shift */
+}
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 15px 20px;
+    background-color: var(--header-bg); /* Slightly different background */
+    border-top: 1px solid var(--modal-border);
+}
+.modal-button {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+    border: 1px solid var(--button-border);
+}
+.modal-button.cancel {
+    background-color: var(--button-bg);
+    color: var(--button-text);
+}
+.modal-button.cancel:hover {
+    background-color: var(--button-hover-bg);
+}
+.modal-button.create {
+    background-color: var(--run-button-bg); /* Use run button color */
+    color: var(--run-button-text);
+    border-color: transparent;
+}
+.modal-button.create:hover {
+    background-color: var(--run-button-hover-bg);
+}
+
+/* --- Adjustments for elements moved --- */
+/* Hide the old main header structure if it still exists in HTML */
+.main-header {
+   display: none;
+}
+/* --- Specific Git Action Styles (within left-sidebar-nav) --- */
+/* Ensure the container uses the sidebar background */
+#leftSidebarNav .git-actions {
+    background-color: var(--sidebar-bg); /* Explicitly set background */
+    border-top: 1px solid var(--border-color);
+    padding: 15px; /* Add padding around the whole section */
+    margin-top: 15px;
+}
+
+#leftSidebarNav .git-actions h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1em;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+/* Style the inputs within the Git section */
+#leftSidebarNav .git-actions input[type="text"] {
+    width: 100%; /* Full width */
+    box-sizing: border-box; /* Include padding/border */
+    padding: 6px 10px; /* Slightly smaller padding */
+    margin-bottom: 8px; /* Space below inputs */
+    font-size: 0.9em;
+    background-color: var(--editor-bg); /* Match editor input background */
+    border: 1px solid var(--editor-border);
+    color: var(--text-color);
+    border-radius: 4px;
+}
+
+/* Style the buttons within the Git section */
+#leftSidebarNav .git-actions .sidebar-button {
+    width: 100%; /* Make buttons full width */
+    margin-bottom: 8px; /* Space between buttons */
+    font-size: 0.95em;
+    /* Inherits general .sidebar-button styles */
+}
+
+/* Style the horizontal rule */
+#leftSidebarNav .git-actions hr {
+    border: none;
+    border-top: 1px solid var(--border-color);
+    margin: 15px 0; /* More vertical space around hr */
+}

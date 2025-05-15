@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Editor</title>
+    <!-- Include CodeMirror CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/theme/material-darker.min.css">
+    <!-- Light theme CSS removed -->
+
+    <!-- Select2 CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <!-- highlight.js CSS (light theme removed) -->
+    <!-- highlight.js CSS (dark theme) - Ensure 'disabled' is removed or managed by JS if needed, but likely not needed now -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark-theme">
+
+
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Include CodeMirror JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/mode/xml/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/mode/css/css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/addon/edit/closetag.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/addon/edit/closebrackets.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/addon/lint/lint.js"></script>
+    <!-- Add linters if needed -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/addon/lint/html-lint.js"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/addon/lint/css-lint.js"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/addon/lint/javascript-lint.js"></script> -->
+
+
+    <!-- Add JSZip library for downloading multiple files -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+    <!-- jQuery (required for Select2 and provided JS) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <!-- Select2 JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <!-- marked.js (for Markdown parsing) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.2/marked.min.js"></script>
+    <!-- highlight.js (for code syntax highlighting) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- Load specific languages for highlight.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/markdown.min.js"></script>
+
+    <!-- Firebase SDK -->
+    <!-- Make sure you're using compatible versions -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <!-- Add these lines to your HTML file's <head> -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.min.js"></script>
+
+
+</head>
+<body> <!-- Ensure body has dark theme class if needed by CSS, e.g., class="dark-theme" -->
+
+    <!-- NEW: Fixed Left Activity Bar -->
+    <aside class="activity-bar" id="activityBar">
+        <button class="activity-bar-button" id="leftSidebarToggleBtn" title="Toggle GitHub Account (Ctrl+Shift+G)" aria-label="Toggle GitHub Account Menu" aria-expanded="false" aria-controls="leftSidebarNav">
+            <!-- GitHub Icon SVG -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-github" viewBox="0 0 16 16">
+               <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8"/>
+           </svg>
+       </button>
+        <button class="activity-bar-button active" id="fileSidebarToggleBtn" title="Toggle File Explorer (Ctrl+B)" aria-label="Toggle File Explorer" aria-expanded="true"> <!-- Start active -->
+            <!-- Files Icon SVG -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+        </button>
+        <!-- NEW: Git Branch Icon -->
+        <button class="activity-bar-button" id="gitSidebarToggleBtn" title="Toggle Git Actions" aria-label="Toggle Git Actions Menu" aria-expanded="false" aria-controls="gitView">
+            <!-- Font Awesome Git Branch Icon (Using SVG for consistency) -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-git" viewBox="0 0 16 16"><path d="M15.698 7.287 8.712.302a1.03 1.03 0 0 0-1.457 0l-1.45 1.45 1.84 1.84a1.223 1.223 0 0 1 1.55 1.56l1.773 1.774a1.224 1.224 0 0 1 1.267 2.025 1.226 1.226 0 0 1-2.002-1.334L8.58 5.963v4.353a1.226 1.226 0 1 1-1.008-.036V5.887a1.226 1.226 0 0 1-.666-1.606l-1.84-1.84-5.698 5.698a1.03 1.03 0 0 0 0 1.457l6.986 6.986a1.03 1.03 0 0 0 1.457 0l6.953-6.953a1.031 1.031 0 0 0 0-1.457z"/></svg>
+        </button>
+
+        <!-- GitHub Login Button Removed From Here -->
+        <!-- Add more activity bar icons here (e.g., Search, Settings) -->
+    </aside>
+    <!-- END: Activity Bar -->
+
+    <!-- Left Sidebar Navigation (GitHub Account) -->
+    <nav class="left-sidebar-nav" id="leftSidebarNav" aria-hidden="true">
+        <div class="left-sidebar-header">
+            <h3>GitHub Account</h3>
+            <button class="close-sidebar-btn" id="closeLeftSidebarBtn" aria-label="Close GitHub Account Menu">&times;</button>
+        </div>
+        <div class="left-sidebar-content">
+            <!-- GitHub Login Button (Now in Sidebar) -->
+            <button id="sidebarGithubLoginBtn" class="sidebar-button login-button"> <!-- Initially hidden by JS if logged in -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-github" viewBox="0 0 16 16">
+                    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8"/>
+                </svg>
+                Login with GitHub
+            </button>
+            <!-- User Profile Display (Initially Hidden) -->
+            <div id="userProfileContainer" class="user-profile hidden">
+                <img id="userProfileImage" src="placeholder.png" alt="User Avatar" width="40" height="40"> <!-- Added placeholder src and size -->
+                <div class="profile-info">
+                    <span id="userProfileName"></span>
+                    <span id="userProfileEmail"></span>
+                </div>
+            </div>
+
+            <!-- Repository List (Initially Hidden) -->
+            <div id="userReposContainer" class="user-repos hidden">
+                <h4>Your Repositories</h4>
+                <ul id="userReposList">
+                    <li>Please sign in to load repositories.</li>
+                </ul>
+            </div>
+
+            <!-- Logout Button (Initially Hidden) -->
+            <button id="navLogoutBtn" class="sidebar-button logout-button hidden">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"/>
+                    <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/>
+                </svg>
+                Logout
+            </button>
+            <!-- Add more sidebar content here if needed -->
+        </div>
+    </nav>
+    <!-- END: Left Sidebar Navigation (GitHub Account) -->
+
+    <!-- NEW: Git Actions Sidebar -->
+    <nav class="left-sidebar-nav git-sidebar" id="gitView" aria-hidden="true">
+        <div class="left-sidebar-header">
+            <h3>Git Source Control</h3>
+            <button class="close-sidebar-btn" id="closeGitSidebarBtn" aria-label="Close Git Actions Menu">&times;</button>
+        </div>
+        <div class="left-sidebar-content">
+            <div id="gitActionsContainer" class="git-actions">
+                <!-- Section for actions on the current repository (visible when a repo is active) -->
+                <div id="currentRepoActions" class="hidden"> <!-- Initially hidden, shown by JS -->
+                    <h4>Actions for <span id="currentRepoName">...</span></h4>
+                    <button id="gitStatusBtn" class="sidebar-button small-button">Status</button>
+                    <button id="gitPullBtn" class="sidebar-button small-button">Pull</button>
+                    <div class="form-group">
+                        <label for="gitCommitMsgInput">Commit Message:</label>
+                        <input type="text" id="gitCommitMsgInput" placeholder="Your commit message">
+                    </div>
+                    <button id="gitCommitBtn" class="sidebar-button small-button">Commit</button>
+                    <button id="gitPushBtn" class="sidebar-button small-button">Push</button>
+                </div>
+                <div id="gitStatusOutput" class="status-output">
+                    <!-- Status messages will appear here -->
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- END: Git Actions Sidebar -->
+
+    <!-- Overlay for Left Sidebar -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- File Sidebar (Collapsible/Resizable) - Now positioned next to Activity Bar -->
+    <aside class="file-sidebar" id="fileSidebar"> <!-- Start expanded by default -->
+        <div class="file-sidebar-header"> <!-- Optional header within sidebar -->
+             <h4>Files</h4>
+             <!-- Add other controls here if needed -->
+        </div>
+        <div class="file-sidebar-content">
+            <div class="editor-tabs" id="editorTabs">
+                <!-- Tabs will be added dynamically -->
+                <!-- Dynamic tabs will be added here -->
+            </div>
+            <div class="file-sidebar-controls">
+                 <button class="new-file-button" id="newFileBtn" title="New File">+</button>
+                 <button class="image-button" id="imageBtn" title="Add Image">Image</button>
+                 <input type="file" id="imageUploadInput" accept="image/*" style="display: none;">
+            </div>
+        </div>
+        <div class="resize-handle-horizontal" id="fileSidebarResizeHandle"></div>
+    </aside>
+    <!-- END: File Sidebar -->
+
+
+    <!-- Top Header -->
+    <header class="top-header">
+        <div class="top-header-content">
+             <!-- GitHub Toggle Button Removed from here -->
+            <div class="editor-title">Code Editor</div> <!-- Updated Title -->
+            <div class="top-header-controls">
+
+                 <!-- Theme Toggle Button Removed -->
+
+                <!-- Vertical Nav Toggle (Existing Right Side Menu) -->
+                <div class="vertical-nav-container">
+                    <button class="menu-toggle-button" id="menuToggleBtn" aria-label="Toggle Menu" aria-expanded="false" aria-controls="verticalNav">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path fill-rule="evenodd" d="M3 6.75A.75.75 0 0 1 3.75 6h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 6.75ZM3 12a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 12Zm0 5.25a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1-.75-.75Z" clip-rule="evenodd" /></svg>
+                    </button>
+                    <nav class="vertical-nav" id="verticalNav">
+                        <ul>
+                            <li><button id="navLearnBtn">Learn</button></li>
+                            <li><button id="navNewFileBtn">New File</button></li>
+                            <li><button id="navAddImageBtn">Add Image</button></li>
+                            <li><button id="navDownloadBtn">Download Project</button></li>
+                            <li><button id="navResetBtn" class="reset-button">Reset Code</button></li>
+                            <!-- Theme Toggle Button Removed -->
+                            <!-- Logout button is now in the left sidebar -->
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area (Wraps Editor Controls, Editor, Output) -->
+    <div class="main-content-area" id="mainContentArea">
+
+        <!-- Header for Editor Controls (Run, View, etc.) -->
+        <header class="editor-controls-header" id="editorControlsHeader">
+             <!-- NEW Edit Button, use a class like 'hidden' or 'active' -->
+             <button class="header-button action-button hidden" id="editModeBtn" title="Enable Editing">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16"><path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/><path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/></svg>
+             </button>
+             <!-- Special Characters Toggle Button -->
+             <button class="header-button action-button" id="toggleSpecialCharsBtn" title="Toggle Special Characters">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-alt" viewBox="0 0 16 16">
+                    <path d="M1 13.5a.5.5 0 0 0 .5.5h3.797a.5.5 0 0 0 .439-.26L11 3h3.5a.5.5 0 0 0 0-1h-13a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h2.768l-4 8a.5.5 0 0 0 .13 1.062ZM6.313 4.5H4.147L7 10.75h2.166L6.313 4.5Z"/>
+                </svg>
+             </button>
+
+             <!-- Undo/Redo Buttons -->
+             <button class="header-button action-button" id="undoBtn" title="Undo (Ctrl+Z)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2z"/>
+                    <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.72a.25.25 0 0 0 0 .384l2.36 2.38A.25.25 0 0 0 8 5.294V4.466z"/>
+                  </svg>
+            </button>
+            <button class="header-button action-button" id="redoBtn" title="Redo (Ctrl+Y)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/>
+                    <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 2.38a.25.25 0 0 1 0 .384l-2.36 2.38A.25.25 0 0 1 8 5.294V4.466z"/>
+                  </svg>
+            </button>
+
+            <!-- View Toggle Button -->
+            <button class="header-button action-button" id="viewToggleButton" title="Toggle View (Side-by-Side / Stacked)">
+                <!-- Icon for Side-by-Side View -->
+                <svg class="icon icon-side-by-side" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M5 0a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1H5zm6 14H5V2h6v12z"/>
+                    <path d="M0 1a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V1zm3 0V0H1v1H0v14h3V1zm10 0a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1V1z"/>
+                </svg>
+                <!-- Icon for Stacked View -->
+                <svg class="icon icon-stacked" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M0 2a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V2zm1 1v2h14V3H1zm0 7a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1v-3zm1 1v2h14v-2H2z"/>
+                </svg>
+            </button>
+
+            <button class="run-button" id="runBtn">Run</button>
+        </header>
+
+        <!-- Special Character Buttons (Initially Hidden) -->
+        <div class="special-char-container" id="specialCharContainer">
+            <div class="button-group" id="special-char-buttons">
+                <!-- Non-alphanumeric character buttons with hints -->
+                <button data-char="<" title="Less-than sign: <">&lt;</button>
+                <button data-char=">" title="Greater-than sign: >">&gt;</button>
+                <button data-char="/" title="Forward slash: /">/</button>
+                <button data-char='&quot;' title="Double quote: &quot;">"</button>
+                <button data-char="'" title="Single quote: '">'</button>
+                <button data-char="=" title="Equals sign: =">=</button>
+                <button data-char="&amp;" title="Ampersand: &amp;">&amp;</button>
+                <button data-char=";" title="Semicolon: ;">;</button>
+                <button data-char="#" title="Hash/Pound sign: #">#</button>
+                <button data-char="." title="Period/Dot: .">.</button>
+                <button data-char=":" title="Colon: :">:</button>
+                <button data-char="-" title="Hyphen: -">-</button>
+                <button data-char="_" title="Underscore: _">_</button>
+                <button data-char="{" title="Opening curly brace: {">{</button>
+                <button data-char="}" title="Closing curly brace: }">}</button>
+                <button data-char="[" title="Opening square bracket: [">[</button>
+                <button data-char="]" title="Closing square bracket: ]">]</button>
+                <button data-char="(" title="Opening parenthesis: (">(</button>
+                <button data-char=")" title="Closing parenthesis: )">)</button>
+                <button data-char="!" title="Exclamation mark: !">!</button>
+                <button data-char="*" title="Asterisk: *">*</button>
+                <button data-char="|" title="Vertical bar/Pipe: |">|</button>
+                <button data-char="?" title="Question mark: ?">?</button>
+                <button data-char="@" title="At symbol: @">@</button>
+                <button data-char="~" title="Tilde: ~">~</button>
+                <button data-char="&copy;" title="Copyright symbol: &copy;">&copy;</button>
+                <button data-char="&reg;" title="Registered trademark symbol: &reg;">&reg;</button>
+                <button data-char="₹" title="Indian Rupee symbol: ₹">₹</button>
+                <button data-char="$" title="Dollar sign: $">$</button>
+                <button class="insertDefaultCodeBtn" id="insertDefaultCodeBtn" title="Insert Default Code Snippet">Code</button>
+            </div>
+        </div>
+
+        <!-- Main Editor Layout (Panes + Output) -->
+        <main class="editor-layout-container side-by-side-view" id="editorLayout">
+            <!-- Editor Section -->
+            <section class="editor-section" id="editorSection">
+                <div class="editor-panes" id="editorPanes">
+                    <!-- Editor panes will be added dynamically -->
+                    <div class="editor-placeholder" id="editorPlaceholder">
+                        Click 'Code' in the Special Characters bar or Import from GitHub to load files.
+                    </div>
+                    <!-- Dynamic panes will be added here -->
+                </div>
+            </section>
+
+            <!-- Output Section -->
+            <section class="output-container" id="outputSection">
+                <div class="output-label">Output</div>
+                <iframe class="output-screen" id="outputScreen" title="Code Output"></iframe>
+            </section>
+        </main>
+
+    </div> <!-- END: Main Content Area -->
+
+    <!-- Old File Sidebar Toggle Button Removed -->
+
+    <!-- Floating Learn Panel (Initially Hidden) -->
+    <aside class="learn-panel" id="learnPanel">
+        <div class="learn-panel-header">
+            <button class="close-learn-panel" id="closeLearnPanelBtn" title="Close Learn Panel" aria-label="Close learn panel">&times;</button>
+        </div>
+        <div class="learn-panel-content">
+            <!-- Tutorial Component Structure -->
+            <div class="container">
+                <div class="header" style="display: flex; align-items: center; gap: 5px;">
+                    <select class="mySelect" id="mySelect" style="width: 100%;"></select>
+                </div>
+                <div class="content">
+                    <div class="message-box">Select a topic above to start learning.</div>
+                </div>
+            </div>
+            <!-- End Tutorial Component Structure -->
+
+            <hr>
+            <h4>Quick Links:</h4>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML" target="_blank" rel="noopener noreferrer">MDN HTML Guide</a></li>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS" target="_blank" rel="noopener noreferrer">MDN CSS Guide</a></li>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noopener noreferrer">MDN JavaScript Guide</a></li>
+                <li><a href="https://www.w3schools.com/" target="_blank" rel="noopener noreferrer">W3Schools</a></li>
+            </ul>
+        </div>
+    </aside>
+    <!-- END: Floating Learn Panel -->
+
+    <!-- New File Modal -->
+    <div class="modal-overlay" id="newFileModalOverlay">
+        <div class="modal-dialog" id="newFileModal">
+            <div class="modal-header">
+                <h3>Create New File</h3>
+                <button class="modal-close-btn" id="closeModalBtn" aria-label="Close modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <label for="newFileName">File Name (e.g., styles.css, script.js, image.png):</label>
+                <input type="text" id="newFileName" placeholder="Enter file name with extension">
+                <div class="modal-error" id="modalError"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-button cancel" id="cancelModalBtn">Cancel</button>
+                <button class="modal-button create" id="createFileBtn">Create</button>
+            </div>
+        </div>
+    </div>
+    <!-- END: New File Modal -->
+
+
+    <!-- Main Application Script -->
+    <script src="script.js"></script>
+
+</body>
+</html>
