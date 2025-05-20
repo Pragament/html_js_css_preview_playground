@@ -45,20 +45,21 @@
             overflow: hidden;
         }
 
-        .file-explorer {
-            width: 104px;
-            background: #2d2d2d;
-            color: #fff;
-            padding: 10px;
-            overflow-y: auto;
-        }
+       .file-explorer {
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+    height: auto;
+    flex-wrap: wrap;
+}
 
-        .file-explorer ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
+       .file-explorer ul {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
         .file-explorer li {
             padding: 5px;
             cursor: pointer;
@@ -110,13 +111,10 @@
         }
 
         .divider-text {
-            display: flex;
-            align-items: center;
-            text-align: center;
-            margin: 0;
-            font-weight: bold;
-            color: #555;
-        }
+    flex-basis: 100%;
+    text-align: center;
+    margin-top: 10px;
+}
 
         .divider-text::before,
         .divider-text::after {
@@ -228,10 +226,12 @@
         /* Responsive Design for 7-inch Tablet */
         @media (max-width: 600px) {
             .toolbar {
-                gap: 3px;
-                padding: 5px;
-            }
-
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 4px;
+        padding: 5px;
+    }
             .toolbar button {
                 padding: 4px 8px;
                 font-size: 10px;
@@ -271,10 +271,27 @@
             opacity: 0.5;
         }
 
-        .button-group {
-            display: flex;
-            gap: 5px;
-        }
+       .button-group {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+        gap: 4px;
+    }
+     .toolbar button,
+    .button-group button {
+        padding: 2px 4px;
+        font-size: 10px;
+        min-width: 30px;
+        flex: 1 0 8%;
+        max-width: 40px;
+        box-sizing: border-box;
+    }
+
+    #special-char-buttons {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
 
         .divider {
             width: 2px;
@@ -340,14 +357,14 @@
             <button onclick="zoomIn()" title="Zoom in">🔍➕</button>
             <button onclick="zoomOut()" title="Zoom out">🔍➖</button>
             <button onclick="insertTemplate()" title="Insert Template">🔥📄</button>
-            <button onclick="selectAll()" title="Select All">Select All</button>
-            <button onclick="copyText()" title="Copy">Copy</button>
-            <button onclick="pasteText()" title="Paste">Paste</button>
+            <button onclick="selectAll()" title="Select All">☑️</button>
+            <button onclick="copyText()" title="Copy">📋</button>
+            <button onclick="pasteText()" title="Paste">📥</button>
             <button onclick="clearEditor()" title="Clear Editor">Clear🚫📝</button>
-            <button onclick="toggleAutocomplete()" id="autocomplete-button" title="Toggle Autocomplete">💡:❌Off</button>
-            <button onclick="prettifyCode()" title="Prettify Code">✨ Prettify</button>
+            <button onclick="toggleAutocomplete()" id="autocomplete-button" title="Toggle Autocomplete">💡:❌</button>
+            <button onclick="prettifyCode()" title="Prettify Code">✨</button>
             <button hidden onclick="createNewFile()" title="Create New File">🆕📄➕</button>
-            <button hidden onclick="saveFile()" title="Create New File">Save 💾📄</button>
+            <button hidden onclick="saveFile()" title="Create New File">💾📄</button>
             <button hidden onclick="viewAutosavedFiles()" title="View Saved Files">👁️📄</button>
             <button onclick="toggleSpecialChars()" title="Show/Hide Special Characters">👁️🎹</button>
             <p id="capsWarning">⚠️ Caps Lock is ON!</p>
