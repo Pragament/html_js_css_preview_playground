@@ -7,333 +7,28 @@
     <title>Code Playground</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/codemirror.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/theme/material.min.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            height: 100vh;
-            flex-direction: column;
-        }
-
-        .toolbar {
-            display: flex;
-            flex-direction: column;
-            background: #2d2d2d;
-            padding: 10px;
-            gap: 10px;
-        }
-
-        .toolbar button {
-            background: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            padding: 6px 10px;;
-            font-size: x-large;
-        }
-
-        .toolbar button:hover {
-            background: #0056b3;
-        }
-
-        .main-container {
-            display: flex;
-            flex: 1;
-            overflow: hidden;
-        }
-
-        .file-explorer {
-            width: 104px;
-            background: #2d2d2d;
-            color: #fff;
-            padding: 10px;
-            overflow-y: auto;
-        }
-
-        .file-explorer ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .file-explorer li {
-            padding: 5px;
-            cursor: pointer;
-        }
-
-        .file-explorer li.hover:hover {
-            background: #444;
-        }
-
-        .file-explorer img {
-            width: 90%;
-            height: auto;
-            border-radius: 5px;
-            margin-top: 5px;
-        }
-
-        .editor-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            /*max-width: 93%;*/
-        }
-
-        .CodeMirror {
-            /*height: 33.33vh;*/
-            border-bottom: 1px solid #444;
-            /*white-space: pre-wrap;*/
-            /* Wrap text */
-        }
-
-        .preview-container {
-            flex: 1;
-            display: flex;
-        }
-
-        .preview {
-            flex: 1;
-            border-left: 1px solid #444;
-        }
-
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        .divider-text {
-            display: flex;
-            align-items: center;
-            text-align: center;
-            margin: 0;
-            font-weight: bold;
-            color: #555;
-        }
-
-        .divider-text::before,
-        .divider-text::after {
-            content: "";
-            flex: 1;
-            border-bottom: 1px solid #ccc;
-            margin: 0 10px;
-        }
-
-        /* Floating Help Button */
-        .help-button {
-            visibility: hidden;
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            font-size: 24px;
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Chat Window */
-        .chat-window {
-            position: fixed;
-            bottom: 80px;
-            right: 20px;
-            width: 300px;
-            background: white;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            display: none;
-            flex-direction: column;
-        }
-
-        .chat-header {
-            background: #007bff;
-            color: white;
-            padding: 10px;
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
-            font-weight: bold;
-        }
-
-        .chat-body {
-            flex: 1;
-            padding: 10px;
-            overflow-y: auto;
-            max-height: 300px;
-        }
-
-        .chat-footer {
-            display: flex;
-            padding: 10px;
-            border-top: 1px solid #ccc;
-        }
-
-        .chat-footer input {
-            flex: 1;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            margin-right: 10px;
-        }
-
-        .chat-footer button {
-            background: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 8px 12px;
-            cursor: pointer;
-        }
-
-        .message {
-            margin-bottom: 10px;
-        }
-
-        .message.user {
-            text-align: right;
-        }
-
-        .message.bot {
-            text-align: left;
-        }
-
-        .message p {
-            display: inline-block;
-            padding: 8px;
-            border-radius: 10px;
-            max-width: 80%;
-        }
-
-        .message.user p {
-            background: #007bff;
-            color: white;
-        }
-
-        .message.bot p {
-            background: #f1f1f1;
-            color: #333;
-        }
-
-        /* Responsive Design for 7-inch Tablet */
-        @media (max-width: 600px) {
-            .toolbar {
-                gap: 3px;
-                padding: 5px;
-            }
-
-            .toolbar button {
-                padding: 4px 8px;
-                font-size: 10px;
-            }
-
-            .main-container {
-                flex-direction: column;
-            }
-
-            .file-explorer {
-                width: 100%;
-                height: 150px;
-            }
-
-            .editor-container {
-                height: 50vh;
-            }
-
-            .preview-container {
-                height: 30vh;
-            }
-
-            .help-button {
-                bottom: 10px;
-                right: 10px;
-            }
-
-            .chat-window {
-                width: 90%;
-                right: 5%;
-                bottom: 70px;
-            }
-        }
-
-        .toolbar button:disabled {
-            pointer-events: none;
-            opacity: 0.5;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 5px;
-        }
-
-        .divider {
-            width: 2px;
-            height: 24px;
-            background-color: #ccc;
-            margin: 0 10px;
-        }
-
-        /* Preview Layout Toggle */
-        .preview-right {
-            flex-direction: row;
-        }
-
-        .preview-bottom {
-            flex-direction: column;
-        }
-
-        .preview-bottom .preview {
-            border-left: none;
-            border-top: 1px solid #444;
-        }
-
-        #special-char-buttons {
-            flex-basis: 100%;
-            /* Forces it to take full width and move to the next line */
-        }
-
-        #capsWarning {
-            display: none;
-            color: red;
-            font-weight: bold;
-            animation: blink 1s infinite alternate;
-        }
-
-        @keyframes blink {
-            0% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0;
-            }
-
-            100% {
-                opacity: 1;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="index.css">
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify-html.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify-css.min.js"></script>
+    <!-- Select2 liniks -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/highlight.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/default.min.css">
+    
+    
 </head>
 
-<body>
+<body>  
     <!-- Toolbar with Undo/Redo Buttons -->
     <div class="toolbar">
         <!-- Undo/Redo Button Group -->
         <div class="button-group">
-            <button onclick="togglePreviewLayout()" hidden id="preview-toggle-button"
+            <button onclick="togglePreviewLayout()" 
                 title="Toggle Preview Layout">👁️🔄</button>
             <button id="undo-button" onclick="undo()" disabled title="Undo the last action">↩️</button>
             <button id="redo-button" onclick="redo()" disabled title="Redo the last undone action">↪️</button>
@@ -389,6 +84,23 @@
     </div>
 
     <div class="main-container preview-right" id="main-container">
+        <!-------------------CHAPTERS--------------->
+        <div class="container">
+            <div class="header">
+                <button class="arrow" id="prev">&lt;</button>
+                <div class="steps" id="step-container"></div>
+                <select class="mySelect" id="mySelect" style="width: 300px;"></select>
+                <button class="arrow" id="next">&gt;</button>
+            </div>
+            <div class="content">
+                <div class="title">Tutorial</div>
+                <div class="step-info">Chapter 1 of 76</div>
+                <div class="message-box">LEARN HOW TO CODE HERE</div>
+            </div>
+            <div class="footer"></div>
+            <div class="resize-handle"></div>
+        </div>
+        <!-------------------FILE EXPLORER--------------->
         <div class="file-explorer">
             <ul>
                 <li class="hover" onclick="toggleFile('html')">index.html</li>
@@ -396,11 +108,9 @@
                 <li class="hover" onclick="toggleFile('js')">script.js</li>
             </ul>
             <div class="divider-text">Text</div>
-
             <strong></strong>
             <ul>
-                <li class="hover"
-                    onclick="insertLoremIpsum('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.')">
+                <li class="hover" onclick="insertLoremIpsum('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.')">
                     Insert sample text
                 </li>
             </ul>
@@ -421,18 +131,19 @@
                 </li>
             </ul>
         </div>
-        <div class="editor-container">
-            <textarea id="html-code" class="hidden">
-<!-- Add your HTML code here -->
-</textarea>
-            <textarea id="css-code" class="hidden">
-/* Add your CSS here */
-</textarea>
-            <textarea id="js-code" class="hidden">
-// Add your JavaScript here
-</textarea>
+        <div class="editor-preview-wrapper"> 
+            <div class="editor-container" style="width: 100%; ">
+                <textarea id="html-code" class="hidden">
+                    </textarea>
+                <textarea id="css-code" class="hidden">
+                    /* Add your CSS here */
+                </textarea>
+                <textarea id="js-code" class="hidden">
+                    // Add your JavaScript here
+                </textarea>
+            </div>
             <div class="preview-container">
-                <iframe id="preview"></iframe>
+                <iframe id="preview" style="background-color: #8ab9ef;"></iframe>
             </div>
         </div>
     </div>
@@ -467,6 +178,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/javascript-hint.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/html-hint.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/css-hint.min.js"></script>
+    <script src="index.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/show-hint.min.css">
     <script>
         // Default sample code
@@ -849,18 +561,17 @@ document.querySelector('h1').addEventListener('click', () => {
         }
 
         // Toggle Preview Layout
-        function togglePreviewLayout() {
-            const mainContainer = document.getElementById('main-container');
-            const previewToggleButton = document.getElementById('preview-toggle-button');
+    function togglePreviewLayout() {
+    const editorPreviewWrapper = document.querySelector('.editor-preview-wrapper');
 
-            if (mainContainer.classList.contains('preview-right')) {
-                mainContainer.classList.remove('preview-right');
-                mainContainer.classList.add('preview-bottom');
-            } else {
-                mainContainer.classList.remove('preview-bottom');
-                mainContainer.classList.add('preview-right');
-            }
-        }
+    if (editorPreviewWrapper.classList.contains('preview-right')) {
+        editorPreviewWrapper.classList.remove('preview-right');
+        editorPreviewWrapper.classList.add('preview-bottom');
+    } else {
+        editorPreviewWrapper.classList.remove('preview-bottom');
+        editorPreviewWrapper.classList.add('preview-right');
+    }
+}
 
         // Function to select all text in the active editor
         function selectAll() {
@@ -993,6 +704,7 @@ document.querySelector('h1').addEventListener('click', () => {
             }
         }
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </body>
 
 </html>
