@@ -2,341 +2,337 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Code Playground</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/codemirror.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/theme/material.min.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            height: 100vh;
-            flex-direction: column;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Code Playground</title>
 
-        .toolbar {
-            display: flex;
-            flex-direction: column;
-            background: #2d2d2d;
-            padding: 10px;
-            gap: 10px;
-        }
+  <!-- Codemirror CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/codemirror.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/theme/material.min.css" />
 
-        .toolbar button {
-            background: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            padding: 6px 10px;;
-            font-size: x-large;
-        }
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      height: 100vh;
+      flex-direction: column;
+    }
+    /* Rest of your CSS remains unchanged */
+    .toolbar {
+      display: flex;
+      flex-direction: column;
+      background: #2d2d2d;
+      padding: 10px;
+      gap: 10px;
+    }
 
-        .toolbar button:hover {
-            background: #0056b3;
-        }
+    .toolbar button {
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      padding: 6px 10px;
+      font-size: x-large;
+    }
 
-        .main-container {
-            display: flex;
-            flex: 1;
-            overflow: hidden;
-        }
+    .toolbar button:hover {
+      background: #0056b3;
+    }
 
-        .file-explorer {
-            width: 104px;
-            background: #2d2d2d;
-            color: #fff;
-            padding: 10px;
-            overflow-y: auto;
-        }
+    .main-container {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
 
-        .file-explorer ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
+    .file-explorer {
+      width: 104px;
+      background: #2d2d2d;
+      color: #fff;
+      padding: 10px;
+      overflow-y: auto;
+    }
 
-        .file-explorer li {
-            padding: 5px;
-            cursor: pointer;
-        }
+    .file-explorer ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
 
-        .file-explorer li.hover:hover {
-            background: #444;
-        }
+    .file-explorer li {
+      padding: 5px;
+      cursor: pointer;
+    }
 
-        .file-explorer img {
-            width: 90%;
-            height: auto;
-            border-radius: 5px;
-            margin-top: 5px;
-        }
+    .file-explorer li.hover:hover {
+      background: #444;
+    }
 
-        .editor-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            /*max-width: 93%;*/
-        }
+    .file-explorer img {
+      width: 90%;
+      height: auto;
+      border-radius: 5px;
+      margin-top: 5px;
+    }
 
-        .CodeMirror {
-            /*height: 33.33vh;*/
-            border-bottom: 1px solid #444;
-            /*white-space: pre-wrap;*/
-            /* Wrap text */
-        }
+    .editor-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
 
-        .preview-container {
-            flex: 1;
-            display: flex;
-        }
+    .CodeMirror {
+      border-bottom: 1px solid #444;
+    }
 
-        .preview {
-            flex: 1;
-            border-left: 1px solid #444;
-        }
+    .preview-container {
+      flex: 1;
+      display: flex;
+    }
 
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
+    .preview {
+      flex: 1;
+      border-left: 1px solid #444;
+    }
 
-        .hidden {
-            display: none !important;
-        }
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
 
-        .divider-text {
-            display: flex;
-            align-items: center;
-            text-align: center;
-            margin: 0;
-            font-weight: bold;
-            color: #555;
-        }
+    .hidden {
+      display: none !important;
+    }
 
-        .divider-text::before,
-        .divider-text::after {
-            content: "";
-            flex: 1;
-            border-bottom: 1px solid #ccc;
-            margin: 0 10px;
-        }
+    .divider-text {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      margin: 0;
+      font-weight: bold;
+      color: #555;
+    }
 
-        /* Floating Help Button */
-        .help-button {
-            visibility: hidden;
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            font-size: 24px;
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
+    .divider-text::before,
+    .divider-text::after {
+      content: "";
+      flex: 1;
+      border-bottom: 1px solid #ccc;
+      margin: 0 10px;
+    }
 
-        /* Chat Window */
-        .chat-window {
-            position: fixed;
-            bottom: 80px;
-            right: 20px;
-            width: 300px;
-            background: white;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            display: none;
-            flex-direction: column;
-        }
+    .help-button {
+      visibility: hidden;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
 
-        .chat-header {
-            background: #007bff;
-            color: white;
-            padding: 10px;
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
-            font-weight: bold;
-        }
+    .chat-window {
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      width: 300px;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      display: none;
+      flex-direction: column;
+    }
 
-        .chat-body {
-            flex: 1;
-            padding: 10px;
-            overflow-y: auto;
-            max-height: 300px;
-        }
+    .chat-header {
+      background: #007bff;
+      color: white;
+      padding: 10px;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      font-weight: bold;
+    }
 
-        .chat-footer {
-            display: flex;
-            padding: 10px;
-            border-top: 1px solid #ccc;
-        }
+    .chat-body {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+      max-height: 300px;
+    }
 
-        .chat-footer input {
-            flex: 1;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            margin-right: 10px;
-        }
+    .chat-footer {
+      display: flex;
+      padding: 10px;
+      border-top: 1px solid #ccc;
+    }
 
-        .chat-footer button {
-            background: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 8px 12px;
-            cursor: pointer;
-        }
+    .chat-footer input {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-right: 10px;
+    }
 
-        .message {
-            margin-bottom: 10px;
-        }
+    .chat-footer button {
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 8px 12px;
+      cursor: pointer;
+    }
 
-        .message.user {
-            text-align: right;
-        }
+    .message {
+      margin-bottom: 10px;
+    }
 
-        .message.bot {
-            text-align: left;
-        }
+    .message.user {
+      text-align: right;
+    }
 
-        .message p {
-            display: inline-block;
-            padding: 8px;
-            border-radius: 10px;
-            max-width: 80%;
-        }
+    .message.bot {
+      text-align: left;
+    }
 
-        .message.user p {
-            background: #007bff;
-            color: white;
-        }
+    .message p {
+      display: inline-block;
+      padding: 8px;
+      border-radius: 10px;
+      max-width: 80%;
+    }
 
-        .message.bot p {
-            background: #f1f1f1;
-            color: #333;
-        }
+    .message.user p {
+      background: #007bff;
+      color: white;
+    }
 
-        /* Responsive Design for 7-inch Tablet */
-        @media (max-width: 600px) {
-            .toolbar {
-                gap: 3px;
-                padding: 5px;
-            }
+    .message.bot p {
+      background: #f1f1f1;
+      color: #333;
+    }
 
-            .toolbar button {
-                padding: 4px 8px;
-                font-size: 10px;
-            }
+    @media (max-width: 600px) {
+      .toolbar {
+        gap: 3px;
+        padding: 5px;
+      }
 
-            .main-container {
-                flex-direction: column;
-            }
+      .toolbar button {
+        padding: 4px 8px;
+        font-size: 10px;
+      }
 
-            .file-explorer {
-                width: 100%;
-                height: 150px;
-            }
+      .main-container {
+        flex-direction: column;
+      }
 
-            .editor-container {
-                height: 50vh;
-            }
+      .file-explorer {
+        width: 100%;
+        height: 150px;
+      }
 
-            .preview-container {
-                height: 30vh;
-            }
+      .editor-container {
+        height: 50vh;
+      }
 
-            .help-button {
-                bottom: 10px;
-                right: 10px;
-            }
+      .preview-container {
+        height: 30vh;
+      }
 
-            .chat-window {
-                width: 90%;
-                right: 5%;
-                bottom: 70px;
-            }
-        }
+      .help-button {
+        bottom: 10px;
+        right: 10px;
+      }
 
-        .toolbar button:disabled {
-            pointer-events: none;
-            opacity: 0.5;
-        }
+      .chat-window {
+        width: 90%;
+        right: 5%;
+        bottom: 70px;
+      }
+    }
 
-        .button-group {
-            display: flex;
-            gap: 5px;
-        }
+    .toolbar button:disabled {
+      pointer-events: none;
+      opacity: 0.5;
+    }
 
-        .divider {
-            width: 2px;
-            height: 24px;
-            background-color: #ccc;
-            margin: 0 10px;
-        }
+    .button-group {
+      display: flex;
+      gap: 5px;
+    }
 
-        /* Preview Layout Toggle */
-        .preview-right {
-            flex-direction: row;
-        }
+    .divider {
+      width: 2px;
+      height: 24px;
+      background-color: #ccc;
+      margin: 0 10px;
+    }
 
-        .preview-bottom {
-            flex-direction: column;
-        }
+    .preview-right {
+      flex-direction: row;
+    }
 
-        .preview-bottom .preview {
-            border-left: none;
-            border-top: 1px solid #444;
-        }
+    .preview-bottom {
+      flex-direction: column;
+    }
 
-        #special-char-buttons {
-            flex-basis: 100%;
-            /* Forces it to take full width and move to the next line */
-        }
+    .preview-bottom .preview {
+      border-left: none;
+      border-top: 1px solid #444;
+    }
 
-        #capsWarning {
-            display: none;
-            color: red;
-            font-weight: bold;
-            animation: blink 1s infinite alternate;
-        }
+    #special-char-buttons {
+      flex-basis: 100%;
+    }
 
-        @keyframes blink {
-            0% {
-                opacity: 1;
-            }
+    #capsWarning {
+      display: none;
+      color: red;
+      font-weight: bold;
+      animation: blink 1s infinite alternate;
+    }
 
-            50% {
-                opacity: 0;
-            }
+    @keyframes blink {
+      0% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+  </style>
 
-            100% {
-                opacity: 1;
-            }
-        }
-    </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify-html.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify-css.min.js"></script>
+  <!-- Beautify Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify-html.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify-css.min.js"></script>
 </head>
+
 
 <body>
     <!-- Toolbar with Undo/Redo Buttons -->
     <div class="toolbar">
         <!-- Undo/Redo Button Group -->
         <div class="button-group">
-            <button onclick="togglePreviewLayout()" hidden id="preview-toggle-button"
+            <button onclick="togglePreviewLayout()" hidden="hidden" id="preview-toggle-button"
                 title="Toggle Preview Layout">👁️🔄</button>
-            <button id="undo-button" onclick="undo()" disabled title="Undo the last action">↩️</button>
-            <button id="redo-button" onclick="redo()" disabled title="Redo the last undone action">↪️</button>
+            <button id="undo-button" onclick="undo()" disabled="disabled" title="Undo the last action">↩️</button>
+            <button id="redo-button" onclick="redo()" disabled="disabled"
+                title="Redo the last undone action">↪️</button>
             <button onclick="zoomIn()" title="Zoom in">🔍➕</button>
             <button onclick="zoomOut()" title="Zoom out">🔍➖</button>
             <button onclick="insertTemplate()" title="Insert Template">🔥📄</button>
@@ -346,23 +342,22 @@
             <button onclick="clearEditor()" title="Clear Editor">Clear🚫📝</button>
             <button onclick="toggleAutocomplete()" id="autocomplete-button" title="Toggle Autocomplete">💡:❌Off</button>
             <button onclick="prettifyCode()" title="Prettify Code">✨ Prettify</button>
-            <button hidden onclick="createNewFile()" title="Create New File">🆕📄➕</button>
-            <button hidden onclick="saveFile()" title="Create New File">Save 💾📄</button>
-            <button hidden onclick="viewAutosavedFiles()" title="View Saved Files">👁️📄</button>
+            <button hidden="hidden" onclick="createNewFile()" title="Create New File">🆕📄➕</button>
+            <button hidden="hidden" onclick="saveFile()" title="Save File">Save 💾📄</button>
+            <button hidden="hidden" onclick="viewAutosavedFiles()" title="View Saved Files">👁️📄</button>
             <button onclick="toggleSpecialChars()" title="Show/Hide Special Characters">👁️🎹</button>
             <p id="capsWarning">⚠️ Caps Lock is ON!</p>
         </div>
 
         <!-- Special Character Button Group -->
         <div class="button-group" id="special-char-buttons">
-            <!-- Non-alphanumeric character buttons with hints -->
-            <button onclick="insertLoremIpsum('<')" title="Less-than sign: <">&lt;</button>
-            <button onclick="insertLoremIpsum('>')" title="Greater-than sign: >">&gt;</button>
+            <button onclick="insertLoremIpsum('&lt;')" title="Less-than sign: &lt;">&lt;</button>
+            <button onclick="insertLoremIpsum('&gt;')" title="Greater-than sign: &gt;">&gt;</button>
             <button onclick="insertLoremIpsum('/')" title="Forward slash: /">/</button>
             <button onclick="insertLoremIpsum('&quot;')" title="Double quote: &quot;">"</button>
-            <button onclick="insertLoremIpsum('\'')" title="Single quote: '">'</button>
+            <button onclick="insertLoremIpsum('&#39;')" title="Single quote: '">'</button>
             <button onclick="insertLoremIpsum('=')" title="Equals sign: =">=</button>
-            <button onclick="insertLoremIpsum('&')" title="Ampersand: &">&amp;</button>
+            <button onclick="insertLoremIpsum('&amp;')" title="Ampersand: &amp;">&amp;</button>
             <button onclick="insertLoremIpsum(';')" title="Semicolon: ;">;</button>
             <button onclick="insertLoremIpsum('#')" title="Hash/Pound sign: #">#</button>
             <button onclick="insertLoremIpsum('.')" title="Period/Dot: .">.</button>
@@ -381,13 +376,13 @@
             <button onclick="insertLoremIpsum('?')" title="Question mark: ?">?</button>
             <button onclick="insertLoremIpsum('@')" title="At symbol: @">@</button>
             <button onclick="insertLoremIpsum('~')" title="Tilde: ~">~</button>
-            <button onclick="insertLoremIpsum('&copy;')" title="Copyright symbol: &copy;">&copy;</button>
-            <button onclick="insertLoremIpsum('&reg;')" title="Registered trademark symbol: &reg;">&reg;</button>
+            <button onclick="insertLoremIpsum('&#169;')" title="Copyright symbol: ©">&#169;</button>
+            <button onclick="insertLoremIpsum('&#174;')" title="Registered trademark symbol: ®">&#174;</button>
             <button onclick="insertLoremIpsum('₹')" title="Indian Rupee symbol: ₹">₹</button>
             <button onclick="insertLoremIpsum('$')" title="Dollar sign: $">$</button>
         </div>
     </div>
-
+    
     <div class="main-container preview-right" id="main-container">
         <div class="file-explorer">
             <ul>
