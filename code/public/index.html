@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Playground</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/theme/material.min.css">
+    <link rel="stylesheet" href="app.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify-html.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify-css.min.js"></script>
+    <style>
+        .github-section {
+            margin-top: 10px;
+        }
+        .github-repos, .github-files {
+            max-height: 280px;
+            overflow-y: auto;
+        }
+        .github-repos button, .github-files button {
+            display: block;
+            width: 100%;
+            margin: 2px 0;
+            padding: 4px 8px;
+            background-color: #33334d;
+            color: #ffffff;
+            border: 1px solid #555;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+            text-align: left;
+        }
+        .github-repos button:hover, .github-files button:hover {
+            background-color: #3d3d5c;
+        }
+        #github-login-btn {
+            background-color: #238636;
+            border-color: #238636;
+        }
+        #github-login-btn:hover {
+            background-color: #2ea043;
+        }
+        #github-logout-btn {
+            background-color: #da3633;
+            border-color: #da3633;
+        }
+        #github-logout-btn:hover {
+            background-color: #e5484d;
+        }
+        .file-explorer {
+            position: relative;
+            resize: horizontal;
+            overflow: auto;
+            min-width: 200px;
+            max-width: 500px;
+        }
+        .file-explorer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            background-color: #2d2d44;
+            border-bottom: 1px solid #444;
+            margin-bottom: 8px;
+        }
+        .file-explorer-header h3 {
+            margin: 0;
+            color: #ffffff;
+            font-size: 14px;
+        }
+        .file-explorer-toggle {
+            background-color: #da3633;
+            color: #ffffff;
+            border: 1px solid #da3633;
+            padding: 4px 8px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .file-explorer-toggle:hover {
+            background-color: #e5484d;
+        }
+        .file-explorer.hidden {
+            display: none;
+        }
+        .main-container.full-width .editor-container {
+            width: 100%;
+        }
+        .show-explorer-btn {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 1000;
+            background-color: #238636;
+            color: #ffffff;
+            border: 1px solid #238636;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            display: none;
+        }
+        .show-explorer-btn:hover {
+            background-color: #2ea043;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Show Explorer Button (hidden by default) -->
+    <button class="show-explorer-btn" id="show-explorer-btn" onclick="showFileExplorer()">📁 Show Explorer</button>
+
+    <!-- Toolbar with Undo/Redo Buttons -->
+    <div class="toolbar">
+        <!-- Undo/Redo Button Group -->
+        <div class="button-group">
+            <button onclick="UserSignin()" id="github-login-btn">🔐 Login GitHub</button>
+            <button onclick="UserLogout()" id="github-logout-btn" style="display:none;">🔓 Logout</button>
+            <button onclick="togglePreviewLayout()" hidden id="preview-toggle-button"
+                title="Toggle Preview Layout">👁️🔄</button>
+            <button id="undo-button" onclick="undo()" disabled title="Undo the last action">↩️</button>
+            <button id="redo-button" onclick="redo()" disabled title="Redo the last undone action">↪️</button>
+            <button onclick="zoomIn()" title="Zoom in">🔍➕</button>
+            <button onclick="zoomOut()" title="Zoom out">🔍➖</button>
+            <button onclick="insertTemplate()" title="Insert Template">🔥📄</button>
+            <button onclick="selectAll()" title="Select All">Select All</button>
+            <button onclick="copyText()" title="Copy">Copy</button>
+            <button onclick="pasteText()" title="Paste">Paste</button>
+            <button onclick="clearEditor()" title="Clear Editor">Clear🚫📝</button>
+            <button onclick="toggleAutocomplete()" id="autocomplete-button" title="Toggle Autocomplete">💡:❌Off</button>
+            <button onclick="prettifyCode()" title="Prettify Code">✨ Prettify</button>
+            <button hidden onclick="createNewFile()" title="Create New File">🆕📄➕</button>
+            <button hidden onclick="saveFile()" title="Create New File">Save 💾📄</button>
+            <button hidden onclick="viewAutosavedFiles()" title="View Saved Files">👁️📄</button>
+            <button onclick="toggleSpecialChars()" title="Show/Hide Special Characters">👁️🎹</button>
+            <p id="capsWarning">⚠️ Caps Lock is ON!</p>
+        </div>
+
+        <!-- Special Character Button Group -->
+        <div class="button-group" id="special-char-buttons">
+            <!-- Non-alphanumeric character buttons with hints -->
+            <button onclick="insertLoremIpsum('<')" title="Less-than sign: <">&lt;</button>
+            <button onclick="insertLoremIpsum('>')" title="Greater-than sign: >">&gt;</button>
+            <button onclick="insertLoremIpsum('/')" title="Forward slash: /">/</button>
+            <button onclick="insertLoremIpsum('&quot;')" title="Double quote: &quot;">"</button>
+            <button onclick="insertLoremIpsum('\'')" title="Single quote: '">'</button>
+            <button onclick="insertLoremIpsum('=')" title="Equals sign: =">=</button>
+            <button onclick="insertLoremIpsum('&')" title="Ampersand: &">&amp;</button>
+            <button onclick="insertLoremIpsum(';')" title="Semicolon: ;">;</button>
+            <button onclick="insertLoremIpsum('#')" title="Hash/Pound sign: #">#</button>
+            <button onclick="insertLoremIpsum('.')" title="Period/Dot: .">.</button>
+            <button onclick="insertLoremIpsum(':')" title="Colon: :">:</button>
+            <button onclick="insertLoremIpsum('-')" title="Hyphen: -">-</button>
+            <button onclick="insertLoremIpsum('_')" title="Underscore: _">_</button>
+            <button onclick="insertLoremIpsum('{')" title="Opening curly brace: {">{</button>
+            <button onclick="insertLoremIpsum('}')" title="Closing curly brace: }">}</button>
+            <button onclick="insertLoremIpsum('[')" title="Opening square bracket: [">[</button>
+            <button onclick="insertLoremIpsum(']')" title="Closing square bracket: ]">]</button>
+            <button onclick="insertLoremIpsum('(')" title="Opening parenthesis: (">(</button>
+            <button onclick="insertLoremIpsum(')')" title="Closing parenthesis: )">)</button>
+            <button onclick="insertLoremIpsum('!')" title="Exclamation mark: !">!</button>
+            <button onclick="insertLoremIpsum('*')" title="Asterisk: *">*</button>
+            <button onclick="insertLoremIpsum('|')" title="Vertical bar/Pipe: |">|</button>
+            <button onclick="insertLoremIpsum('?')" title="Question mark: ?">?</button>
+            <button onclick="insertLoremIpsum('@')" title="At symbol: @">@</button>
+            <button onclick="insertLoremIpsum('~')" title="Tilde: ~">~</button>
+            <button onclick="insertLoremIpsum('&copy;')" title="Copyright symbol: &copy;">&copy;</button>
+            <button onclick="insertLoremIpsum('&reg;')" title="Registered trademark symbol: &reg;">&reg;</button>
+            <button onclick="insertLoremIpsum('₹')" title="Indian Rupee symbol: ₹">₹</button>
+            <button onclick="insertLoremIpsum('$')" title="Dollar sign: $">$</button>
+            <button onclick="updateFileToGitHub()" title="Update GitHub">💾 Update to GitHub</button>
+
+        </div>
+    </div>
+
+    <div class="main-container preview-right" id="main-container">
+        <div class="file-explorer" id="file-explorer">
+            <div class="file-explorer-header">
+                <h3>File Explorer</h3>
+                <button class="file-explorer-toggle" onclick="hideFileExplorer()">✕</button>
+            </div>
+            <ul>
+                <li class="hover" onclick="toggleFile('html')">index.html</li>
+                <li class="hover" onclick="toggleFile('css')">style.css</li>
+                <li class="hover" onclick="toggleFile('js')">script.js</li>
+            </ul>
+            
+            <!-- GitHub Integration Section -->
+            <div class="github-section" id="github-section">
+                <div class="divider-text">GitHub Repositories</div>
+                <div id="github-repos" class="github-repos"></div>
+                
+                <div class="divider-text">Repository Files</div>
+                <div id="github-files" class="github-files"></div>
+            </div>
+            
+            <div class="divider-text">Text</div>
+            <strong></strong>
+            <ul>
+                <li class="hover"
+                    onclick="insertLoremIpsum('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.')">
+                    Insert sample text
+                </li>
+            </ul>
+            <div class="divider-text">Images</div>
+            <strong></strong>
+            <ul>
+                <li class="hover" onclick="insertImagePath('./images/sample1.jpg')">
+                    sample1.jpg
+                    <img src="images/sample1.jpg" alt="Sample 1">
+                </li>
+                <li class="hover" onclick="insertImagePath('./images/sample2.jpg')">
+                    sample2.jpg
+                    <img src="images/sample2.jpg" alt="Sample 2">
+                </li>
+                <li class="hover" onclick="insertImagePath('./images/sample3.jpg')">
+                    sample3.jpg
+                    <img src="images/sample3.jpg" alt="Sample 3">
+                </li>
+            </ul>
+        </div>
+        <div class="editor-container">
+            <textarea id="html-code" class="hidden">
+<!-- Add your HTML code here -->
+</textarea>
+            <textarea id="css-code" class="hidden">
+/* Add your CSS here */
+</textarea>
+            <textarea id="js-code" class="hidden">
+// Add your JavaScript here
+</textarea>
+            <div class="preview-container">
+                <iframe id="preview"></iframe>
+            </div>
+        </div>
+    </div>
+    <!-- Floating Help Button -->
+    <button class="help-button" onclick="toggleChat()">?</button>
+
+    <!-- Chat Window -->
+    <div class="chat-window">
+        <div class="chat-header">Help Chat</div>
+        <div class="chat-body" id="chat-body">
+            <div class="message bot">
+                <p>Hello! How can I help you today?</p>
+            </div>
+            <div class="action-buttons">
+                <button onclick="showFAQs()">View FAQs</button>
+                <button onclick="showCustomMessageInput()">Send Custom Message</button>
+            </div>
+        </div>
+        <div class="chat-footer">
+            <input type="text" id="chat-input" placeholder="Type your message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/mode/xml/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/mode/css/css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/mode/htmlmixed/htmlmixed.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/show-hint.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/xml-hint.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/javascript-hint.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/html-hint.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/css-hint.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/show-hint.min.css">
+    <script src="app.js"></script>
+    
+    <!-- Firebase and GitHub Integration -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+        import { getAuth, GithubAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA7qla4VwqZY5I7GAGGGzcR2sno8DodqhM",
+            authDomain: "codestudiodev-e38e8.firebaseapp.com",
+            projectId: "codestudiodev-e38e8",
+            storageBucket: "codestudiodev-e38e8",
+            messagingSenderId: "302367725207",
+            appId: "1:302367725207:web:fefb4c98c6f0c6c5f3fbd2"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GithubAuthProvider();
+        provider.addScope('repo');
+
+        let githubToken = localStorage.getItem('githubToken') || '';
+        let currentRepo = null;
+
+        onAuthStateChanged(auth, (user) => {
+            const loginBtn = document.getElementById('github-login-btn');
+            const logoutBtn = document.getElementById('github-logout-btn');
+            githubToken = localStorage.getItem('githubToken') || '';
+            loginBtn.style.display = user && githubToken ? 'none' : 'inline-block';
+            logoutBtn.style.display = user && githubToken ? 'inline-block' : 'none';
+            if (user && githubToken) {
+                listRepos();
+            } else {
+                clearGitHubUI();
+            }
+        });
+
+        window.UserSignin = function () {
+            signInWithPopup(auth, provider).then((result) => {
+                const credential = GithubAuthProvider.credentialFromResult(result);
+                githubToken = credential.accessToken;
+                if (githubToken) {
+                    localStorage.setItem('githubToken', githubToken);
+                    document.getElementById('github-login-btn').style.display = 'none';
+                    document.getElementById('github-logout-btn').style.display = 'inline-block';
+                    listRepos();
+                }
+            }).catch(console.error);
+        };
+
+        window.UserLogout = function () {
+            signOut(auth).then(() => {
+                localStorage.removeItem('githubToken');
+                githubToken = '';
+                currentRepo = null;
+                document.getElementById('github-login-btn').style.display = 'inline-block';
+                document.getElementById('github-logout-btn').style.display = 'none';
+                clearGitHubUI();
+            });
+        };
+
+        function listRepos() {
+            fetch('https://api.github.com/user/repos', {
+                headers: { Authorization: `token ${githubToken}` }
+            }).then(res => res.json()).then(repos => {
+                const reposDiv = document.getElementById('github-repos');
+                reposDiv.innerHTML = '';
+                repos.forEach((repo, i) => {
+                    const btn = document.createElement('button');
+                    btn.textContent = `${i + 1}. ${repo.full_name}`;
+                    btn.onclick = () => {
+                        currentRepo = repo;
+                        listFiles(repo);
+                    };
+                    reposDiv.appendChild(btn);
+                });
+            }).catch(err => {
+                console.error('Error fetching repos:', err);
+                document.getElementById('github-repos').innerHTML = '<p style="color: #ff6b6b;">Error loading repositories</p>';
+            });
+        }
+
+        function listFiles(repo) {
+            fetch(`https://api.github.com/repos/${repo.owner.login}/${repo.name}/contents/`, {
+                headers: { Authorization: `token ${githubToken}` }
+            }).then(res => res.json()).then(files => {
+                const filesDiv = document.getElementById('github-files');
+                filesDiv.innerHTML = '';
+                files.forEach(file => {
+                    if (file.name.endsWith('.html') || file.name.endsWith('.css') || file.name.endsWith('.js')) {
+                        const btn = document.createElement('button');
+                        btn.textContent = file.name;
+                        btn.onclick = () => loadGitHubFile({
+                            download_url: file.download_url,
+                            path: file.path,
+                            sha: file.sha,
+                            owner: repo.owner.login,
+                            repo: repo.name
+                        });
+                        filesDiv.appendChild(btn);
+                    }
+                });
+            }).catch(err => {
+                console.error('Error fetching files:', err);
+                document.getElementById('github-files').innerHTML = '<p style="color: #ff6b6b;">Error loading files</p>';
+            });
+        }
+
+        function clearGitHubUI() {
+            document.getElementById('github-repos').innerHTML = '<p style="color: #888;">Login to view repositories</p>';
+            document.getElementById('github-files').innerHTML = '<p style="color: #888;">Select a repository to view files</p>';
+        }
+
+        async function loadGitHubFile(fileData) {
+            try {
+                const res = await fetch(fileData.download_url);
+                const content = await res.text();
+
+                // Store file metadata for updates
+                window.currentGitHubFile = fileData;
+
+                // Load content into appropriate editor
+                if (fileData.path.endsWith('.html')) {
+                    htmlEditor.setValue(content);
+                    toggleFile('html');
+                } else if (fileData.path.endsWith('.css')) {
+                    cssEditor.setValue(content);
+                    toggleFile('css');
+                } else if (fileData.path.endsWith('.js')) {
+                    jsEditor.setValue(content);
+                    toggleFile('js');
+                }
+
+                updatePreview();
+            } catch (err) {
+                alert('Failed to load file: ' + err.message);
+            }
+        }
+
+        // Make functions available globally
+        window.listRepos = listRepos;
+        window.listFiles = listFiles;
+        window.loadGitHubFile = loadGitHubFile;
+        window.githubToken = githubToken;
+        window.currentRepo = currentRepo;
+
+        // Initial UI setup
+        clearGitHubUI();
+    </script>
+
+    <script>
+        // File Explorer Toggle Functions
+        function hideFileExplorer() {
+            const fileExplorer = document.getElementById('file-explorer');
+            const mainContainer = document.getElementById('main-container');
+            const showBtn = document.getElementById('show-explorer-btn');
+            
+            fileExplorer.classList.add('hidden');
+            mainContainer.classList.add('full-width');
+            showBtn.style.display = 'block';
+        }
+
+        function showFileExplorer() {
+            const fileExplorer = document.getElementById('file-explorer');
+            const mainContainer = document.getElementById('main-container');
+            const showBtn = document.getElementById('show-explorer-btn');
+            
+            fileExplorer.classList.remove('hidden');
+            mainContainer.classList.remove('full-width');
+            showBtn.style.display = 'none';
+        }
+        window.onload = async () => {
+            const params = new URLSearchParams(window.location.search);
+            const fileUrl = params.get('file');
+            if (!fileUrl) return;
+
+            try {
+                const res = await fetch(fileUrl);
+                const content = await res.text();
+
+                // Detect file type and load it into the appropriate CodeMirror editor
+                if (fileUrl.endsWith('.html')) {
+                    htmlEditor.setValue(content);
+                    toggleFile('html');
+                } else if (fileUrl.endsWith('.css')) {
+                    cssEditor.setValue(content);
+                    toggleFile('css');
+                } else if (fileUrl.endsWith('.js')) {
+                    jsEditor.setValue(content);
+                    toggleFile('js');
+                }
+
+                updatePreview();
+            } catch (err) {
+                alert('Failed to load file: ' + err.message);
+            }
+        };
+
+        async function updateFileToGitHub() {
+            const fileData = window.currentGitHubFile;
+            
+            if (!fileData) {
+                alert('No GitHub file selected. Please load a file from GitHub first.');
+                return;
+            }
+
+            const token = localStorage.getItem('githubToken');
+            if (!token) {
+                alert('Please login to GitHub first.');
+                return;
+            }
+
+            try {
+                const updatedContent = getCurrentEditorContent();
+                const base64Content = btoa(unescape(encodeURIComponent(updatedContent)));
+
+                const url = `https://api.github.com/repos/${fileData.owner}/${fileData.repo}/contents/${fileData.path}`;
+                const res = await fetch(url, {
+                    method: 'PUT',
+                    headers: {
+                        Authorization: `token ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: `Updated ${fileData.path} via Code Playground`,
+                        content: base64Content,
+                        sha: fileData.sha
+                    })
+                });
+
+                if (res.ok) {
+                    const result = await res.json();
+                    // Update the SHA for future updates
+                    window.currentGitHubFile.sha = result.content.sha;
+                    alert('✅ File updated successfully in GitHub!');
+                } else {
+                    const error = await res.json();
+                    alert('❌ Error updating file: ' + error.message);
+                }
+            } catch (err) {
+                alert('❌ Error updating file: ' + err.message);
+            }
+        }
+
+        function getCurrentEditorContent() {
+            const fileData = window.currentGitHubFile;
+            if (!fileData) return '';
+
+            const htmlCode = htmlEditor?.getValue?.() || '';
+            const cssCode = cssEditor?.getValue?.() || '';
+            const jsCode = jsEditor?.getValue?.() || '';
+
+            if (fileData.path.endsWith('.html')) return htmlCode;
+            if (fileData.path.endsWith('.css')) return cssCode;
+            if (fileData.path.endsWith('.js')) return jsCode;
+            return '';
+        }
+    </script>
+</body>
+
+</html>
