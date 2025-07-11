@@ -105,6 +105,25 @@
         .show-explorer-btn:hover {
             background-color: #2ea043;
         }
+        .repo-search {
+            margin-bottom: 8px;
+        }
+        .repo-search input {
+            width: 100%;
+            padding: 6px 8px;
+            background-color: #2d2d44;
+            border: 1px solid #555;
+            border-radius: 3px;
+            color: #ffffff;
+            font-size: 12px;
+        }
+        .repo-search input::placeholder {
+            color: #888;
+        }
+        .repo-search input:focus {
+            outline: none;
+            border-color: #238636;
+        }
     </style>
 </head>
 
@@ -190,6 +209,9 @@
             <!-- GitHub Integration Section -->
             <div class="github-section" id="github-section">
                 <div class="divider-text">GitHub Repositories</div>
+                <div class="repo-search">
+                    <input type="text" id="repo-search-input" placeholder="Search repositories..." onkeyup="searchRepositories()">
+                </div>
                 <div id="github-repos" class="github-repos"></div>
                 
                 <div class="divider-text">Repository Files</div>
@@ -291,6 +313,7 @@
 
         let githubToken = localStorage.getItem('githubToken') || '';
         let currentRepo = null;
+        let allRepos = []; // Store all repositories for search
 
         onAuthStateChanged(auth, (user) => {
             const loginBtn = document.getElementById('github-login-btn');
@@ -323,6 +346,7 @@
                 localStorage.removeItem('githubToken');
                 githubToken = '';
                 currentRepo = null;
+                allRepos = [];
                 document.getElementById('github-login-btn').style.display = 'inline-block';
                 document.getElementById('github-logout-btn').style.display = 'none';
                 clearGitHubUI();
@@ -333,22 +357,44 @@
             fetch('https://api.github.com/user/repos', {
                 headers: { Authorization: `token ${githubToken}` }
             }).then(res => res.json()).then(repos => {
-                const reposDiv = document.getElementById('github-repos');
-                reposDiv.innerHTML = '';
-                repos.forEach((repo, i) => {
-                    const btn = document.createElement('button');
-                    btn.textContent = `${i + 1}. ${repo.full_name}`;
-                    btn.onclick = () => {
-                        currentRepo = repo;
-                        listFiles(repo);
-                    };
-                    reposDiv.appendChild(btn);
-                });
+                allRepos = repos; // Store all repositories
+                displayRepos(repos);
             }).catch(err => {
                 console.error('Error fetching repos:', err);
                 document.getElementById('github-repos').innerHTML = '<p style="color: #ff6b6b;">Error loading repositories</p>';
             });
         }
+
+        function displayRepos(repos) {
+            const reposDiv = document.getElementById('github-repos');
+            reposDiv.innerHTML = '';
+            repos.forEach((repo, i) => {
+                const btn = document.createElement('button');
+                btn.textContent = `${i + 1}. ${repo.full_name}`;
+                btn.onclick = () => {
+                    currentRepo = repo;
+                    listFiles(repo);
+                };
+                reposDiv.appendChild(btn);
+            });
+        }
+
+        // Search repositories function
+        window.searchRepositories = function() {
+            const searchTerm = document.getElementById('repo-search-input').value.toLowerCase();
+            
+            if (searchTerm === '') {
+                // If search is empty, show all repos
+                displayRepos(allRepos);
+            } else {
+                // Filter repos based on search term
+                const filteredRepos = allRepos.filter(repo => 
+                    repo.name.toLowerCase().includes(searchTerm) || 
+                    repo.full_name.toLowerCase().includes(searchTerm)
+                );
+                displayRepos(filteredRepos);
+            }
+        };
 
         function listFiles(repo) {
             fetch(`https://api.github.com/repos/${repo.owner.login}/${repo.name}/contents/`, {
@@ -379,6 +425,8 @@
         function clearGitHubUI() {
             document.getElementById('github-repos').innerHTML = '<p style="color: #888;">Login to view repositories</p>';
             document.getElementById('github-files').innerHTML = '<p style="color: #888;">Select a repository to view files</p>';
+            document.getElementById('repo-search-input').value = '';
+            allRepos = [];
         }
 
         async function loadGitHubFile(fileData) {
