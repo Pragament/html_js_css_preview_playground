@@ -11,129 +11,166 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify-html.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify-css.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    
     <style>
-        .github-section {
-            margin-top: 10px;
-        }
-        .github-repos, .github-files {
-            max-height: 280px;
-            overflow-y: auto;
-        }
+        /* Existing inline styles from your original file */
+        .github-section { margin-top: 10px; }
+        .github-repos, .github-files { max-height: 280px; overflow-y: auto; }
         .github-repos button, .github-files button {
-            display: block;
-            width: 100%;
-            margin: 2px 0;
-            padding: 4px 8px;
-            background-color: #33334d;
-            color: #ffffff;
-            border: 1px solid #555;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 12px;
-            text-align: left;
+            display: block; width: 100%; margin: 2px 0; padding: 4px 8px;
+            background-color: #33334d; color: #ffffff; border: 1px solid #555;
+            border-radius: 3px; cursor: pointer; font-size: 12px; text-align: left;
         }
-        .github-repos button:hover, .github-files button:hover {
-            background-color: #3d3d5c;
-        }
-        #github-login-btn {
-            background-color: #238636;
-            border-color: #238636;
-        }
-        #github-login-btn:hover {
-            background-color: #2ea043;
-        }
-        #github-logout-btn {
-            background-color: #da3633;
-            border-color: #da3633;
-        }
-        #github-logout-btn:hover {
-            background-color: #e5484d;
-        }
+        .github-repos button:hover, .github-files button:hover { background-color: #3d3d5c; }
+        #github-login-btn { background-color: #238636; border-color: #238636; }
+        #github-login-btn:hover { background-color: #2ea043; }
+        #github-logout-btn { background-color: #da3633; border-color: #da3633; }
+        #github-logout-btn:hover { background-color: #e5484d; }
         .file-explorer {
-            position: relative;
-            resize: horizontal;
-            overflow: auto;
-            min-width: 200px;
-            max-width: 500px;
+            position: relative; resize: horizontal; overflow: auto; min-width: 200px; max-width: 500px;
         }
         .file-explorer-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 8px; background-color: #2d2d44; border-bottom: 1px solid #444; margin-bottom: 8px;
+        }
+        .file-explorer-header h3 { margin: 0; color: #ffffff; font-size: 14px; }
+        .file-explorer-toggle {
+            background-color: #da3633; color: #ffffff; border: 1px solid #da3633;
+            padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 12px;
+        }
+        .file-explorer-toggle:hover { background-color: #e5484d; }
+        .file-explorer.hidden { display: none; }
+        .main-container.full-width .editor-container { width: 100%; }
+        .show-explorer-btn {
+            position: fixed; top: 10px; left: 10px; z-index: 1000;
+            background-color: #238636; color: #ffffff; border: 1px solid #238636;
+            padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 14px;
+            display: none;
+        }
+        .show-explorer-btn:hover { background-color: #2ea043; }
+        .repo-search { margin-bottom: 8px; }
+        .repo-search input {
+            width: 100%; padding: 6px 8px; background-color: #2d2d44;
+            border: 1px solid #555; border-radius: 3px; color: #ffffff; font-size: 12px;
+        }
+        .repo-search input::placeholder { color: #888; }
+        .repo-search input:focus { outline: none; border-color: #238636; }
+
+        /* NEW: Basic styles for the tutorial sidebar and lecture display area (will be moved to app.css) */
+        #tutorial-sidebar {
+            width: 250px;
+            flex-shrink: 0;
+            background-color: #1e1e2d;
+            color: #ffffff;
+            border-right: 1px solid #444;
+            overflow-y: auto;
+            resize: horizontal;
+            overflow: auto;
+            min-width: 150px;
+            max-width: 400px;
+        }
+        .sidebar-header {
             padding: 8px;
             background-color: #2d2d44;
             border-bottom: 1px solid #444;
             margin-bottom: 8px;
+            text-align: center;
         }
-        .file-explorer-header h3 {
-            margin: 0;
+        .sidebar-header h3 { margin: 0; color: #ffffff; font-size: 14px; }
+        .sidebar-content ul { list-style: none; padding: 0; margin: 0; }
+        .chapter-title {
+            padding: 8px 10px; font-weight: bold; cursor: pointer;
+            background-color: #28283d; border-bottom: 1px solid #3a3a4c;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .chapter-title:hover { background-color: #33334d; }
+        .topic-list {
+            list-style: none; padding-left: 15px; margin: 0;
+            display: none; background-color: #222233;
+        }
+        .topic-list.expanded { display: block; }
+        .topic-item { padding: 6px 10px; cursor: pointer; border-bottom: 1px solid #2e2e42; }
+        .topic-item:last-child { border-bottom: none; }
+        .topic-item:hover { background-color: #33334d; }
+        .topic-item.active { background-color: #007bff; color: white; }
+
+        #lecture-display-area {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: #28283d;
             color: #ffffff;
-            font-size: 14px;
+            display: none; /* Hidden by default, shown by JS when a topic is selected */
+            border-bottom: 1px solid #444;
         }
-        .file-explorer-toggle {
-            background-color: #da3633;
-            color: #ffffff;
-            border: 1px solid #da3633;
-            padding: 4px 8px;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 12px;
+        #lecture-display-area p { line-height: 1.6; margin-bottom: 1em; }
+        #lecture-display-area h1, #lecture-display-area h2, #lecture-display-area h3, #lecture-display-area h4 {
+            color: #007bff; margin-top: 1.5em; margin-bottom: 0.8em;
         }
-        .file-explorer-toggle:hover {
-            background-color: #e5484d;
+        #lecture-display-area a { color: #4CAF50; text-decoration: none; }
+        #lecture-display-area a:hover { text-decoration: underline; }
+        #lecture-display-area ul, #lecture-display-area ol { margin-left: 20px; margin-bottom: 1em; }
+        #lecture-display-area li { margin-bottom: 0.5em; }
+        #lecture-display-area pre {
+            background-color: #1e1e2d; padding: 15px; border-radius: 8px; overflow-x: auto;
+            position: relative; margin-bottom: 20px;
         }
-        .file-explorer.hidden {
-            display: none;
+        #lecture-display-area code {
+            font-family: 'Fira Code', 'Cascadia Code', monospace; font-size: 0.95em; color: #e0e0e0;
         }
-        .main-container.full-width .editor-container {
+        .try-it-button {
+            background-color: #238636; color: white; border: none;
+            padding: 8px 15px; margin-top: 10px; margin-bottom: 20px;
+            border-radius: 5px; cursor: pointer; font-size: 0.9em;
+            display: inline-block; float: right; clear: both;
+        }
+        .try-it-button:hover { background-color: #2ea043; }
+        .try-it-button:active { background-color: #1b6b2b; }
+        .editor-container.lecture-active textarea { display: none !important; }
+        .editor-container.lecture-active .preview-container { display: none !important; }
+
+        /* General layout adjustments using flexbox */
+        body {
+            background-color: #1a1a2e;
+            color: #f0f0f0;
+        }
+        .main-container {
+            display: flex;
+            height: calc(100vh - 50px); /* Adjust height, assuming 50px for toolbar */
             width: 100%;
+            box-sizing: border-box;
+            flex-direction: row; /* Default to horizontal arrangement */
         }
-        .show-explorer-btn {
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            z-index: 1000;
-            background-color: #238636;
-            color: #ffffff;
-            border: 1px solid #238636;
-            padding: 8px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-            display: none;
+        .editor-container {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
         }
-        .show-explorer-btn:hover {
-            background-color: #2ea043;
+        .CodeMirror {
+            height: 100% !important;
         }
-        .repo-search {
-            margin-bottom: 8px;
+        .preview-container {
+            flex-grow: 1;
         }
-        .repo-search input {
+        #preview {
             width: 100%;
-            padding: 6px 8px;
-            background-color: #2d2d44;
-            border: 1px solid #555;
-            border-radius: 3px;
-            color: #ffffff;
-            font-size: 12px;
+            height: 100%;
+            border: none;
         }
-        .repo-search input::placeholder {
-            color: #888;
-        }
-        .repo-search input:focus {
-            outline: none;
-            border-color: #238636;
+        @media (max-width: 600px) {
+            .main-container { flex-direction: column; }
+            #tutorial-sidebar, .file-explorer {
+                width: 100%; height: auto; max-height: 200px; resize: vertical;
+            }
         }
     </style>
 </head>
 
 <body>
-    <!-- Show Explorer Button (hidden by default) -->
     <button class="show-explorer-btn" id="show-explorer-btn" onclick="showFileExplorer()">📁 Show Explorer</button>
 
-    <!-- Toolbar with Undo/Redo Buttons -->
     <div class="toolbar">
-        <!-- Undo/Redo Button Group -->
         <div class="button-group">
             <button onclick="UserSignin()" id="github-login-btn">🔐 Login GitHub</button>
             <button onclick="UserLogout()" id="github-logout-btn" style="display:none;">🔓 Logout</button>
@@ -157,9 +194,7 @@
             <p id="capsWarning">⚠️ Caps Lock is ON!</p>
         </div>
 
-        <!-- Special Character Button Group -->
         <div class="button-group" id="special-char-buttons">
-            <!-- Non-alphanumeric character buttons with hints -->
             <button onclick="insertLoremIpsum('<')" title="Less-than sign: <">&lt;</button>
             <button onclick="insertLoremIpsum('>')" title="Greater-than sign: >">&gt;</button>
             <button onclick="insertLoremIpsum('/')" title="Forward slash: /">/</button>
@@ -194,7 +229,17 @@
         </div>
     </div>
 
-    <div class="main-container preview-right" id="main-container">
+    <div class="main-container" id="main-container">
+        <aside id="tutorial-sidebar">
+            <div class="sidebar-header">
+                <h3>Step-by-Step Tutorial</h3>
+            </div>
+            <div class="sidebar-content">
+                <ul id="chapters-list">
+                    </ul>
+            </div>
+        </aside>
+
         <div class="file-explorer" id="file-explorer">
             <div class="file-explorer-header">
                 <h3>File Explorer</h3>
@@ -205,19 +250,18 @@
                 <li class="hover" onclick="toggleFile('css')">style.css</li>
                 <li class="hover" onclick="toggleFile('js')">script.js</li>
             </ul>
-            
-            <!-- GitHub Integration Section -->
+
             <div class="github-section" id="github-section">
                 <div class="divider-text">GitHub Repositories</div>
                 <div class="repo-search">
                     <input type="text" id="repo-search-input" placeholder="Search repositories..." onkeyup="searchRepositories()">
                 </div>
                 <div id="github-repos" class="github-repos"></div>
-                
+
                 <div class="divider-text">Repository Files</div>
                 <div id="github-files" class="github-files"></div>
             </div>
-            
+
             <div class="divider-text">Text</div>
             <strong></strong>
             <ul>
@@ -243,9 +287,12 @@
                 </li>
             </ul>
         </div>
-        <div class="editor-container">
+
+        <div class="editor-container" id="editor-container"> <div id="lecture-display-area">
+                <p>Select a topic from the "Step-by-Step Tutorial" sidebar to view content here.</p>
+            </div>
+
             <textarea id="html-code" class="hidden">
-<!-- Add your HTML code here -->
 </textarea>
             <textarea id="css-code" class="hidden">
 /* Add your CSS here */
@@ -258,10 +305,8 @@
             </div>
         </div>
     </div>
-    <!-- Floating Help Button -->
     <button class="help-button" onclick="toggleChat()">?</button>
 
-    <!-- Chat Window -->
     <div class="chat-window">
         <div class="chat-header">Help Chat</div>
         <div class="chat-body" id="chat-body">
@@ -290,10 +335,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/html-hint.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/css-hint.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/show-hint.min.css">
-    <script src="app.js"></script>
-    
-    <!-- Firebase and GitHub Integration -->
-    <script type="module">
+    <script src="app.js"></script> <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
         import { getAuth, GithubAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
 
@@ -467,7 +509,7 @@
     </script>
 
     <script>
-        // File Explorer Toggle Functions
+        // File Explorer Toggle Functions (Keep existing)
         function hideFileExplorer() {
             const fileExplorer = document.getElementById('file-explorer');
             const mainContainer = document.getElementById('main-container');
@@ -487,6 +529,10 @@
             mainContainer.classList.remove('full-width');
             showBtn.style.display = 'none';
         }
+        
+        // This window.onload is handled by the combined DOMContentLoaded in app.js now.
+        // The original onload will be commented out or removed, as it duplicates logic
+        /*
         window.onload = async () => {
             const params = new URLSearchParams(window.location.search);
             const fileUrl = params.get('file');
@@ -496,7 +542,6 @@
                 const res = await fetch(fileUrl);
                 const content = await res.text();
 
-                // Detect file type and load it into the appropriate CodeMirror editor
                 if (fileUrl.endsWith('.html')) {
                     htmlEditor.setValue(content);
                     toggleFile('html');
@@ -513,6 +558,7 @@
                 alert('Failed to load file: ' + err.message);
             }
         };
+        */
 
         async function updateFileToGitHub() {
             const fileData = window.currentGitHubFile;
