@@ -5,14 +5,24 @@ body {
     display: flex;
     height: 100vh;
     flex-direction: column;
+    background-color: #1a1a2e; /* A slightly darker background for the overall app */
+    color: #f0f0f0; /* Default text color */
 }
 
 .toolbar {
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* Changed to column to stack groups */
     background: #2d2d2d;
     padding: 10px;
     gap: 10px;
+    flex-shrink: 0; /* Prevent toolbar from shrinking */
+}
+
+/* Ensure button groups wrap if too many buttons */
+.button-group {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap; /* Allow buttons to wrap to next line if needed */
 }
 
 .toolbar button {
@@ -22,26 +32,113 @@ body {
     border-radius: 5px;
     cursor: pointer;
     padding: 6px 10px;
-    ;
-    font-size: x-large;
+    font-size: large; /* Adjusted from x-large for better fit with multiple buttons */
+    white-space: nowrap; /* Prevent text wrapping in buttons */
 }
 
 .toolbar button:hover {
     background: #0056b3;
 }
 
+.toolbar button:disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+
+/* Updated .main-container to accommodate new sidebar */
 .main-container {
     display: flex;
-    flex: 1;
-    overflow: hidden;
+    flex: 1; /* Allows it to take remaining vertical space after toolbar */
+    overflow: hidden; /* Important for containing resized children */
+    flex-direction: row; /* Default to horizontal layout for sidebars */
+}
+
+/* NEW: Styles for the tutorial sidebar */
+#tutorial-sidebar {
+    width: 250px; /* Initial width */
+    flex-shrink: 0; /* Prevent it from shrinking by default */
+    background-color: #1e1e2d; /* Dark background */
+    color: #ffffff;
+    border-right: 1px solid #444;
+    overflow-y: auto; /* Vertically scrollable content */
+    
+    /* Resizable properties */
+    resize: horizontal;
+    overflow: auto; /* Required for 'resize' to work visually */
+    min-width: 150px; /* Minimum width for resizing */
+    max-width: 400px; /* Maximum width for resizing */
+}
+
+.sidebar-header {
+    padding: 8px;
+    background-color: #2d2d44;
+    border-bottom: 1px solid #444;
+    margin-bottom: 8px;
+    text-align: center;
+}
+.sidebar-header h3 {
+    margin: 0;
+    color: #ffffff;
+    font-size: 14px;
+}
+.sidebar-content ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.chapter-title {
+    padding: 8px 10px;
+    font-weight: bold;
+    cursor: pointer;
+    background-color: #28283d; /* Chapter background */
+    border-bottom: 1px solid #3a3a4c;
+    display: flex; /* Allow for icons if added later */
+    align-items: center;
+    justify-content: space-between;
+}
+.chapter-title:hover {
+    background-color: #33334d;
+}
+.topic-list {
+    list-style: none;
+    padding-left: 15px; /* Indent topics */
+    margin: 0;
+    display: none; /* Hidden by default by JS, not CSS initially */
+    background-color: #222233; /* Topic list background */
+}
+.topic-list.expanded {
+    display: block; /* Show when expanded by JS */
+}
+.topic-item {
+    padding: 6px 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #2e2e42;
+}
+.topic-item:last-child {
+    border-bottom: none;
+}
+.topic-item:hover {
+    background-color: #33334d;
+}
+.topic-item.active {
+    background-color: #007bff; /* Highlight active topic */
+    color: white;
 }
 
 .file-explorer {
-    width: 104px;
+    width: 200px; /* Adjusted initial width */
+    flex-shrink: 0; /* Prevent it from shrinking by default */
     background: #2d2d2d;
     color: #fff;
     padding: 10px;
     overflow-y: auto;
+    /* Keeping resize properties from inline style, though often better to consolidate */
+    position: relative; 
+    resize: horizontal; 
+    overflow: auto; 
+    min-width: 100px; /* Adjusted min-width for better control */
+    max-width: 500px; 
 }
 
 .file-explorer ul {
@@ -67,27 +164,32 @@ body {
 }
 
 .editor-container {
-    flex: 1;
+    flex: 1; /* Allows it to take all remaining horizontal space */
     display: flex;
-    flex-direction: column;
-    /*max-width: 93%;*/
+    flex-direction: column; /* Stack editor textareas and preview vertically */
+    /* Removed max-width: 93%; - flex:1 will handle width */
 }
 
+/* Adjusted CodeMirror styles */
 .CodeMirror {
-    /*height: 33.33vh;*/
+    height: 100% !important; /* Make sure CodeMirror fills its parent */
     border-bottom: 1px solid #444;
-    /*white-space: pre-wrap;*/
-    /* Wrap text */
 }
+/* You can uncomment these if you specifically need text wrapping */
+/* .CodeMirror pre {
+    white-space: pre-wrap;
+    word-break: break-all;
+} */
 
 .preview-container {
-    flex: 1;
+    flex: 1; /* Takes remaining vertical space in editor-container */
     display: flex;
+    flex-direction: column; /* Ensure iframe within also takes space */
 }
 
 .preview {
     flex: 1;
-    border-left: 1px solid #444;
+    border-left: 1px solid #444; /* Keep existing border for vertical split */
 }
 
 iframe {
@@ -104,9 +206,10 @@ iframe {
     display: flex;
     align-items: center;
     text-align: center;
-    margin: 0;
+    margin: 0; /* Adjusted from 10px margin-top/bottom to 0, use padding if needed */
     font-weight: bold;
     color: #555;
+    padding: 10px 0; /* Add some padding for spacing */
 }
 
 .divider-text::before,
@@ -119,7 +222,7 @@ iframe {
 
 /* Floating Help Button */
 .help-button {
-    visibility: hidden;
+    visibility: hidden; /* This makes it non-clickable */
     position: fixed;
     bottom: 20px;
     right: 20px;
@@ -132,6 +235,7 @@ iframe {
     font-size: 24px;
     cursor: pointer;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 100; /* Ensure it's on top */
 }
 
 /* Chat Window */
@@ -146,6 +250,7 @@ iframe {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     display: none;
     flex-direction: column;
+    z-index: 101; /* Ensure chat is on top of help button */
 }
 
 .chat-header {
@@ -162,6 +267,7 @@ iframe {
     padding: 10px;
     overflow-y: auto;
     max-height: 300px;
+    color: #333; /* Ensure text is visible on white background */
 }
 
 .chat-footer {
@@ -232,9 +338,13 @@ iframe {
         flex-direction: column;
     }
 
+    /* Adjust sidebars to take full width and stack vertically */
+    #tutorial-sidebar,
     .file-explorer {
         width: 100%;
-        height: 150px;
+        height: auto; /* Allow height to be determined by content or max-height */
+        max-height: 200px; /* Limit height to prevent taking too much space */
+        resize: vertical; /* Allow vertical resizing on small screens */
     }
 
     .editor-container {
@@ -255,16 +365,6 @@ iframe {
         right: 5%;
         bottom: 70px;
     }
-}
-
-.toolbar button:disabled {
-    pointer-events: none;
-    opacity: 0.5;
-}
-
-.button-group {
-    display: flex;
-    gap: 5px;
 }
 
 .divider {
@@ -290,7 +390,6 @@ iframe {
 
 #special-char-buttons {
     flex-basis: 100%;
-    /* Forces it to take full width and move to the next line */
 }
 
 #capsWarning {
@@ -312,4 +411,84 @@ iframe {
     100% {
         opacity: 1;
     }
+}
+
+/* NEW: Styles for the lecture display area and its content */
+#lecture-display-area {
+    flex: 1; /* Takes available space within editor-container */
+    padding: 20px;
+    overflow-y: auto;
+    background-color: #28283d;
+    color: #ffffff;
+    display: none; /* Hidden by default, shown by JS when a topic is selected */
+    border-bottom: 1px solid #444; /* Matches existing editor borders */
+}
+#lecture-display-area p {
+    line-height: 1.6;
+    margin-bottom: 1em;
+}
+#lecture-display-area h1, #lecture-display-area h2, #lecture-display-area h3, #lecture-display-area h4 {
+    color: #007bff; /* Accent color for headings */
+    margin-top: 1.5em;
+    margin-bottom: 0.8em;
+}
+#lecture-display-area a {
+    color: #4CAF50; /* Link color */
+    text-decoration: none;
+}
+#lecture-display-area a:hover {
+    text-decoration: underline;
+}
+#lecture-display-area ul, #lecture-display-area ol {
+    margin-left: 20px;
+    margin-bottom: 1em;
+}
+#lecture-display-area li {
+    margin-bottom: 0.5em;
+}
+#lecture-display-area pre {
+    background-color: #1e1e2d;
+    padding: 15px;
+    border-radius: 8px;
+    overflow-x: auto;
+    position: relative; /* For positioning the button */
+    margin-bottom: 20px; /* Space for the button if it's placed outside the pre */
+}
+#lecture-display-area code {
+    font-family: 'Fira Code', 'Cascadia Code', monospace; /* Good monospaced font */
+    font-size: 0.95em;
+    color: #e0e0e0; /* Light code text */
+}
+
+.try-it-button {
+    background-color: #238636;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    margin-top: 10px; /* Space from the code block */
+    margin-bottom: 20px; /* Space before next content */
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    display: inline-block; /* Or block, depending on desired layout */
+    float: right; /* Position it to the right of the code block */
+    clear: both; /* Clear floats to ensure proper positioning */
+}
+.try-it-button:hover {
+    background-color: #2ea043;
+}
+.try-it-button:active {
+    background-color: #1b6b2b;
+}
+
+/* Class to visually hide editors when lecture is displayed */
+.editor-container.lecture-active textarea {
+    display: none !important;
+}
+.editor-container.lecture-active .preview-container {
+    display: none !important;
+}
+/* CRITICAL RULE: This makes the lecture-display-area visible when editor-container has 'lecture-active' */
+.editor-container.lecture-active #lecture-display-area {
+    display: block !important;
 }
