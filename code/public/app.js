@@ -1,10 +1,12 @@
-// Default sample code
+ // Default sample code
 const defaultHTML = `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Playground</title>
+    <!-- Uncomment the following line to include an external CSS file -->
+    <!-- <link rel="stylesheet" href="style.css"> -->
     <style>
         /* Add your internal CSS here */
         body {
@@ -21,6 +23,8 @@ const defaultHTML = `<!DOCTYPE html>
 <body>
     <h1>Hello, World!</h1>
     <p>Welcome to the Code Playground.</p>
+    <!-- Uncomment the following line to include an external JS file -->
+    <!-- <script src="script.js"><\/script> -->
     <script>
         // Add your internal JavaScript here
         console.log('Hello from the script!');
@@ -76,21 +80,23 @@ const jsEditor = CodeMirror.fromTextArea(document.getElementById('js-code'), {
 
 // Automatically show hints while typing
 cssEditor.on("inputRead", function (cm, event) {
-    if (!cm.state.completionActive) {
+    if (!cm.state.completionActive) {  // Prevent multiple popups
         CodeMirror.commands.autocomplete(cm, null, { completeSingle: false });
     }
 });
 
+// Automatically show hints while typing
 htmlEditor.on("inputRead", function (cm, event) {
     const autocompleteButton = document.getElementById('autocomplete-button');
     const isOn = autocompleteButton.textContent.includes('On');
-    if (isOn && !cm.state.completionActive) {
+    if (isOn && !cm.state.completionActive) {  // Prevent multiple popups
         CodeMirror.commands.autocomplete(cm, null, { completeSingle: false });
     }
 });
 
+// Automatically show hints while typing
 jsEditor.on("inputRead", function (cm, event) {
-    if (!cm.state.completionActive) {
+    if (!cm.state.completionActive) {  // Prevent multiple popups
         CodeMirror.commands.autocomplete(cm, null, { completeSingle: false });
     }
 });
@@ -120,19 +126,10 @@ function toggleFile(type) {
     const htmlEditorElement = htmlEditor.getWrapperElement();
     const cssEditorElement = cssEditor.getWrapperElement();
     const jsEditorElement = jsEditor.getWrapperElement();
-    const lectureDisplayArea = document.getElementById('lecture-display-area');
-    const editorContainer = document.getElementById('editor-container'); // Get editor container
-
-    // Hide lecture display when switching to code editors
-    if (lectureDisplayArea) {
-        lectureDisplayArea.classList.add('hidden');
-    }
-    editorContainer.classList.remove('lecture-active'); // Remove lecture-active class
 
     htmlEditorElement.classList.add('hidden');
     cssEditorElement.classList.add('hidden');
     jsEditorElement.classList.add('hidden');
-    document.getElementById('preview').classList.remove('hidden'); // Ensure preview is shown with editors
 
     if (type === 'html') {
         htmlEditorElement.classList.remove('hidden');
@@ -141,7 +138,6 @@ function toggleFile(type) {
     } else if (type === 'js') {
         jsEditorElement.classList.remove('hidden');
     }
-    updateUndoRedoButtons(); // Update button states after toggle
 }
 
 // Function to insert image path at cursor position
@@ -154,11 +150,36 @@ function insertImagePath(imagePath) {
     }
 }
 
+// Global flag to control preview update
+let disablePreviewUpdate = false;
+
+// Modified updatePreview function to respect disablePreviewUpdate flag
+const originalUpdatePreview = updatePreview;
+updatePreview = function() {
+    if (disablePreviewUpdate) return;
+    originalUpdatePreview();
+};
+
+// Function to insert text (e.g., special characters) at cursor position without triggering preview update
+function insertLoremIpsum(text) {
+    const activeEditor = getActiveEditor();
+    if (activeEditor) {
+        disablePreviewUpdate = true;
+        const cursor = activeEditor.getCursor();
+        activeEditor.replaceRange(text, cursor);
+        activeEditor.focus();
+        disablePreviewUpdate = false;
+        // Manually trigger updatePreview once after insertion if needed
+        updatePreview();
+    }
+}
+
 // Function to insert Lorem Ipsum at cursor position
 function insertTemplate() {
     const activeEditor = getActiveEditor();
     if (activeEditor) {
-        const wrappedText = `<!DOCTYPE html>
+        const wrappedText = `<!-- Add your HTML code here -->
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -170,18 +191,7 @@ function insertTemplate() {
 </body>
 </html>`;
         const cursor = activeEditor.getCursor();
-        clearEditor(); // Clear existing content before inserting template
-        activeEditor.replaceRange(wrappedText, cursor);
-        activeEditor.focus(); // Focus back on the editor
-    }
-}
-
-// Function to insert Lorem Ipsum at cursor position
-function insertLoremIpsum(dummyText) {
-    const activeEditor = getActiveEditor();
-    if (activeEditor) {
-        const wrappedText = dummyText.replace(/(.{80})/g, "$1\n"); // Wrap every 80 characters
-        const cursor = activeEditor.getCursor();
+        clearEditor();
         activeEditor.replaceRange(wrappedText, cursor);
         activeEditor.focus(); // Focus back on the editor
     }
@@ -192,12 +202,6 @@ function getActiveEditor() {
     const htmlEditorElement = htmlEditor.getWrapperElement();
     const cssEditorElement = cssEditor.getWrapperElement();
     const jsEditorElement = jsEditor.getWrapperElement();
-    const lectureDisplayArea = document.getElementById('lecture-display-area');
-
-    // If lecture display is active, no CodeMirror editor is "active"
-    if (!lectureDisplayArea.classList.contains('hidden')) {
-        return null;
-    }
 
     if (!htmlEditorElement.classList.contains('hidden')) {
         return htmlEditor;
@@ -237,48 +241,48 @@ function zoomOut() {
 // Function to update undo/redo button states
 function updateUndoRedoButtons(event) {
     const activeEditor = getActiveEditor();
-    const undoButton = document.getElementById('undo-button');
-    const redoButton = document.getElementById('redo-button');
-
     if (activeEditor) {
+        const undoButton = document.getElementById('undo-button');
+        const redoButton = document.getElementById('redo-button');
         const history = activeEditor.historySize();
         undoButton.disabled = !history.undo;
         redoButton.disabled = !history.redo;
-    } else {
-        // If no editor is active (e.g., lecture view is open), disable buttons
-        undoButton.disabled = true;
-        redoButton.disabled = true;
+        checkCapsLock();
     }
-    // checkCapsLock(); // This listener should be on document, not updated here
 }
 
-// Caps Lock Warning functions
-// These event listeners should only be attached once, preferably on DOMContentLoaded
-document.addEventListener('keydown', function (event) {
-    if (event.getModifierState && event.getModifierState("CapsLock")) { // check for getModifierState existence
-        showCapsLockWarning();
-    } else {
-        hideCapsLockWarning();
-    }
-});
+function checkCapsLock() {
+    document.addEventListener('keydown', function (event) {
+        if (event.getModifierState("CapsLock")) {
+            showCapsLockWarning();
+        } else {
+            hideCapsLockWarning();
+        }
+    });
 
-document.addEventListener('keyup', function (event) {
-    if (event.getModifierState && !event.getModifierState("CapsLock")) {
-        hideCapsLockWarning();
-    }
-});
+    document.addEventListener('keyup', function (event) {
+        if (!event.getModifierState("CapsLock")) {
+            hideCapsLockWarning();
+        }
+    });
+}
 
 function showCapsLockWarning() {
     let warning = document.getElementById("capsWarning");
     if (!warning) {
-        // This case should ideally not happen if the HTML is loaded correctly
-        // and the warning element is already present as per index.html.
-        // But for robustness:
-        warning = document.createElement("p"); // Changed to p as in your HTML
+        warning = document.createElement("div");
         warning.id = "capsWarning";
         warning.innerHTML = "⚠️ Caps Lock is ON!";
-        // Styles are already in CSS, no need to duplicate here
-        document.querySelector('.toolbar .button-group').appendChild(warning); // Append to the group
+        warning.style.position = "fixed";
+        warning.style.top = "10px";
+        warning.style.right = "10px";
+        warning.style.color = "red";
+        warning.style.background = "yellow";
+        warning.style.padding = "10px";
+        warning.style.border = "2px solid red";
+        warning.style.borderRadius = "5px";
+        warning.style.animation = "blink 0.3s infinite alternate";
+        document.body.appendChild(warning);
     }
     warning.style.display = "block";
 }
@@ -290,16 +294,16 @@ function hideCapsLockWarning() {
     }
 }
 
-
 // Listen for changes in editors to update undo/redo buttons
 htmlEditor.on('change', updateUndoRedoButtons);
 cssEditor.on('change', updateUndoRedoButtons);
 jsEditor.on('change', updateUndoRedoButtons);
 
-// Initial call to update preview and set default editor
-// These are now part of the DOMContentLoaded listener below
-// toggleFile('html');
-// updatePreview();
+// Show HTML editor by default
+toggleFile('html');
+
+// Initialize preview with default content
+updatePreview();
 
 // Chat Window Functions
 function toggleChat() {
@@ -389,8 +393,7 @@ async function mockApiCall(message) {
 // Toggle Preview Layout
 function togglePreviewLayout() {
     const mainContainer = document.getElementById('main-container');
-    // previewToggleButton is not directly used for class toggling here
-    // const previewToggleButton = document.getElementById('preview-toggle-button'); 
+    const previewToggleButton = document.getElementById('preview-toggle-button');
 
     if (mainContainer.classList.contains('preview-right')) {
         mainContainer.classList.remove('preview-right');
@@ -480,11 +483,13 @@ function prettifyCode() {
 
 // Function to create a new file and autosave in local storage
 function createNewFile() {
+    // If there's text in active editor, ask user to save it
     const activeEditor = getActiveEditor();
     if (activeEditor) {
         const code = activeEditor.getValue();
         if (code) {
             saveFile();
+            // Clear the active editor
             clearEditor();
         }
     }
@@ -520,192 +525,296 @@ function saveFile(fileName) {
     console.log("saveFile " + fileName)
     const activeEditor = getActiveEditor();
     if (activeEditor) {
-        const fileNamePrompt = prompt('Enter the name of the new file:'); // Renamed to avoid conflict
-        if (fileNamePrompt) {
+        const fileName = prompt('Enter the name of the new file:');
+        if (fileName) {
             const content = activeEditor.getValue();
             console.log("content " + content)
-            localStorage.setItem(fileNamePrompt, content);
+            localStorage.setItem(fileName, content);
             viewAutosavedFiles();
         }
     }
 }
 
+const fs = window.fs || null; // Placeholder for file system access if available
 
-// **NEW: Tutorial Sidebar Functions**
-
-const chaptersListElement = document.getElementById('chapters-list');
-const lectureDisplayArea = document.getElementById('lecture-display-area');
-const editorContainer = document.getElementById('editor-container'); // Get reference to the editor container
-
-// Define the base URL for fetching individual lecture Markdown files
-// THIS IS THE CRITICAL LINE THAT NEEDS TO BE ABSOLUTELY CORRECT.
-// Based on HR's example and your failing URLs, this is the full prefix.
-const BASE_TOPIC_CONTENT_URL = 'https://raw.githubusercontent.com/freeCodeCamp/freeCodeCamp/refs/heads/main/curriculum/challenges/english/25-front-end-development/';
-
-
-async function fetchChaptersAndTopics() {
-    try {
-        const response = await fetch('https://staticapis.pragament.com/online_courses/freecodecamp-html.json');
-        const data = await response.json();
-        renderChapters(data.chapters);
-    } catch (error) {
-        console.error('Error fetching chapters and topics:', error);
-        chaptersListElement.innerHTML = '<li style="color: red; padding: 10px;">Failed to load tutorial content. Please check your internet connection or try again later.</li>';
-        lectureDisplayArea.innerHTML = '<p style="color: red;">Failed to load tutorial content. Please check your internet connection or try again later.</p>';
+// Show welcome screen and hide main UI
+function showWelcomeScreen() {
+    document.getElementById('welcome-section').style.display = 'flex';
+    document.querySelector('.toolbar').style.display = 'none';
+    document.getElementById('file-explorer').style.display = 'none';
+    document.getElementById('main-container').style.display = 'none';
+    const showExplorerBtn = document.getElementById('show-explorer-btn');
+    if (showExplorerBtn) {
+        showExplorerBtn.style.display = 'none';
     }
 }
 
-function renderChapters(chapters) {
-    chaptersListElement.innerHTML = ''; // Clear previous content
-    chapters.forEach(chapter => {
-        const chapterLi = document.createElement('li');
-        const chapterTitle = document.createElement('div');
-        chapterTitle.classList.add('chapter-title');
-        chapterTitle.textContent = chapter.name; // Use chapter.name as per your API
-        chapterLi.appendChild(chapterTitle);
-
-        const topicUl = document.createElement('ul');
-        topicUl.classList.add('topic-list');
-
-        chapter.topics.forEach(topic => {
-            const topicLi = document.createElement('li');
-            topicLi.classList.add('topic-item');
-            
-            // --- CRITICAL FIX FOR FOLDER NAME ---
-            // Use chapter.dashedName directly. The full path is now in BASE_TOPIC_CONTENT_URL.
-            // The previous attempts to remove 'lecture-' were incorrect for the overall path structure.
-            const folderName = chapter.dashedName; 
-            // --- END CRITICAL FIX ---
-
-            const fullTopicUrl = `${BASE_TOPIC_CONTENT_URL}${folderName}/${topic.id}.md`;
-            topicLi.dataset.topicUrl = fullTopicUrl; // Store the constructed URL on the element
-
-            topicLi.textContent = topic.title;
-            topicUl.appendChild(topicLi);
-
-            // Event listener for clicking a topic
-            topicLi.addEventListener('click', () => {
-                // Remove 'active' class from all topics
-                document.querySelectorAll('.topic-item').forEach(item => item.classList.remove('active'));
-                // Add 'active' class to the clicked topic
-                topicLi.classList.add('active');
-                
-                // Use the stored full URL to fetch lecture detail
-                fetchLectureDetail(topicLi.dataset.topicUrl);
-            });
-        });
-
-        chapterLi.appendChild(topicUl);
-        chaptersListElement.appendChild(chapterLi);
-
-        // Toggle topic list visibility on chapter title click
-        chapterTitle.addEventListener('click', () => {
-            topicUl.classList.toggle('expanded'); // Use a class for toggling display
-        });
-    });
-}
-
-async function fetchLectureDetail(topicUrl) {
-    // Hide code editors and show lecture display area
-    hideEditorsAndShowLecture();
-
-    try {
-        const response = await fetch(topicUrl);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status} from ${topicUrl}`);
-        }
-        const markdownContent = await response.text();
-        renderMarkdown(markdownContent);
-    } catch (error) {
-        console.error('Error fetching lecture detail:', error);
-        lectureDisplayArea.innerHTML = `<p style="color: red;">Failed to load lecture content: ${error.message}. Please check the console for details.</p>`;
+// Show main UI and hide welcome screen
+function showMainUI() {
+    document.getElementById('welcome-section').style.display = 'none';
+    document.querySelector('.toolbar').style.display = 'flex';
+    document.getElementById('file-explorer').style.display = 'block';
+    document.getElementById('main-container').style.display = 'flex';
+    const showExplorerBtn = document.getElementById('show-explorer-btn');
+    if (showExplorerBtn) {
+        showExplorerBtn.style.display = 'inline-block';
     }
 }
 
-function renderMarkdown(markdownContent) {
-    // Use marked.parse to convert Markdown to HTML
-    lectureDisplayArea.innerHTML = marked.parse(markdownContent);
+// Load files from public directory and display in welcome section
+async function loadWelcomeFiles() {
+    const list = document.getElementById('welcome-files-list');
+    list.innerHTML = '';
 
-    // Add "Try it yourself" buttons to code blocks
-    lectureDisplayArea.querySelectorAll('pre code').forEach(codeBlock => {
-        const preElement = codeBlock.parentNode; // The <pre> tag
-        const tryItButton = document.createElement('button');
-        tryItButton.textContent = 'Try it yourself';
-        tryItButton.classList.add('try-it-button');
-        
-        // Insert button after the pre element
-        preElement.insertAdjacentElement('afterend', tryItButton);
+    // Since direct file system access is not available in browser,
+    // we will simulate by listing known files in public directory.
+    // In a real environment, this could be fetched from a server API.
 
-        tryItButton.addEventListener('click', () => {
-            const codeToInsert = codeBlock.textContent.trim(); // Get the code content
-            // The classNames will be like "language-html", "language-css", etc.
-            // Split by '-' and take the last part.
-            const codeLanguage = codeBlock.className.split('-').pop(); 
+    const publicFiles = [
+        { name: 'index.html', type: 'html' },
+        { name: 'app.css', type: 'css' },
+        { name: 'app.js', type: 'js' },
+        { name: 'sample1.jpg', type: 'image', path: './images/sample1.jpg' },
+        { name: 'sample2.jpg', type: 'image', path: './images/sample2.jpg' },
+        { name: 'sample3.jpg', type: 'image', path: './images/sample3.jpg' }
+    ];
 
-            // Determine which editor to use and insert code
-            if (codeLanguage === 'html' || codeLanguage === 'xml') { // Marked.js might tag HTML as xml
-                htmlEditor.setValue(codeToInsert);
-                toggleFile('html'); // Show the HTML editor and hide lecture
-            } else if (codeLanguage === 'css') {
-                cssEditor.setValue(codeToInsert);
-                toggleFile('css'); // Show the CSS editor and hide lecture
-            } else if (codeLanguage === 'js' || codeLanguage === 'javascript') {
-                jsEditor.setValue(codeToInsert);
-                toggleFile('js'); // Show the JS editor and hide lecture
-            } else {
-                // Fallback: If language not detected, put in HTML editor and alert
-                htmlEditor.setValue(codeToInsert);
-                toggleFile('html');
-                alert(`Code inserted into HTML editor. Language '${codeLanguage}' not specifically handled.`);
-            }
-            htmlEditor.focus(); // Focus on the HTML editor (or the specific one if toggled)
-            updatePreview(); // Update the preview after inserting code
-        });
+    publicFiles.forEach(file => {
+        const li = document.createElement('li');
+        li.className = 'hover';
+        li.textContent = file.name;
+        li.style.cursor = 'pointer';
+        li.onclick = () => {
+            loadPublicFile(file);
+        };
+        list.appendChild(li);
     });
 }
 
-// Utility function to hide editors and show lecture area
-function hideEditorsAndShowLecture() {
-    htmlEditor.getWrapperElement().classList.add('hidden');
-    cssEditor.getWrapperElement().classList.add('hidden');
-    jsEditor.getWrapperElement().classList.add('hidden');
-    document.getElementById('preview').classList.add('hidden'); // Hide preview as well
-    lectureDisplayArea.classList.remove('hidden'); // Show lecture display
-    editorContainer.classList.add('lecture-active'); // Add class to editor container to hide its children
-}
-
-
-// Combined window.onload / DOMContentLoaded for initialization
-document.addEventListener('DOMContentLoaded', async () => {
-    // Original window.onload content for loading files from URL params
-    const urlParams = new URLSearchParams(window.location.search);
-    const fileUrl = urlParams.get("file");
-    if (fileUrl) {
+// Load a file from public directory into editor or preview
+async function loadPublicFile(file) {
+    if (file.type === 'html' || file.type === 'css' || file.type === 'js') {
         try {
-            const res = await fetch(fileUrl);
-            const content = await res.text();
-            const extension = fileUrl.split('.').pop();
-
-            if (extension === 'html') htmlEditor.setValue(content);
-            else if (extension === 'css') cssEditor.setValue(content);
-            else if (extension === 'js') jsEditor.setValue(content);
-
+            const response = await fetch(file.name);
+            const content = await response.text();
+            if (file.type === 'html') {
+                htmlEditor.setValue(content);
+                toggleFile('html');
+            } else if (file.type === 'css') {
+                cssEditor.setValue(content);
+                toggleFile('css');
+            } else if (file.type === 'js') {
+                jsEditor.setValue(content);
+                toggleFile('js');
+            }
             updatePreview();
-            lectureDisplayArea.classList.add('hidden'); // Ensure lecture is hidden if a file is loaded
-            editorContainer.classList.remove('lecture-active'); // Ensure editors are shown
-            toggleFile(extension); // Show the specific editor loaded
-        } catch (err) {
-            alert('Failed to load file from URL: ' + err.message);
-            // If file load fails, revert to default tutorial view
-            fetchChaptersAndTopics();
-            toggleFile('html'); // Still show HTML editor as default
+            showMainUI();
+        } catch (error) {
+            alert('Failed to load file: ' + file.name);
         }
-    } else {
-        // If no file was loaded from URL, initialize tutorial sidebar and show lecture by default
-        fetchChaptersAndTopics();
-        hideEditorsAndShowLecture(); // Show lecture area by default
+    } else if (file.type === 'image') {
+        // Show image in preview iframe
+        const preview = document.getElementById('preview');
+        preview.srcdoc = `<html><body style="margin:0;display:flex;justify-content:center;align-items:center;background:#222;"><img src="${file.path}" style="max-width:100%;max-height:100%;" /></body></html>`;
+        showMainUI();
     }
-    
-    updateUndoRedoButtons(); // Initial update for buttons
-    // checkCapsLock() listener is attached directly to document, no need to call it here.
-});
+}
+
+// Clear editors to start a new blank file
+function startNewFile() {
+    htmlEditor.setValue(defaultHTML);
+    cssEditor.setValue(defaultCSS);
+    jsEditor.setValue(defaultJS);
+    toggleFile('html');
+    updatePreview();
+    showMainUI();
+}
+
+// Track last saved content for unsaved changes detection
+let lastSavedContent = {
+    html: defaultHTML,
+    css: defaultCSS,
+    js: defaultJS
+};
+
+// Check if current file has unsaved changes
+function hasUnsavedChanges() {
+    const htmlChanged = htmlEditor.getValue() !== lastSavedContent.html;
+    const cssChanged = cssEditor.getValue() !== lastSavedContent.css;
+    const jsChanged = jsEditor.getValue() !== lastSavedContent.js;
+    return htmlChanged || cssChanged || jsChanged;
+}
+
+// Save current content as last saved content
+function saveCurrentContent() {
+    lastSavedContent.html = htmlEditor.getValue();
+    lastSavedContent.css = cssEditor.getValue();
+    lastSavedContent.js = jsEditor.getValue();
+}
+
+// Show modal for unsaved changes prompt
+function showUnsavedChangesModal(callbacks) {
+    const modal = document.getElementById('unsaved-changes-modal');
+    modal.classList.remove('hidden');
+
+    const saveBtn = document.getElementById('modal-save-btn');
+    const discardBtn = document.getElementById('modal-discard-btn');
+    const cancelBtn = document.getElementById('modal-cancel-btn');
+
+    function cleanup() {
+        saveBtn.removeEventListener('click', onSave);
+        discardBtn.removeEventListener('click', onDiscard);
+        cancelBtn.removeEventListener('click', onCancel);
+        modal.classList.add('hidden');
+    }
+
+    function onSave() {
+        cleanup();
+        if (callbacks && callbacks.onSave) callbacks.onSave();
+    }
+
+    function onDiscard() {
+        cleanup();
+        if (callbacks && callbacks.onDiscard) callbacks.onDiscard();
+    }
+
+    function onCancel() {
+        cleanup();
+        if (callbacks && callbacks.onCancel) callbacks.onCancel();
+    }
+
+    saveBtn.addEventListener('click', onSave);
+    discardBtn.addEventListener('click', onDiscard);
+    cancelBtn.addEventListener('click', onCancel);
+}
+
+    // Event listeners for welcome button and new button
+    document.addEventListener('DOMContentLoaded', () => {
+        // Show welcome screen initially
+        showWelcomeScreen();
+        loadWelcomeFiles();
+
+        // Preview button to toggle special char buttons visibility
+        const previewBtn = document.getElementById('preview-toggle-button');
+        const specialCharButtons = document.getElementById('special-char-buttons');
+        if (previewBtn && specialCharButtons) {
+            previewBtn.addEventListener('click', () => {
+                specialCharButtons.classList.toggle('hidden');
+            });
+        }
+
+        // GitHub login button event listener
+        const githubLoginBtn = document.getElementById('github-login-btn');
+        if (githubLoginBtn) {
+            let githubWindow = null;
+            githubLoginBtn.addEventListener('click', (event) => {
+                event.preventDefault();
+                if (!githubWindow || githubWindow.closed) {
+                    githubWindow = window.open('https://github.com/login', '_blank', 'width=600,height=700');
+                } else {
+                    githubWindow.focus();
+                }
+            });
+        }
+
+        // GitHub logout button event listener
+        const githubLogoutBtn = document.getElementById('github-logout-btn');
+        if (githubLogoutBtn) {
+            let githubLogoutWindow = null;
+            githubLogoutBtn.addEventListener('click', (event) => {
+                event.preventDefault();
+                if (!githubLogoutWindow || githubLogoutWindow.closed) {
+                    githubLogoutWindow = window.open('https://github.com/logout', '_blank', 'width=600,height=700');
+                } else {
+                    githubLogoutWindow.focus();
+                }
+            });
+        }
+
+        // File explorer close button event listener
+        const fileExplorerCloseBtn = document.getElementById('file-explorer-close-btn');
+        if (fileExplorerCloseBtn) {
+            fileExplorerCloseBtn.addEventListener('click', () => {
+                hideFileExplorer();
+            });
+        }
+
+        // Show Explorer button event listener
+        const showExplorerBtn = document.getElementById('show-explorer-btn');
+        if (showExplorerBtn) {
+            showExplorerBtn.addEventListener('click', () => {
+                showFileExplorer();
+            });
+        }
+
+        // Prettify button event listener
+        const prettifyBtn = document.getElementById('prettify-button');
+        if (prettifyBtn) {
+            prettifyBtn.addEventListener('click', () => {
+                prettifyCode();
+            });
+        }
+
+        // Welcome button in toolbar
+        const welcomeBtn = document.getElementById('welcome-button');
+        if (welcomeBtn) {
+            welcomeBtn.addEventListener('click', () => {
+                if (hasUnsavedChanges()) {
+                    showUnsavedChangesModal({
+                        onSave: () => {
+                            saveCurrentContent();
+                            showWelcomeScreen();
+                            loadWelcomeFiles();
+                        },
+                        onDiscard: () => {
+                            // Discard changes by resetting editors to last saved content
+                            htmlEditor.setValue(lastSavedContent.html);
+                            cssEditor.setValue(lastSavedContent.css);
+                            jsEditor.setValue(lastSavedContent.js);
+                            showWelcomeScreen();
+                            loadWelcomeFiles();
+                        },
+                        onCancel: () => {
+                            // Do nothing, stay on current screen
+                        }
+                    });
+                } else {
+                    showWelcomeScreen();
+                    loadWelcomeFiles();
+                }
+                // Show welcome screen and load files, do not auto-click new button
+                showWelcomeScreen();
+                loadWelcomeFiles();
+                // Removed auto-click on new button to prevent UI reverting
+            });
+        }
+
+        // New button in welcome section
+        const newBtn = document.getElementById('welcome-new-btn');
+        if (newBtn) {
+            newBtn.addEventListener('click', () => {
+                startNewFile();
+                saveCurrentContent();
+            });
+        }
+    });
+
+    // Function to show file explorer and hide Show Explorer button
+    function showFileExplorer() {
+        const fileExplorer = document.getElementById('file-explorer');
+        const showExplorerBtn = document.getElementById('show-explorer-btn');
+        if (fileExplorer && showExplorerBtn) {
+            fileExplorer.style.display = 'block';
+            showExplorerBtn.style.display = 'none';
+        }
+    }
+
+    // Function to hide file explorer and show Show Explorer button
+    function hideFileExplorer() {
+        const fileExplorer = document.getElementById('file-explorer');
+        const showExplorerBtn = document.getElementById('show-explorer-btn');
+        if (fileExplorer && showExplorerBtn) {
+            fileExplorer.style.display = 'none';
+            showExplorerBtn.style.display = 'inline-block';
+        }
+    }
