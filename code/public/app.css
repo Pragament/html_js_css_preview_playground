@@ -470,7 +470,6 @@ iframe {
     border-radius: 5px;
     cursor: pointer;
     font-size: 0.9em;
-    display: inline-block; /* Or block, depending on desired layout */
     float: right; /* Position it to the right of the code block */
     clear: both; /* Clear floats to ensure proper positioning */
 }
@@ -491,4 +490,77 @@ iframe {
 /* CRITICAL RULE: This makes the lecture-display-area visible when editor-container has 'lecture-active' */
 .editor-container.lecture-active #lecture-display-area {
     display: block !important;
+}
+#saved-files-list li {
+    color: #0ff;
+    cursor: pointer;
+    padding: 5px;
+    border-bottom: 1px solid #555;
+}
+
+#saved-files-list li:hover {
+    background-color: #33334d;
+}
+
+.modal {
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background-color: #1a1a2e;
+  color: #f0f0f0;
+  padding: 20px;
+  border-radius: 10px;
+  width: 400px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 0 10px #000;
+  position: relative;
+}
+
+.modal-content h2 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.modal-content ul {
+  list-style: none;
+  padding: 0;
+}
+
+.modal-content ul li {
+  padding: 10px;
+  background: #333;
+  margin: 5px 0;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background 0.2s;
+}
+
+.modal-content ul li:hover {
+  background: #555;
+}
+
+.modal .close {
+  position: absolute;
+  top: 8px;
+  right: 15px;
+  font-size: 24px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none !important;
 }
