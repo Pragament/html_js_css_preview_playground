@@ -49,8 +49,12 @@ console.log('Hello from script.js!');
 document.querySelector('h1').addEventListener('click', () => {
     alert('You clicked the heading!');
 });`;
+let isUnsaved = false; // Tracks unsaved changes
+
 
 // Initialize CodeMirror editors with default content
+let currentFileName = ''; // Global variable to track current file name
+
 const htmlEditor = CodeMirror.fromTextArea(document.getElementById('html-code'), {
     mode: 'htmlmixed',
     theme: 'material',
@@ -111,12 +115,28 @@ function updatePreview() {
 }
 
 // Update preview on editor change
-htmlEditor.on('change', updatePreview);
-cssEditor.on('change', updatePreview);
-jsEditor.on('change', updatePreview);
+htmlEditor.on('change', () => {
+    isUnsaved = true;
+    updatePreview();
+    updateUndoRedoButtons();
+});
+
+cssEditor.on('change', () => {
+    isUnsaved = true;
+    updatePreview();
+    updateUndoRedoButtons();
+});
+
+jsEditor.on('change', () => {
+    isUnsaved = true;
+    updatePreview();
+    updateUndoRedoButtons();
+});
+
 
 // Function to toggle files
 function toggleFile(type) {
+    console.log("toggleFile called with type:", type);
     const htmlEditorElement = htmlEditor.getWrapperElement();
     const cssEditorElement = cssEditor.getWrapperElement();
     const jsEditorElement = jsEditor.getWrapperElement();
@@ -135,10 +155,13 @@ function toggleFile(type) {
     document.getElementById('preview').classList.remove('hidden'); // Ensure preview is shown with editors
 
     if (type === 'html') {
+        console.log("Showing HTML editor");
         htmlEditorElement.classList.remove('hidden');
     } else if (type === 'css') {
+        console.log("Showing CSS editor");
         cssEditorElement.classList.remove('hidden');
     } else if (type === 'js') {
+        console.log("Showing JS editor");
         jsEditorElement.classList.remove('hidden');
     }
     updateUndoRedoButtons(); // Update button states after toggle
@@ -442,6 +465,16 @@ function clearEditor() {
         activeEditor.setValue('');
     }
 }
+async function confirmDiscardChanges() {
+    if (!isUnsaved) return true;
+    const confirmMsg = confirm("You have unsaved changes. Do you want to save them?");
+    if (confirmMsg) {
+        const success = await saveFile();
+        return success;
+    }
+    return confirm("Are you sure you want to discard the changes?");
+}
+
 
 // Function to toggle the visibility of the special character buttons
 function toggleSpecialChars() {
@@ -478,57 +511,125 @@ function prettifyCode() {
     }
 }
 
-// Function to create a new file and autosave in local storage
-function createNewFile() {
-    const activeEditor = getActiveEditor();
-    if (activeEditor) {
-        const code = activeEditor.getValue();
-        if (code) {
-            saveFile();
-            clearEditor();
-        }
+async function createNewFile() {
+    const confirmed = await confirmDiscardChanges();
+    if (!confirmed) return;
+
+    const fileName = prompt("Enter the new file name with extension (e.g., index.html, style.css, script.js):");
+    if (!fileName) return;
+
+    const extension = fileName.split('.').pop().toLowerCase();
+    if (!['html', 'css', 'js'].includes(extension)) {
+        alert("Unsupported file extension. Please enter html, css, or js.");
+        return;
     }
+
+    clearEditor();
+
+    if (extension === 'html') toggleFile('html');
+    else if (extension === 'css') toggleFile('css');
+    else toggleFile('js');
+
+    currentFileName = fileName;
+    isUnsaved = false;
+    document.getElementById('current-file-name').textContent = fileName;
 }
 
-// Function to view autosaved files in the file explorer
-function viewAutosavedFiles() {
-    const fileExplorer = document.querySelector('.file-explorer ul');
-    fileExplorer.innerHTML = '';
-    for (let i = 0; i < localStorage.length; i++) {
-        const fileName = localStorage.key(i);
-        const li = document.createElement('li');
-        li.className = 'hover';
-        li.textContent = fileName;
-        li.onclick = () => loadFile(fileName);
-        fileExplorer.appendChild(li);
-    }
-}
 
-// Function to load a file from local storage
-function loadFile(fileName) {
-    console.log("loadFile " + fileName)
+    // Clear all editors and hide lecture display
+    clearEditor();
+    const htmlEditorElement = htmlEditor.getWrapperElement();
+    const cssEditorElement = cssEditor.getWrapperElement();
+    const jsEditorElement = jsEditor.getWrapperElement();
+
+
+async function loadFile(fileName) {
+    const confirmed = await confirmDiscardChanges();
+    if (!confirmed) return;
+
     const content = localStorage.getItem(fileName);
-    console.log("content " + content)
-    const activeEditor = getActiveEditor();
-    if (activeEditor) {
-        activeEditor.setValue(content);
+    const extension = fileName.split('.').pop().toLowerCase();
+
+    if (extension === 'html') {
+        toggleFile('html');
+        htmlEditor.setValue(content);
+        htmlEditor.focus();
+    } else if (extension === 'css') {
+        toggleFile('css');
+        cssEditor.setValue(content);
+        cssEditor.focus();
+    } else if (extension === 'js') {
+        toggleFile('js');
+        jsEditor.setValue(content);
+        jsEditor.focus();
     }
+
+    currentFileName = fileName;
+    isUnsaved = false;
+    document.getElementById('current-file-name').textContent = fileName;
+
+    document.getElementById('saved-files-container').classList.add('hidden');
+    document.getElementById('saved-files-list').classList.add('hidden');
+
+    updatePreview();
 }
 
-// Save the content of the active editor to local storage
-function saveFile(fileName) {
-    console.log("saveFile " + fileName)
-    const activeEditor = getActiveEditor();
-    if (activeEditor) {
-        const fileNamePrompt = prompt('Enter the name of the new file:'); // Renamed to avoid conflict
-        if (fileNamePrompt) {
-            const content = activeEditor.getValue();
-            console.log("content " + content)
-            localStorage.setItem(fileNamePrompt, content);
-            viewAutosavedFiles();
+
+function saveFile() {
+    return new Promise((resolve) => {
+        let fileName = currentFileName;
+        if (!fileName) {
+            fileName = prompt('Enter file name to save:');
+            if (!fileName) return resolve(false);
         }
-    }
+
+        const editor = getActiveEditor();
+        if (!editor) return resolve(false);
+
+        const content = editor.getValue();
+        localStorage.setItem(fileName, content);
+
+        currentFileName = fileName;
+        isUnsaved = false;
+        document.getElementById('current-file-name').textContent = fileName;
+
+        alert("✅ File saved as " + fileName);
+        resolve(true);
+    });
 }
+
+function viewAutosavedFiles() {
+  const modal = document.getElementById('savedFilesModal');
+  const list = document.getElementById('saved-files-modal-list');
+  list.innerHTML = '';
+
+  for (let i = 0; i < localStorage.length; i++) {
+    const fileName = localStorage.key(i);
+    const ext = fileName.split('.').pop().toLowerCase();
+    if (['html', 'css', 'js'].includes(ext)) {
+      const li = document.createElement('li');
+      li.textContent = fileName;
+      li.onclick = () => {
+        loadFile(fileName);
+        closeSavedFilesModal();
+      };
+      list.appendChild(li);
+    }
+  }
+
+  if (list.children.length === 0) {
+    const li = document.createElement('li');
+    li.textContent = "⚠️ No saved files found.";
+    list.appendChild(li);
+  }
+
+  modal.classList.remove('hidden');
+}
+function closeSavedFilesModal() {
+  document.getElementById('savedFilesModal').classList.add('hidden');
+}
+
+    
 
 
 // **NEW: Tutorial Sidebar Functions**
