@@ -1,17 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Redirecting…</title>
-  <meta http-equiv="refresh" content="0; url=code/public/index.html" />
-  <style>
-    body { font-family: Arial, sans-serif; padding: 24px; }
-    a { color: #0e639c; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Playground</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/theme/material.min.css">
+    <link rel="stylesheet" href="app.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify-html.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify-css.min.js"></script>
 </head>
+
 <body>
-  <!-- <p>Redirecting to the app… If you are not redirected automatically, <a href="code/public/index.html">click here</a>.</p>
-  <script>window.location.replace('code/public/index.html');</script> -->
+    <!-- Toolbar with Undo/Redo Buttons -->
+    <div class="toolbar">
+        <!-- Undo/Redo Button Group -->
+        <div class="button-group">
+            <button onclick="togglePreviewLayout()" hidden id="preview-toggle-button"
+                title="Toggle Preview Layout">👁️🔄</button>
+            <button id="undo-button" onclick="undo()" disabled title="Undo the last action">↩️</button>
+            <button id="redo-button" onclick="redo()" disabled title="Redo the last undone action">↪️</button>
+            <button onclick="zoomIn()" title="Zoom in">🔍➕</button>
+            <button onclick="zoomOut()" title="Zoom out">🔍➖</button>
+            <button onclick="insertTemplate()" title="Insert Template">🔥📄</button>
+            <button onclick="selectAll()" title="Select All">Select All</button>
+            <button onclick="copyText()" title="Copy">Copy</button>
+            <button onclick="pasteText()" title="Paste">Paste</button>
+            <button onclick="clearEditor()" title="Clear Editor">Clear🚫📝</button>
+            <button onclick="toggleAutocomplete()" id="autocomplete-button" title="Toggle Autocomplete">💡:❌Off</button>
+            <button onclick="prettifyCode()" title="Prettify Code">✨ Prettify</button>
+            <button hidden onclick="createNewFile()" title="Create New File">🆕📄➕</button>
+            <button hidden onclick="saveFile()" title="Create New File">Save 💾📄</button>
+            <button hidden onclick="viewAutosavedFiles()" title="View Saved Files">👁️📄</button>
+            <button onclick="toggleSpecialChars()" title="Show/Hide Special Characters">👁️🎹</button>
+            <p id="capsWarning">⚠️ Caps Lock is ON!</p>
+        </div>
+
+        <!-- Special Character Button Group -->
+        <div class="button-group" id="special-char-buttons">
+            <!-- Non-alphanumeric character buttons with hints -->
+            <button onclick="insertLoremIpsum('<')" title="Less-than sign: <">&lt;</button>
+            <button onclick="insertLoremIpsum('>')" title="Greater-than sign: >">&gt;</button>
+            <button onclick="insertLoremIpsum('/')" title="Forward slash: /">/</button>
+            <button onclick="insertLoremIpsum('&quot;')" title="Double quote: &quot;">"</button>
+            <button onclick="insertLoremIpsum('\'')" title="Single quote: '">'</button>
+            <button onclick="insertLoremIpsum('=')" title="Equals sign: =">=</button>
+            <button onclick="insertLoremIpsum('&')" title="Ampersand: &">&amp;</button>
+            <button onclick="insertLoremIpsum(';')" title="Semicolon: ;">;</button>
+            <button onclick="insertLoremIpsum('#')" title="Hash/Pound sign: #">#</button>
+            <button onclick="insertLoremIpsum('.')" title="Period/Dot: .">.</button>
+            <button onclick="insertLoremIpsum(':')" title="Colon: :">:</button>
+            <button onclick="insertLoremIpsum('-')" title="Hyphen: -">-</button>
+            <button onclick="insertLoremIpsum('_')" title="Underscore: _">_</button>
+            <button onclick="insertLoremIpsum('{')" title="Opening curly brace: {">{</button>
+            <button onclick="insertLoremIpsum('}')" title="Closing curly brace: }">}</button>
+            <button onclick="insertLoremIpsum('[')" title="Opening square bracket: [">[</button>
+            <button onclick="insertLoremIpsum(']')" title="Closing square bracket: ]">]</button>
+            <button onclick="insertLoremIpsum('(')" title="Opening parenthesis: (">(</button>
+            <button onclick="insertLoremIpsum(')')" title="Closing parenthesis: )">)</button>
+            <button onclick="insertLoremIpsum('!')" title="Exclamation mark: !">!</button>
+            <button onclick="insertLoremIpsum('*')" title="Asterisk: *">*</button>
+            <button onclick="insertLoremIpsum('|')" title="Vertical bar/Pipe: |">|</button>
+            <button onclick="insertLoremIpsum('?')" title="Question mark: ?">?</button>
+            <button onclick="insertLoremIpsum('@')" title="At symbol: @">@</button>
+            <button onclick="insertLoremIpsum('~')" title="Tilde: ~">~</button>
+            <button onclick="insertLoremIpsum('&copy;')" title="Copyright symbol: &copy;">&copy;</button>
+            <button onclick="insertLoremIpsum('&reg;')" title="Registered trademark symbol: &reg;">&reg;</button>
+            <button onclick="insertLoremIpsum('₹')" title="Indian Rupee symbol: ₹">₹</button>
+            <button onclick="insertLoremIpsum('$')" title="Dollar sign: $">$</button>
+        </div>
+    </div>
+
+    <div class="main-container preview-right" id="main-container">
+        <div class="file-explorer">
+            <ul>
+                <li class="hover" onclick="toggleFile('html')">index.html</li>
+                <li class="hover" onclick="toggleFile('css')">style.css</li>
+                <li class="hover" onclick="toggleFile('js')">script.js</li>
+            </ul>
+            <div class="divider-text">Text</div>
+
+            <strong></strong>
+            <ul>
+                <li class="hover"
+                    onclick="insertLoremIpsum('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.')">
+                    Insert sample text
+                </li>
+            </ul>
+            <div class="divider-text">Images</div>
+            <strong></strong>
+            <ul>
+                <li class="hover" onclick="insertImagePath('./images/sample1.jpg')">
+                    sample1.jpg
+                    <img src="images/sample1.jpg" alt="Sample 1">
+                </li>
+                <li class="hover" onclick="insertImagePath('./images/sample2.jpg')">
+                    sample2.jpg
+                    <img src="images/sample2.jpg" alt="Sample 2">
+                </li>
+                <li class="hover" onclick="insertImagePath('./images/sample3.jpg')">
+                    sample3.jpg
+                    <img src="images/sample3.jpg" alt="Sample 3">
+                </li>
+            </ul>
+        </div>
+        <div class="editor-container">
+            <textarea id="html-code" class="hidden">
+<!-- Add your HTML code here -->
+</textarea>
+            <textarea id="css-code" class="hidden">
+/* Add your CSS here */
+</textarea>
+            <textarea id="js-code" class="hidden">
+// Add your JavaScript here
+</textarea>
+            <div class="preview-container">
+                <iframe id="preview"></iframe>
+            </div>
+        </div>
+    </div>
+    <!-- Floating Help Button -->
+    <button class="help-button" onclick="toggleChat()">?</button>
+
+    <!-- Chat Window -->
+    <div class="chat-window">
+        <div class="chat-header">Help Chat</div>
+        <div class="chat-body" id="chat-body">
+            <div class="message bot">
+                <p>Hello! How can I help you today?</p>
+            </div>
+            <div class="action-buttons">
+                <button onclick="showFAQs()">View FAQs</button>
+                <button onclick="showCustomMessageInput()">Send Custom Message</button>
+            </div>
+        </div>
+        <div class="chat-footer">
+            <input type="text" id="chat-input" placeholder="Type your message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/mode/xml/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/mode/css/css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/mode/htmlmixed/htmlmixed.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/show-hint.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/xml-hint.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/javascript-hint.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/html-hint.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/css-hint.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/show-hint.min.css">
+    <script src="app.js"></script>
 </body>
+
 </html>
