@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Code Playground</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/codemirror.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/theme/material.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/theme/eclipse.min.css">
     <link rel="stylesheet" href="app.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify-html.min.js"></script>
@@ -137,7 +137,7 @@
         }
         .main-container {
             display: flex;
-            height: calc(100vh - 50px); /* Adjust height, assuming 50px for toolbar */
+            /* Remove hardcoded height that could overlap toolbar */
             width: 100%;
             box-sizing: border-box;
             flex-direction: row; /* Default to horizontal arrangement */
@@ -192,7 +192,7 @@
             <button onclick="createNewFile()" title="Create New File">🆕New📄</button>
             <button onclick="saveFile()" title="Save the File">Save 📄</button>
             <button onclick="viewAutosavedFiles()" title="View Saved Files">👁️Welcome📄</button>
-
+            <button onclick="toggleOutputPanel()" title="Toggle Output Panel">🖥️ Toggle Output</button>
 
 
             <p id="capsWarning">⚠️ Caps Lock is ON!</p>
@@ -233,7 +233,13 @@
     </div>
 
     <div class="main-container" id="main-container">
-        <aside id="tutorial-sidebar">
+        <!-- Activity Bar (VS Code-like leftmost bar) -->
+        <div class="activity-bar">
+            <button class="activity-item" id="btn-activity-explorer" title="Explorer" onclick="toggleExplorerSidebar()">📁</button>
+            <button class="activity-item" id="btn-activity-tutorial" title="Tutorial" onclick="toggleTutorialSidebar()">📚</button>
+        </div>
+
+        <aside id="tutorial-sidebar" class="sidebar-hidden">
             <div class="sidebar-header">
                 <h3>Step-by-Step Tutorial</h3>
             </div>
@@ -243,7 +249,7 @@
             </div>
         </aside>
 
-        <div class="file-explorer" id="file-explorer">
+        <div class="file-explorer sidebar-hidden" id="file-explorer">
             <div class="file-explorer-header">
                 <h3>File Explorer</h3>
                 <button class="file-explorer-toggle" onclick="hideFileExplorer()">✕</button>
@@ -346,291 +352,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/html-hint.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/css-hint.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/show-hint.min.css">
-    <script src="app.js"></script> <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
-        import { getAuth, GithubAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyA7qla4VwqZY5I7GAGGGzcR2sno8DodqhM",
-            authDomain: "codestudiodev-e38e8.firebaseapp.com",
-            projectId: "codestudiodev-e38e8",
-            storageBucket: "codestudiodev-e38e8",
-            messagingSenderId: "302367725207",
-            appId: "1:302367725207:web:fefb4c98c6f0c6c5f3fbd2"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const provider = new GithubAuthProvider();
-        provider.addScope('repo');
-
-        let githubToken = localStorage.getItem('githubToken') || '';
-        let currentRepo = null;
-        let allRepos = []; // Store all repositories for search
-
-        onAuthStateChanged(auth, (user) => {
-            const loginBtn = document.getElementById('github-login-btn');
-            const logoutBtn = document.getElementById('github-logout-btn');
-            githubToken = localStorage.getItem('githubToken') || '';
-            loginBtn.style.display = user && githubToken ? 'none' : 'inline-block';
-            logoutBtn.style.display = user && githubToken ? 'inline-block' : 'none';
-            if (user && githubToken) {
-                listRepos();
-            } else {
-                clearGitHubUI();
-            }
-        });
-
-        window.UserSignin = function () {
-            signInWithPopup(auth, provider).then((result) => {
-                const credential = GithubAuthProvider.credentialFromResult(result);
-                githubToken = credential.accessToken;
-                if (githubToken) {
-                    localStorage.setItem('githubToken', githubToken);
-                    document.getElementById('github-login-btn').style.display = 'none';
-                    document.getElementById('github-logout-btn').style.display = 'inline-block';
-                    listRepos();
-                }
-            }).catch(console.error);
-        };
-
-        window.UserLogout = function () {
-            signOut(auth).then(() => {
-                localStorage.removeItem('githubToken');
-                githubToken = '';
-                currentRepo = null;
-                allRepos = [];
-                document.getElementById('github-login-btn').style.display = 'inline-block';
-                document.getElementById('github-logout-btn').style.display = 'none';
-                clearGitHubUI();
-            });
-        };
-
-        function listRepos() {
-            fetch('https://api.github.com/user/repos', {
-                headers: { Authorization: `token ${githubToken}` }
-            }).then(res => res.json()).then(repos => {
-                allRepos = repos; // Store all repositories
-                displayRepos(repos);
-            }).catch(err => {
-                console.error('Error fetching repos:', err);
-                document.getElementById('github-repos').innerHTML = '<p style="color: #ff6b6b;">Error loading repositories</p>';
-            });
-        }
-
-        function displayRepos(repos) {
-            const reposDiv = document.getElementById('github-repos');
-            reposDiv.innerHTML = '';
-            repos.forEach((repo, i) => {
-                const btn = document.createElement('button');
-                btn.textContent = `${i + 1}. ${repo.full_name}`;
-                btn.onclick = () => {
-                    currentRepo = repo;
-                    listFiles(repo);
-                };
-                reposDiv.appendChild(btn);
-            });
-        }
-
-        // Search repositories function
-        window.searchRepositories = function() {
-            const searchTerm = document.getElementById('repo-search-input').value.toLowerCase();
-            
-            if (searchTerm === '') {
-                // If search is empty, show all repos
-                displayRepos(allRepos);
-            } else {
-                // Filter repos based on search term
-                const filteredRepos = allRepos.filter(repo => 
-                    repo.name.toLowerCase().includes(searchTerm) || 
-                    repo.full_name.toLowerCase().includes(searchTerm)
-                );
-                displayRepos(filteredRepos);
-            }
-        };
-
-        function listFiles(repo) {
-            fetch(`https://api.github.com/repos/${repo.owner.login}/${repo.name}/contents/`, {
-                headers: { Authorization: `token ${githubToken}` }
-            }).then(res => res.json()).then(files => {
-                const filesDiv = document.getElementById('github-files');
-                filesDiv.innerHTML = '';
-                files.forEach(file => {
-                    if (file.name.endsWith('.html') || file.name.endsWith('.css') || file.name.endsWith('.js')) {
-                        const btn = document.createElement('button');
-                        btn.textContent = file.name;
-                        btn.onclick = () => loadGitHubFile({
-                            download_url: file.download_url,
-                            path: file.path,
-                            sha: file.sha,
-                            owner: repo.owner.login,
-                            repo: repo.name
-                        });
-                        filesDiv.appendChild(btn);
-                    }
-                });
-            }).catch(err => {
-                console.error('Error fetching files:', err);
-                document.getElementById('github-files').innerHTML = '<p style="color: #ff6b6b;">Error loading files</p>';
-            });
-        }
-
-        function clearGitHubUI() {
-            document.getElementById('github-repos').innerHTML = '<p style="color: #888;">Login to view repositories</p>';
-            document.getElementById('github-files').innerHTML = '<p style="color: #888;">Select a repository to view files</p>';
-            document.getElementById('repo-search-input').value = '';
-            allRepos = [];
-        }
-
-        async function loadGitHubFile(fileData) {
-            try {
-                const res = await fetch(fileData.download_url);
-                const content = await res.text();
-
-                // Store file metadata for updates
-                window.currentGitHubFile = fileData;
-
-                // Load content into appropriate editor
-                if (fileData.path.endsWith('.html')) {
-                    htmlEditor.setValue(content);
-                    toggleFile('html');
-                } else if (fileData.path.endsWith('.css')) {
-                    cssEditor.setValue(content);
-                    toggleFile('css');
-                } else if (fileData.path.endsWith('.js')) {
-                    jsEditor.setValue(content);
-                    toggleFile('js');
-                }
-
-                updatePreview();
-            } catch (err) {
-                alert('Failed to load file: ' + err.message);
-            }
-        }
-
-        // Make functions available globally
-        window.listRepos = listRepos;
-        window.listFiles = listFiles;
-        window.loadGitHubFile = loadGitHubFile;
-        window.githubToken = githubToken;
-        window.currentRepo = currentRepo;
-
-        // Initial UI setup
-        clearGitHubUI();
-    </script>
-
-    <script>
-        // File Explorer Toggle Functions (Keep existing)
-        function hideFileExplorer() {
-            const fileExplorer = document.getElementById('file-explorer');
-            const mainContainer = document.getElementById('main-container');
-            const showBtn = document.getElementById('show-explorer-btn');
-            
-            fileExplorer.classList.add('hidden');
-            mainContainer.classList.add('full-width');
-            showBtn.style.display = 'block';
-        }
-
-        function showFileExplorer() {
-            const fileExplorer = document.getElementById('file-explorer');
-            const mainContainer = document.getElementById('main-container');
-            const showBtn = document.getElementById('show-explorer-btn');
-            
-            fileExplorer.classList.remove('hidden');
-            mainContainer.classList.remove('full-width');
-            showBtn.style.display = 'none';
-        }
-        
-        // This window.onload is handled by the combined DOMContentLoaded in app.js now.
-        // The original onload will be commented out or removed, as it duplicates logic
-        /*
-        window.onload = async () => {
-            const params = new URLSearchParams(window.location.search);
-            const fileUrl = params.get('file');
-            if (!fileUrl) return;
-
-            try {
-                const res = await fetch(fileUrl);
-                const content = await res.text();
-
-                if (fileUrl.endsWith('.html')) {
-                    htmlEditor.setValue(content);
-                    toggleFile('html');
-                } else if (fileUrl.endsWith('.css')) {
-                    cssEditor.setValue(content);
-                    toggleFile('css');
-                } else if (fileUrl.endsWith('.js')) {
-                    jsEditor.setValue(content);
-                    toggleFile('js');
-                }
-
-                updatePreview();
-            } catch (err) {
-                alert('Failed to load file: ' + err.message);
-            }
-        };
-        */
-
-        async function updateFileToGitHub() {
-            const fileData = window.currentGitHubFile;
-            
-            if (!fileData) {
-                alert('No GitHub file selected. Please load a file from GitHub first.');
-                return;
-            }
-
-            const token = localStorage.getItem('githubToken');
-            if (!token) {
-                alert('Please login to GitHub first.');
-                return;
-            }
-
-            try {
-                const updatedContent = getCurrentEditorContent();
-                const base64Content = btoa(unescape(encodeURIComponent(updatedContent)));
-
-                const url = `https://api.github.com/repos/${fileData.owner}/${fileData.repo}/contents/${fileData.path}`;
-                const res = await fetch(url, {
-                    method: 'PUT',
-                    headers: {
-                        Authorization: `token ${token}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        message: `Updated ${fileData.path} via Code Playground`,
-                        content: base64Content,
-                        sha: fileData.sha
-                    })
-                });
-
-                if (res.ok) {
-                    const result = await res.json();
-                    // Update the SHA for future updates
-                    window.currentGitHubFile.sha = result.content.sha;
-                    alert('✅ File updated successfully in GitHub!');
-                } else {
-                    const error = await res.json();
-                    alert('❌ Error updating file: ' + error.message);
-                }
-            } catch (err) {
-                alert('❌ Error updating file: ' + err.message);
-            }
-        }
-
-        function getCurrentEditorContent() {
-            const fileData = window.currentGitHubFile;
-            if (!fileData) return '';
-
-            const htmlCode = htmlEditor?.getValue?.() || '';
-            const cssCode = cssEditor?.getValue?.() || '';
-            const jsCode = jsEditor?.getValue?.() || '';
-
-            if (fileData.path.endsWith('.html')) return htmlCode;
-            if (fileData.path.endsWith('.css')) return cssCode;
-            if (fileData.path.endsWith('.js')) return jsCode;
-            return '';
-        }
-    </script>
+    <script src="app.js"></script>
 
     <!-- Saved Files Modal -->
 <div id="savedFilesModal" class="modal hidden">

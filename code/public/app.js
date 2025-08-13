@@ -57,7 +57,7 @@ let currentFileName = ''; // Global variable to track current file name
 
 const htmlEditor = CodeMirror.fromTextArea(document.getElementById('html-code'), {
     mode: 'htmlmixed',
-    theme: 'material',
+    theme: 'eclipse',
     lineNumbers: true,
     autoCloseTags: true,
     value: defaultHTML,
@@ -65,14 +65,14 @@ const htmlEditor = CodeMirror.fromTextArea(document.getElementById('html-code'),
 });
 const cssEditor = CodeMirror.fromTextArea(document.getElementById('css-code'), {
     mode: 'css',
-    theme: 'material',
+    theme: 'eclipse',
     lineNumbers: true,
     value: defaultCSS,
     extraKeys: { "Ctrl-Space": "autocomplete" },
 });
 const jsEditor = CodeMirror.fromTextArea(document.getElementById('js-code'), {
     mode: 'javascript',
-    theme: 'material',
+    theme: 'eclipse',
     lineNumbers: true,
     value: defaultJS,
     extraKeys: { "Ctrl-Space": "autocomplete" },
@@ -810,3 +810,120 @@ document.addEventListener('DOMContentLoaded', async () => {
     updateUndoRedoButtons(); // Initial update for buttons
     // checkCapsLock() listener is attached directly to document, no need to call it here.
 });
+
+// ==== Activity bar toggle logic (ensure only one sidebar shows at a time) ====
+function showOnlySidebar(sidebarId) {
+    const explorer = document.getElementById('file-explorer');
+    const tutorial = document.getElementById('tutorial-sidebar');
+    const btnExplorer = document.getElementById('btn-activity-explorer');
+    const btnTutorial = document.getElementById('btn-activity-tutorial');
+
+    const all = [explorer, tutorial];
+    const buttons = [btnExplorer, btnTutorial];
+
+    // Toggle target; hide others
+    all.forEach(el => {
+        if (!el) return;
+        if (el.id === sidebarId) {
+            // Remove legacy classes that might keep it hidden
+            el.classList.remove('hidden');
+            const mainContainer = document.getElementById('main-container');
+            mainContainer?.classList.remove('full-width');
+            // Toggle visibility
+            if (el.classList.contains('sidebar-hidden')) {
+                el.classList.remove('sidebar-hidden');
+            } else {
+                el.classList.add('sidebar-hidden');
+            }
+        } else {
+            el.classList.add('sidebar-hidden');
+        }
+    });
+
+    // Active state only if shown
+    buttons.forEach(b => b?.classList.remove('active'));
+    if (!document.getElementById(sidebarId)?.classList.contains('sidebar-hidden')) {
+        if (sidebarId === 'file-explorer') btnExplorer?.classList.add('active');
+        if (sidebarId === 'tutorial-sidebar') btnTutorial?.classList.add('active');
+    }
+
+    // Keep toolbar on top after DOM reflow
+    requestAnimationFrame(() => {
+        document.querySelector('.toolbar')?.classList.add('toolbar-top');
+    });
+}
+
+// Public handlers for activity bar buttons
+function toggleExplorerSidebar() {
+    showOnlySidebar('file-explorer');
+}
+function toggleTutorialSidebar() {
+    showOnlySidebar('tutorial-sidebar');
+}
+
+// Keep existing hide/show explorer functions compatible (override safely)
+hideFileExplorer = function () {
+    const fileExplorer = document.getElementById('file-explorer');
+    fileExplorer?.classList.add('sidebar-hidden');
+    fileExplorer?.classList.remove('hidden'); // ensure legacy class removed so it can reopen
+    document.getElementById('btn-activity-explorer')?.classList.remove('active');
+};
+
+function showFileExplorer() {
+    const fileExplorer = document.getElementById('file-explorer');
+    const mainContainer = document.getElementById('main-container');
+    fileExplorer?.classList.remove('sidebar-hidden', 'hidden');
+    mainContainer?.classList.remove('full-width');
+    document.getElementById('btn-activity-explorer')?.classList.add('active');
+}
+
+// Toggle output/preview panel visibility (VS Code-like)
+function toggleOutputPanel() {
+    const previewContainer = document.querySelector('.preview-container');
+    if (!previewContainer) return;
+    previewContainer.classList.toggle('hidden');
+}
+
+// ===== Demo GitHub login (non-OAuth) to avoid conflicts for now =====
+window.UserSignin = function () {
+    // Simple demo: mark as logged in and show demo repos
+    localStorage.setItem('githubToken', 'demo');
+    document.getElementById('github-login-btn')?.setAttribute('style', 'display:none');
+    document.getElementById('github-logout-btn')?.setAttribute('style', 'display:inline-block');
+    const reposDiv = document.getElementById('github-repos');
+    if (reposDiv) {
+        reposDiv.innerHTML = '';
+        ['demo/portfolio', 'demo/web-project', 'demo/learning-html'].forEach((name, i) => {
+            const btn = document.createElement('button');
+            btn.textContent = `${i + 1}. ${name}`;
+            btn.onclick = () => {
+                const filesDiv = document.getElementById('github-files');
+                if (filesDiv) {
+                    filesDiv.innerHTML = '';
+                    ['index.html', 'style.css', 'script.js'].forEach(f => {
+                        const fBtn = document.createElement('button');
+                        fBtn.textContent = f;
+                        fBtn.onclick = () => {
+                            if (f.endsWith('.html')) { htmlEditor.setValue(defaultHTML); toggleFile('html'); }
+                            else if (f.endsWith('.css')) { cssEditor.setValue(defaultCSS); toggleFile('css'); }
+                            else { jsEditor.setValue(defaultJS); toggleFile('js'); }
+                            updatePreview();
+                        };
+                        filesDiv.appendChild(fBtn);
+                    });
+                }
+            };
+            reposDiv.appendChild(btn);
+        });
+    }
+};
+
+window.UserLogout = function () {
+    localStorage.removeItem('githubToken');
+    document.getElementById('github-login-btn')?.setAttribute('style', 'display:inline-block');
+    document.getElementById('github-logout-btn')?.setAttribute('style', 'display:none');
+    const reposDiv = document.getElementById('github-repos');
+    const filesDiv = document.getElementById('github-files');
+    if (reposDiv) reposDiv.innerHTML = '<p style="color:#888;">Login to view repositories</p>';
+    if (filesDiv) filesDiv.innerHTML = '<p style="color:#888;">Select a repository to view files</p>';
+};
