@@ -603,19 +603,24 @@ function viewAutosavedFiles() {
   const list = document.getElementById('saved-files-modal-list');
   list.innerHTML = '';
 
+  // Collect and sort file names alphabetically to mimic VS Code ordering
+  const files = [];
   for (let i = 0; i < localStorage.length; i++) {
     const fileName = localStorage.key(i);
     const ext = fileName.split('.').pop().toLowerCase();
-    if (['html', 'css', 'js'].includes(ext)) {
-      const li = document.createElement('li');
-      li.textContent = fileName;
-      li.onclick = () => {
-        loadFile(fileName);
-        closeSavedFilesModal();
-      };
-      list.appendChild(li);
-    }
+    if (['html', 'css', 'js'].includes(ext)) files.push(fileName);
   }
+  files.sort((a, b) => a.localeCompare(b));
+
+  files.forEach((fileName) => {
+    const li = document.createElement('li');
+    li.textContent = fileName;
+    li.onclick = () => {
+      loadFile(fileName);
+      closeSavedFilesModal();
+    };
+    list.appendChild(li);
+  });
 
   if (list.children.length === 0) {
     const li = document.createElement('li');

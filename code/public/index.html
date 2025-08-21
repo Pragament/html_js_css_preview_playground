@@ -168,7 +168,7 @@
 </head>
 
 <body>
-    <button class="show-explorer-btn" id="show-explorer-btn" onclick="showFileExplorer()">📁 Show Explorer</button>
+    <button class="show-explorer-btn" id="show-explorer-btn" onclick="showFileExplorer()" style="display:none!important;" aria-hidden="true">📁 Show Explorer</button>
 
     <div class="toolbar">
         <div class="button-group">
@@ -233,6 +233,10 @@
     </div>
 
     <div class="main-container" id="main-container">
+        <nav id="activity-bar" aria-label="Activity Bar">
+            <button class="activity-item" id="activity-explorer" title="Explorer" onclick="toggleActivityPanel('explorer')">📁</button>
+            <button class="activity-item active" id="activity-tutorials" title="Tutorials" onclick="toggleActivityPanel('tutorials')">📘</button>
+        </nav>
         <aside id="tutorial-sidebar">
             <div class="sidebar-header">
                 <h3>Step-by-Step Tutorial</h3>
@@ -243,7 +247,7 @@
             </div>
         </aside>
 
-        <div class="file-explorer" id="file-explorer">
+        <div class="file-explorer hidden" id="file-explorer">
             <div class="file-explorer-header">
                 <h3>File Explorer</h3>
                 <button class="file-explorer-toggle" onclick="hideFileExplorer()">✕</button>
@@ -421,7 +425,9 @@
         function displayRepos(repos) {
             const reposDiv = document.getElementById('github-repos');
             reposDiv.innerHTML = '';
-            repos.forEach((repo, i) => {
+            // Alphabetical sort like VS Code
+            const sorted = [...repos].sort((a, b) => a.full_name.localeCompare(b.full_name));
+            sorted.forEach((repo, i) => {
                 const btn = document.createElement('button');
                 btn.textContent = `${i + 1}. ${repo.full_name}`;
                 btn.onclick = () => {
@@ -455,8 +461,9 @@
             }).then(res => res.json()).then(files => {
                 const filesDiv = document.getElementById('github-files');
                 filesDiv.innerHTML = '';
-                files.forEach(file => {
-                    if (file.name.endsWith('.html') || file.name.endsWith('.css') || file.name.endsWith('.js')) {
+                const filtered = files.filter(file => file.name.endsWith('.html') || file.name.endsWith('.css') || file.name.endsWith('.js'));
+                filtered.sort((a, b) => a.name.localeCompare(b.name));
+                filtered.forEach(file => {
                         const btn = document.createElement('button');
                         btn.textContent = file.name;
                         btn.onclick = () => loadGitHubFile({
@@ -467,7 +474,6 @@
                             repo: repo.name
                         });
                         filesDiv.appendChild(btn);
-                    }
                 });
             }).catch(err => {
                 console.error('Error fetching files:', err);
@@ -525,20 +531,26 @@
             const fileExplorer = document.getElementById('file-explorer');
             const mainContainer = document.getElementById('main-container');
             const showBtn = document.getElementById('show-explorer-btn');
+            const activityBtn = document.getElementById('activity-explorer');
             
             fileExplorer.classList.add('hidden');
             mainContainer.classList.add('full-width');
-            showBtn.style.display = 'block';
+            // Keep the legacy button hidden so it doesn't fight with the activity bar
+            showBtn.style.display = 'none';
+            if (activityBtn) activityBtn.classList.remove('active');
         }
 
         function showFileExplorer() {
             const fileExplorer = document.getElementById('file-explorer');
             const mainContainer = document.getElementById('main-container');
             const showBtn = document.getElementById('show-explorer-btn');
+            const activityBtn = document.getElementById('activity-explorer');
             
             fileExplorer.classList.remove('hidden');
             mainContainer.classList.remove('full-width');
+            // Ensure legacy button stays hidden
             showBtn.style.display = 'none';
+            if (activityBtn) activityBtn.classList.add('active');
         }
         
         // This window.onload is handled by the combined DOMContentLoaded in app.js now.
@@ -614,6 +626,36 @@
                 }
             } catch (err) {
                 alert('❌ Error updating file: ' + err.message);
+            }
+        }
+
+        // VS Code–style activity bar toggle
+        function toggleActivityPanel(panel) {
+            const explorer = document.getElementById('file-explorer');
+            const explorerBtn = document.getElementById('activity-explorer');
+            const tutorialSidebar = document.getElementById('tutorial-sidebar');
+            const tutorialBtn = document.getElementById('activity-tutorials');
+
+            if (panel === 'explorer') {
+                if (explorer.classList.contains('hidden')) {
+                    showFileExplorer();
+                    explorerBtn.classList.add('active');
+                } else {
+                    hideFileExplorer();
+                    explorerBtn.classList.remove('active');
+                }
+                return;
+            }
+
+            if (panel === 'tutorials') {
+                const isHidden = tutorialSidebar.classList.contains('hidden');
+                if (isHidden) {
+                    tutorialSidebar.classList.remove('hidden');
+                    tutorialBtn.classList.add('active');
+                } else {
+                    tutorialSidebar.classList.add('hidden');
+                    tutorialBtn.classList.remove('active');
+                }
             }
         }
 
