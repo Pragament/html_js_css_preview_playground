@@ -564,3 +564,282 @@ iframe {
 .hidden {
   display: none !important;
 }
+/* Add these styles to your app.css or in a <style> tag in index.html */
+
+/* Recording button styles */
+#record-toggle-btn {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: white;
+    font-weight: bold;
+    animation: pulse 2s infinite;
+}
+
+#record-toggle-btn.recording {
+    background-color: #28a745;
+    border-color: #28a745;
+    animation: none;
+}
+
+#record-toggle-btn:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+#record-toggle-btn.recording:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
+}
+
+/* Recording sessions in saved files modal */
+.recording-sessions {
+    margin-top: 10px;
+    padding-left: 20px;
+    border-left: 2px solid #007bff;
+}
+
+.recording-session-item {
+    background-color: #2d2d44;
+    margin: 5px 0;
+    padding: 8px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #444;
+}
+
+.recording-session-item:hover {
+    background-color: #33334d;
+}
+
+.session-info {
+    flex-grow: 1;
+}
+
+.session-name {
+    font-weight: bold;
+    color: #ffffff;
+    font-size: 12px;
+}
+
+.session-meta {
+    color: #888;
+    font-size: 10px;
+    margin-top: 2px;
+}
+
+.session-actions {
+    display: flex;
+    gap: 5px;
+}
+
+.session-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 10px;
+}
+
+.session-btn:hover {
+    background-color: #0056b3;
+}
+
+.session-btn.export {
+    background-color: #28a745;
+}
+
+.session-btn.export:hover {
+    background-color: #1e7e34;
+}
+
+.session-btn.delete {
+    background-color: #dc3545;
+}
+
+.session-btn.delete:hover {
+    background-color: #c82333;
+}
+
+/* Playback control modal styles */
+.playback-controls {
+    min-width: 400px;
+}
+
+.playback-info {
+    background-color: #2d2d44;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.playback-info p {
+    margin: 5px 0;
+    color: #ffffff;
+}
+
+.playback-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.playback-buttons button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.playback-buttons button:hover {
+    background-color: #0056b3;
+}
+
+.playback-buttons button:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+.speed-controls {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-left: auto;
+}
+
+.speed-controls label {
+    color: #ffffff;
+    font-size: 12px;
+}
+
+.speed-controls button {
+    padding: 4px 8px;
+    font-size: 12px;
+    background-color: #6c757d;
+}
+
+.speed-controls button.active {
+    background-color: #28a745;
+}
+
+.speed-controls button:hover {
+    background-color: #5a6268;
+}
+
+.speed-controls button.active:hover {
+    background-color: #1e7e34;
+}
+
+.playback-progress {
+    margin-top: 15px;
+}
+
+.progress-bar {
+    background-color: #2d2d44;
+    height: 6px;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+#progress-fill {
+    background-color: #007bff;
+    height: 100%;
+    width: 0%;
+    transition: width 0.1s ease;
+}
+
+.playback-progress p {
+    text-align: center;
+    color: #888;
+    font-size: 12px;
+    margin: 0;
+}
+
+/* Recording indicator */
+.recording-indicator {
+    position: fixed;
+    top: 60px;
+    right: 20px;
+    background-color: #dc3545;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    z-index: 1000;
+    animation: pulse 1.5s infinite;
+    display: none;
+}
+
+.recording-indicator.active {
+    display: block;
+}
+
+/* File item modifications for recording sessions */
+.file-item {
+    border-bottom: 1px solid #444;
+    padding: 8px 0;
+}
+
+.file-item:last-child {
+    border-bottom: none;
+}
+
+.file-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+    cursor: pointer;
+}
+
+.file-main:hover {
+    background-color: #33334d;
+}
+
+.toggle-recordings {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 2px 6px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 10px;
+}
+
+.toggle-recordings:hover {
+    background-color: #5a6268;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 600px) {
+    .playback-controls {
+        min-width: 300px;
+    }
+    
+    .playback-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .speed-controls {
+        margin-left: 0;
+        justify-content: center;
+        margin-top: 10px;
+    }
+}
