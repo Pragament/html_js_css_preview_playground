@@ -1,19 +1,25 @@
  <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Code Playground</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/codemirror.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/theme/material.min.css">
-    <link rel="stylesheet" href="app.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify-html.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify-css.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    
-    <style>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Code Playground</title>
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/codemirror.min.css">
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/theme/material.min.css">
+        <link rel="stylesheet" href="app.css">
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify.min.js"></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify-html.min.js"></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify-css.min.js"></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+        <style>
         /* Existing inline styles from your original file */
         .github-section { margin-top: 10px; }
         .github-repos, .github-files { max-height: 280px; overflow-y: auto; }
@@ -165,192 +171,293 @@
             }
         }
     </style>
-</head>
 
-<body>
-    <button class="show-explorer-btn" id="show-explorer-btn" onclick="showFileExplorer()" style="display:none!important;" aria-hidden="true">📁 Show Explorer</button>
+    </head>
 
-    <div class="toolbar">
-        <div class="button-group">
-    
-            <button onclick="UserSignin()" id="github-login-btn">🔐 Login GitHub</button>
-            <button onclick="UserLogout()" id="github-logout-btn" style="display:none;">🔓 Logout</button>
-            <button onclick="togglePreviewLayout()" hidden id="preview-toggle-button"
-                title="Toggle Preview Layout">👁️🔄</button>
-            <button id="undo-button" onclick="undo()" disabled title="Undo the last action">↩️</button>
-            <button id="redo-button" onclick="redo()" disabled title="Redo the last undone action">↪️</button>
-            <button onclick="zoomIn()" title="Zoom in">🔍➕</button>
-            <button onclick="zoomOut()" title="Zoom out">🔍➖</button>
-            <button onclick="insertTemplate()" title="Insert Template">🔥📄</button>
-            <button onclick="selectAll()" title="Select All">Select All</button>
-            <button onclick="copyText()" title="Copy">Copy</button>
-            <button onclick="pasteText()" title="Paste">Paste</button>
-            <button onclick="clearEditor()" title="Clear Editor">Clear🚫📝</button>
-            <button onclick="toggleAutocomplete()" id="autocomplete-button" title="Toggle Autocomplete">💡:❌Off</button>
-            <button onclick="prettifyCode()" title="Prettify Code">✨ Prettify</button>
-            <button onclick="toggleSpecialChars()" title="Show/Hide Special Characters">👁️🎹</button>
-            <button onclick="createNewFile()" title="Create New File">🆕New📄</button>
-            <button onclick="saveFile()" title="Save the File">Save 📄</button>
-            <button onclick="viewAutosavedFiles()" title="View Saved Files">👁️Welcome📄</button>
+    <body>
+        <button class="show-explorer-btn" id="show-explorer-btn"
+            onclick="showFileExplorer()">📁 Show Explorer</button>
 
+        <div class="toolbar">
+            <div class="button-group">
 
+                <button onclick="UserSignin()" id="github-login-btn">🔐 Login
+                    GitHub</button>
+                <button onclick="UserLogout()" id="github-logout-btn"
+                    style="display:none;">🔓 Logout</button>
+                <button onclick="togglePreviewLayout()" hidden
+                    id="preview-toggle-button"
+                    title="Toggle Preview Layout">👁️🔄</button>
+                <button id="undo-button" onclick="undo()" disabled
+                    title="Undo the last action">↩️</button>
+                <button id="redo-button" onclick="redo()" disabled
+                    title="Redo the last undone action">↪️</button>
+                <button onclick="zoomIn()" title="Zoom in">🔍➕</button>
+                <button onclick="zoomOut()" title="Zoom out">🔍➖</button>
+                <button onclick="insertTemplate()"
+                    title="Insert Template">🔥📄</button>
+                <button onclick="selectAll()" title="Select All">Select
+                    All</button>
+                <button onclick="copyText()" title="Copy">Copy</button>
+                <button onclick="pasteText()" title="Paste">Paste</button>
+                <button onclick="clearEditor()"
+                    title="Clear Editor">Clear🚫📝</button>
+                <button onclick="toggleAutocomplete()" id="autocomplete-button"
+                    title="Toggle Autocomplete">💡:❌Off</button>
+                <button onclick="prettifyCode()" title="Prettify Code">✨
+                    Prettify</button>
+                <button onclick="toggleSpecialChars()"
+                    title="Show/Hide Special Characters">👁️🎹</button>
+                <button onclick="createNewFile()"
+                    title="Create New File">🆕New📄</button>
+                <button onclick="saveFile()" title="Save the File">Save
+                    📄</button>
+                <button onclick="viewAutosavedFiles()"
+                    title="View Saved Files">👁️Welcome📄</button>
+                <button id="record-toggle-btn" onclick="toggleRecording()"
+                    title="Start/Stop Recording Keystrokes">
+                    🔴 Start Recording
+                </button>
 
-            <p id="capsWarning">⚠️ Caps Lock is ON!</p>
+                <!-- Repeat Recording Button -->
+                <button id="repeat-btn" onclick="openRepeatModal()"
+                    title="Repeat a Recording">
+                    🔁 Repeat Recording
+                </button>
 
-        <div class="button-group" id="special-char-buttons">
-            <button onclick="insertLoremIpsum('<')" title="Less-than sign: <">&lt;</button>
-            <button onclick="insertLoremIpsum('>')" title="Greater-than sign: >">&gt;</button>
-            <button onclick="insertLoremIpsum('/')" title="Forward slash: /">/</button>
-            <button onclick="insertLoremIpsum('&quot;')" title="Double quote: &quot;">"</button>
-            <button onclick="insertLoremIpsum('\'')" title="Single quote: '">'</button>
-            <button onclick="insertLoremIpsum('=')" title="Equals sign: =">=</button>
-            <button onclick="insertLoremIpsum('&')" title="Ampersand: &">&amp;</button>
-            <button onclick="insertLoremIpsum(';')" title="Semicolon: ;">;</button>
-            <button onclick="insertLoremIpsum('#')" title="Hash/Pound sign: #">#</button>
-            <button onclick="insertLoremIpsum('.')" title="Period/Dot: .">.</button>
-            <button onclick="insertLoremIpsum(':')" title="Colon: :">:</button>
-            <button onclick="insertLoremIpsum('-')" title="Hyphen: -">-</button>
-            <button onclick="insertLoremIpsum('_')" title="Underscore: _">_</button>
-            <button onclick="insertLoremIpsum('{')" title="Opening curly brace: {">{</button>
-            <button onclick="insertLoremIpsum('}')" title="Closing curly brace: }">}</button>
-            <button onclick="insertLoremIpsum('[')" title="Opening square bracket: [">[</button>
-            <button onclick="insertLoremIpsum(']')" title="Closing square bracket: ]">]</button>
-            <button onclick="insertLoremIpsum('(')" title="Opening parenthesis: (">(</button>
-            <button onclick="insertLoremIpsum(')')" title="Closing parenthesis: )">)</button>
-            <button onclick="insertLoremIpsum('!')" title="Exclamation mark: !">!</button>
-            <button onclick="insertLoremIpsum('*')" title="Asterisk: *">*</button>
-            <button onclick="insertLoremIpsum('|')" title="Vertical bar/Pipe: |">|</button>
-            <button onclick="insertLoremIpsum('?')" title="Question mark: ?">?</button>
-            <button onclick="insertLoremIpsum('@')" title="At symbol: @">@</button>
-            <button onclick="insertLoremIpsum('~')" title="Tilde: ~">~</button>
-            <button onclick="insertLoremIpsum('&copy;')" title="Copyright symbol: &copy;">&copy;</button>
-            <button onclick="insertLoremIpsum('&reg;')" title="Registered trademark symbol: &reg;">&reg;</button>
-            <button onclick="insertLoremIpsum('₹')" title="Indian Rupee symbol: ₹">₹</button>
-            <button onclick="insertLoremIpsum('$')" title="Dollar sign: $">$</button>
-            <button onclick="updateFileToGitHub()" title="Update GitHub">💾 Update to GitHub</button>
+                <!-- Repeat Modal -->
+                <div id="repeat-modal"
+                    style="display:none; position:fixed; top:20%; left:35%; background:white; padding:20px; border:2px solid black; border-radius:10px; z-index:9999;">
+                    <h3>Select Recording & Speed</h3>
 
-        </div>
-    </div>
+                    <select id="repeat-session-select"></select>
 
-    <div class="main-container" id="main-container">
-        <nav id="activity-bar" aria-label="Activity Bar">
-            <button class="activity-item" id="activity-explorer" title="Explorer" onclick="toggleActivityPanel('explorer')">📁</button>
-            <button class="activity-item active" id="activity-tutorials" title="Tutorials" onclick="toggleActivityPanel('tutorials')">📘</button>
-        </nav>
-        <aside id="tutorial-sidebar">
-            <div class="sidebar-header">
-                <h3>Step-by-Step Tutorial</h3>
-            </div>
-            <div class="sidebar-content">
-                <ul id="chapters-list">
-                    </ul>
-            </div>
-        </aside>
+                    <select id="repeat-speed-select">
+                        <option value="0.5">0.5x</option>
+                        <option value="0.75">0.75x</option>
+                        <option value="1" selected>1x</option>
+                        <option value="1.25">1.25x</option>
+                        <option value="1.5">1.5x</option>
+                        <option value="1.75">1.75x</option>
+                        <option value="2">2x</option>
+                    </select>
 
-        <div class="file-explorer hidden" id="file-explorer">
-            <div class="file-explorer-header">
-                <h3>File Explorer</h3>
-                <button class="file-explorer-toggle" onclick="hideFileExplorer()">✕</button>
-            </div>
-            <ul>
-                <li class="hover" onclick="toggleFile('html')">index.html</li>
-                <li class="hover" onclick="toggleFile('css')">style.css</li>
-                <li class="hover" onclick="toggleFile('js')">script.js</li>
-            </ul>
-
-            <div class="github-section" id="github-section">
-                <div class="divider-text">GitHub Repositories</div>
-                <div class="repo-search">
-                    <input type="text" id="repo-search-input" placeholder="Search repositories..." onkeyup="searchRepositories()">
+                    <br><br>
+                    <button onclick="startRepeat()">▶️ Play</button>
+                    <button onclick="stopRepeat()">⏹️ Stop</button>
+                    <button onclick="closeRepeatModal()">❌ Cancel</button>
                 </div>
-                <div id="github-repos" class="github-repos"></div>
 
-                <div class="divider-text">Repository Files</div>
-                <div id="github-files" class="github-files"></div>
+                <button
+                    onclick="document.getElementById('recordingSessionsModal').classList.remove('hidden')"
+                    title="View Recordings">📹 View Recordings</button>
+
+                <p id="capsWarning">⚠️ Caps Lock is ON!</p>
+
+                <div class="button-group" id="special-char-buttons">
+                    <button onclick="insertLoremIpsum('<')"
+                        title="Less-than sign: <">&lt;</button>
+                    <button onclick="insertLoremIpsum('>')"
+                        title="Greater-than sign: >">&gt;</button>
+                    <button onclick="insertLoremIpsum('/')"
+                        title="Forward slash: /">/</button>
+                    <button onclick="insertLoremIpsum('&quot;')"
+                        title="Double quote: &quot;">"</button>
+                    <button onclick="insertLoremIpsum('\'')"
+                        title="Single quote: '">'</button>
+                    <button onclick="insertLoremIpsum('=')"
+                        title="Equals sign: =">=</button>
+                    <button onclick="insertLoremIpsum('&')"
+                        title="Ampersand: &">&amp;</button>
+                    <button onclick="insertLoremIpsum(';')"
+                        title="Semicolon: ;">;</button>
+                    <button onclick="insertLoremIpsum('#')"
+                        title="Hash/Pound sign: #">#</button>
+                    <button onclick="insertLoremIpsum('.')"
+                        title="Period/Dot: .">.</button>
+                    <button onclick="insertLoremIpsum(':')"
+                        title="Colon: :">:</button>
+                    <button onclick="insertLoremIpsum('-')"
+                        title="Hyphen: -">-</button>
+                    <button onclick="insertLoremIpsum('_')"
+                        title="Underscore: _">_</button>
+                    <button onclick="insertLoremIpsum('{')"
+                        title="Opening curly brace: {">{</button>
+                    <button onclick="insertLoremIpsum('}')"
+                        title="Closing curly brace: }">}</button>
+                    <button onclick="insertLoremIpsum('[')"
+                        title="Opening square bracket: [">[</button>
+                    <button onclick="insertLoremIpsum(']')"
+                        title="Closing square bracket: ]">]</button>
+                    <button onclick="insertLoremIpsum('(')"
+                        title="Opening parenthesis: (">(</button>
+                    <button onclick="insertLoremIpsum(')')"
+                        title="Closing parenthesis: )">)</button>
+                    <button onclick="insertLoremIpsum('!')"
+                        title="Exclamation mark: !">!</button>
+                    <button onclick="insertLoremIpsum('*')"
+                        title="Asterisk: *">*</button>
+                    <button onclick="insertLoremIpsum('|')"
+                        title="Vertical bar/Pipe: |">|</button>
+                    <button onclick="insertLoremIpsum('?')"
+                        title="Question mark: ?">?</button>
+                    <button onclick="insertLoremIpsum('@')"
+                        title="At symbol: @">@</button>
+                    <button onclick="insertLoremIpsum('~')"
+                        title="Tilde: ~">~</button>
+                    <button onclick="insertLoremIpsum('&copy;')"
+                        title="Copyright symbol: &copy;">&copy;</button>
+                    <button onclick="insertLoremIpsum('&reg;')"
+                        title="Registered trademark symbol: &reg;">&reg;</button>
+                    <button onclick="insertLoremIpsum('₹')"
+                        title="Indian Rupee symbol: ₹">₹</button>
+                    <button onclick="insertLoremIpsum('$')"
+                        title="Dollar sign: $">$</button>
+                    <button onclick="updateFileToGitHub()"
+                        title="Update GitHub">💾 Update to GitHub</button>
+
+                </div>
             </div>
 
-            <div class="divider-text">Text</div>
-            <strong></strong>
-            <ul>
-                <li class="hover"
-                    onclick="insertLoremIpsum('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.')">
-                    Insert sample text
-                </li>
-            </ul>
-            <div class="divider-text">Images</div>
-            <strong></strong>
-            <ul>
-                <li class="hover" onclick="insertImagePath('./images/sample1.jpg')">
-                    sample1.jpg
-                    <img src="images/sample1.jpg" alt="Sample 1">
-                </li>
-                <li class="hover" onclick="insertImagePath('./images/sample2.jpg')">
-                    sample2.jpg
-                    <img src="images/sample2.jpg" alt="Sample 2">
-                </li>
-                <li class="hover" onclick="insertImagePath('./images/sample3.jpg')">
-                    sample3.jpg
-                    <img src="images/sample3.jpg" alt="Sample 3">
-                </li>
-            </ul>
-            <div id="saved-files-container" class="divider-text hidden">
-                Saved Files
-            </div>
-            <ul id="saved-files-list" class="hidden"></ul>            
-        </div>
+            <div class="main-container" id="main-container">
+                <aside id="tutorial-sidebar">
+                    <div class="sidebar-header">
+                        <h3>Step-by-Step Tutorial</h3>
+                    </div>
+                    <div class="sidebar-content">
+                        <ul id="chapters-list">
+                        </ul>
+                    </div>
+                </aside>
 
-        <div class="editor-container" id="editor-container">
-            <div id="current-file-name" style="color: white; font-weight: bold; padding: 10px 15px; background-color: #222233; border-bottom: 1px solid #444;">
-                No file loaded
-            </div>
-            <div id="lecture-display-area">
-                <p>Select a topic from the "Step-by-Step Tutorial" sidebar to view content here.</p>
-            </div>
+                <div class="file-explorer" id="file-explorer">
+                    <div class="file-explorer-header">
+                        <h3>File Explorer</h3>
+                        <button class="file-explorer-toggle"
+                            onclick="hideFileExplorer()">✕</button>
+                    </div>
+                    <ul>
+                        <li class="hover"
+                            onclick="toggleFile('html')">index.html</li>
+                        <li class="hover"
+                            onclick="toggleFile('css')">style.css</li>
+                        <li class="hover"
+                            onclick="toggleFile('js')">script.js</li>
+                    </ul>
 
-            <textarea id="html-code" class="hidden">
+                    <div class="github-section" id="github-section">
+                        <div class="divider-text">GitHub Repositories</div>
+                        <div class="repo-search">
+                            <input type="text" id="repo-search-input"
+                                placeholder="Search repositories..."
+                                onkeyup="searchRepositories()">
+                        </div>
+                        <div id="github-repos" class="github-repos"></div>
+
+                        <div class="divider-text">Repository Files</div>
+                        <div id="github-files" class="github-files"></div>
+                    </div>
+
+                    <div class="divider-text">Text</div>
+                    <strong></strong>
+                    <ul>
+                        <li class="hover"
+                            onclick="insertLoremIpsum('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.')">
+                            Insert sample text
+                        </li>
+                    </ul>
+                    <div class="divider-text">Images</div>
+                    <strong></strong>
+                    <ul>
+                        <li class="hover"
+                            onclick="insertImagePath('./images/sample1.jpg')">
+                            sample1.jpg
+                            <img src="images/sample1.jpg" alt="Sample 1">
+                        </li>
+                        <li class="hover"
+                            onclick="insertImagePath('./images/sample2.jpg')">
+                            sample2.jpg
+                            <img src="images/sample2.jpg" alt="Sample 2">
+                        </li>
+                        <li class="hover"
+                            onclick="insertImagePath('./images/sample3.jpg')">
+                            sample3.jpg
+                            <img src="images/sample3.jpg" alt="Sample 3">
+                        </li>
+                    </ul>
+                    <div id="saved-files-container" class="divider-text hidden">
+                        Saved Files
+                    </div>
+                    <ul id="saved-files-list" class="hidden"></ul>
+                </div>
+
+                <div class="editor-container" id="editor-container">
+                    <div id="current-file-name"
+                        style="color: white; font-weight: bold; padding: 10px 15px; background-color: #222233; border-bottom: 1px solid #444;">
+                        No file loaded
+                    </div>
+                    <div id="lecture-display-area">
+                        <p>Select a topic from the "Step-by-Step Tutorial"
+                            sidebar to view content here.</p>
+                    </div>
+
+                    <textarea id="html-code" class="hidden">
 </textarea>
-            <textarea id="css-code" class="hidden">
+                    <textarea id="css-code" class="hidden">
 /* Add your CSS here */
 </textarea>
-            <textarea id="js-code" class="hidden">
+                    <textarea id="js-code" class="hidden">
 // Add your JavaScript here
 </textarea>
-            <div class="preview-container">
-                <iframe id="preview"></iframe>
+                    <div class="preview-container">
+                        <iframe id="preview"></iframe>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-    <button class="help-button" onclick="toggleChat()">?</button>
+            <button class="help-button" onclick="toggleChat()">?</button>
 
-    <div class="chat-window">
-        <div class="chat-header">Help Chat</div>
-        <div class="chat-body" id="chat-body">
-            <div class="message bot">
-                <p>Hello! How can I help you today?</p>
+            <div class="chat-window">
+                <div class="chat-header">Help Chat</div>
+                <div class="chat-body" id="chat-body">
+                    <div class="message bot">
+                        <p>Hello! How can I help you today?</p>
+                    </div>
+                    <div class="action-buttons">
+                        <button onclick="showFAQs()">View FAQs</button>
+                        <button onclick="showCustomMessageInput()">Send Custom
+                            Message</button>
+                    </div>
+                </div>
+                <div class="chat-footer">
+                    <input type="text" id="chat-input"
+                        placeholder="Type your message...">
+                    <button onclick="sendMessage()">Send</button>
+                </div>
             </div>
-            <div class="action-buttons">
-                <button onclick="showFAQs()">View FAQs</button>
-                <button onclick="showCustomMessageInput()">Send Custom Message</button>
-            </div>
-        </div>
-        <div class="chat-footer">
-            <input type="text" id="chat-input" placeholder="Type your message...">
-            <button onclick="sendMessage()">Send</button>
-        </div>
-    </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/codemirror.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/mode/xml/xml.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/mode/javascript/javascript.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/mode/css/css.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/mode/htmlmixed/htmlmixed.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/show-hint.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/xml-hint.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/javascript-hint.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/html-hint.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/css-hint.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/show-hint.min.css">
-    <script src="app.js"></script> <script type="module">
+            <script
+                src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/codemirror.min.js"></script>
+            <script
+                src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/mode/xml/xml.min.js"></script>
+            <script
+                src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/mode/javascript/javascript.min.js"></script>
+            <script
+                src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/mode/css/css.min.js"></script>
+            <script
+                src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/mode/htmlmixed/htmlmixed.min.js"></script>
+            <script
+                src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/show-hint.min.js"></script>
+            <script
+                src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/xml-hint.min.js"></script>
+            <script
+                src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/javascript-hint.min.js"></script>
+            <script
+                src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/html-hint.min.js"></script>
+            <script
+                src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/css-hint.min.js"></script>
+            <link rel="stylesheet"
+                href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/show-hint.min.css">
+            <script src="app.js"></script> <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
         import { getAuth, GithubAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
 
@@ -425,9 +532,7 @@
         function displayRepos(repos) {
             const reposDiv = document.getElementById('github-repos');
             reposDiv.innerHTML = '';
-            // Alphabetical sort like VS Code
-            const sorted = [...repos].sort((a, b) => a.full_name.localeCompare(b.full_name));
-            sorted.forEach((repo, i) => {
+            repos.forEach((repo, i) => {
                 const btn = document.createElement('button');
                 btn.textContent = `${i + 1}. ${repo.full_name}`;
                 btn.onclick = () => {
@@ -461,9 +566,8 @@
             }).then(res => res.json()).then(files => {
                 const filesDiv = document.getElementById('github-files');
                 filesDiv.innerHTML = '';
-                const filtered = files.filter(file => file.name.endsWith('.html') || file.name.endsWith('.css') || file.name.endsWith('.js'));
-                filtered.sort((a, b) => a.name.localeCompare(b.name));
-                filtered.forEach(file => {
+                files.forEach(file => {
+                    if (file.name.endsWith('.html') || file.name.endsWith('.css') || file.name.endsWith('.js')) {
                         const btn = document.createElement('button');
                         btn.textContent = file.name;
                         btn.onclick = () => loadGitHubFile({
@@ -474,6 +578,7 @@
                             repo: repo.name
                         });
                         filesDiv.appendChild(btn);
+                    }
                 });
             }).catch(err => {
                 console.error('Error fetching files:', err);
@@ -525,32 +630,26 @@
         clearGitHubUI();
     </script>
 
-    <script>
+            <script>
         // File Explorer Toggle Functions (Keep existing)
         function hideFileExplorer() {
             const fileExplorer = document.getElementById('file-explorer');
             const mainContainer = document.getElementById('main-container');
             const showBtn = document.getElementById('show-explorer-btn');
-            const activityBtn = document.getElementById('activity-explorer');
             
             fileExplorer.classList.add('hidden');
             mainContainer.classList.add('full-width');
-            // Keep the legacy button hidden so it doesn't fight with the activity bar
-            showBtn.style.display = 'none';
-            if (activityBtn) activityBtn.classList.remove('active');
+            showBtn.style.display = 'block';
         }
 
         function showFileExplorer() {
             const fileExplorer = document.getElementById('file-explorer');
             const mainContainer = document.getElementById('main-container');
             const showBtn = document.getElementById('show-explorer-btn');
-            const activityBtn = document.getElementById('activity-explorer');
             
             fileExplorer.classList.remove('hidden');
             mainContainer.classList.remove('full-width');
-            // Ensure legacy button stays hidden
             showBtn.style.display = 'none';
-            if (activityBtn) activityBtn.classList.add('active');
         }
         
         // This window.onload is handled by the combined DOMContentLoaded in app.js now.
@@ -629,36 +728,6 @@
             }
         }
 
-        // VS Code–style activity bar toggle
-        function toggleActivityPanel(panel) {
-            const explorer = document.getElementById('file-explorer');
-            const explorerBtn = document.getElementById('activity-explorer');
-            const tutorialSidebar = document.getElementById('tutorial-sidebar');
-            const tutorialBtn = document.getElementById('activity-tutorials');
-
-            if (panel === 'explorer') {
-                if (explorer.classList.contains('hidden')) {
-                    showFileExplorer();
-                    explorerBtn.classList.add('active');
-                } else {
-                    hideFileExplorer();
-                    explorerBtn.classList.remove('active');
-                }
-                return;
-            }
-
-            if (panel === 'tutorials') {
-                const isHidden = tutorialSidebar.classList.contains('hidden');
-                if (isHidden) {
-                    tutorialSidebar.classList.remove('hidden');
-                    tutorialBtn.classList.add('active');
-                } else {
-                    tutorialSidebar.classList.add('hidden');
-                    tutorialBtn.classList.remove('active');
-                }
-            }
-        }
-
         function getCurrentEditorContent() {
             const fileData = window.currentGitHubFile;
             if (!fileData) return '';
@@ -674,15 +743,386 @@
         }
     </script>
 
-    <!-- Saved Files Modal -->
-<div id="savedFilesModal" class="modal hidden">
-  <div class="modal-content">
-    <span class="close" onclick="closeSavedFilesModal()">&times;</span>
-    <h2>📁 Your Saved Files</h2>
-    <ul id="saved-files-modal-list"></ul>
-  </div>
-</div>
+            <!-- Saved Files Modal -->
+            <div id="savedFilesModal" class="modal hidden">
+                <div class="modal-content">
+                    <span class="close"
+                        onclick="closeSavedFilesModal()">&times;</span>
+                    <h2>📁 Your Saved Files</h2>
+                    <ul id="saved-files-modal-list"></ul>
+                </div>
+            </div>
 
-</body>
-</html>
+            <!-- Recording Sessions Modal -->
+            <div id="recordingSessionsModal" class="modal hidden">
+                <div class="modal-content">
+                    <span class="close"
+                        onclick="closeRecordingSessionsModal()">&times;</span>
+                    <h2>📹 Recording Sessions</h2>
+                    <div id="recording-sessions-list"></div>
+                </div>
+            </div>
 
+            <!-- Add this modal for playback controls (add before closing </body> tag) -->
+            <div id="playbackControlModal" class="modal hidden">
+                <div class="modal-content playback-controls">
+                    <span class="close"
+                        onclick="stopPlayback()">&times;</span>
+                    <h3>🎬 Playback Controls</h3>
+                    <div class="playback-info">
+                        <p><strong>File:</strong> <span
+                                id="playback-filename"></span></p>
+                        <p><strong>Session:</strong> <span
+                                id="playback-session-name"></span></p>
+                    </div>
+                    <div class="playback-buttons">
+                        <button id="play-pause-btn"
+                            onclick="togglePlayback()">▶️ Play</button>
+                        <button onclick="stopPlayback()">⏹️ Stop</button>
+                        <div class="speed-controls">
+                            <label>Speed:</label>
+                            <button
+                                onclick="changePlaybackSpeed(0.5)">0.5x</button>
+                            <button onclick="changePlaybackSpeed(1)"
+                                class="active">1x</button>
+                            <button
+                                onclick="changePlaybackSpeed(2)">2x</button>
+                            <button
+                                onclick="changePlaybackSpeed(3)">3x</button>
+                        </div>
+                    </div>
+                    <div class="playback-progress">
+                        <div class="progress-bar">
+                            <div id="progress-fill"></div>
+                        </div>
+                        <p><span id="current-step">0</span> / <span
+                                id="total-steps">0</span> steps</p>
+                    </div>
+                </div>
+            </div>
+            <script>
+                /* ----------------- GLOBAL VARIABLES ----------------- */
+let isRecording = false;
+let keystrokes = [];
+let recordingSessions = [];
+let files = [
+    { name: "file1.html", sessions: [] },
+    { name: "file2.js", sessions: [] }
+];
+
+// Example cursor position tracker (row, column)
+let cursorRow = 0;
+let cursorCol = 0;
+
+/* ----------------- RECORDING ----------------- */
+function toggleRecording() {
+    const recordBtn = document.getElementById('record-toggle-btn');
+    isRecording = !isRecording;
+
+    if (isRecording) {
+        keystrokes = [];
+        recordBtn.textContent = '⏹️ Stop Recording';
+        document.addEventListener('keydown', recordKeystroke);
+    } else {
+        recordBtn.textContent = '🔴 Start Recording';
+        document.removeEventListener('keydown', recordKeystroke);
+
+        if (keystrokes.length > 0) {
+            const sessionName = `Session ${recordingSessions.length + 1} (${new Date().toLocaleString()})`;
+            const session = { name: sessionName, keystrokes };
+            recordingSessions.push(session);
+
+            // Attach to first file (demo purpose)
+            if (files.length > 0) {
+                files[0].sessions.push(session);
+            }
+        }
+
+        alert(`✅ Recording stopped. ${keystrokes.length} keystrokes captured.`);
+    }
+}
+
+function recordKeystroke(event) {
+    const now = new Date();
+    const timestamp = now.toTimeString().split(' ')[0]; // HH:MM:SS
+
+    // Update cursor position (for demo; replace with real editor cursor)
+    cursorCol++;
+    if (event.key === 'Enter') {
+        cursorRow++;
+        cursorCol = 0;
+    }
+
+    keystrokes.push({
+        char: event.key,
+        cursor: [cursorRow, cursorCol],
+        time: timestamp
+    });
+}
+
+/* ----------------- RECORDING SESSIONS MODAL ----------------- */
+function openRecordingSessionsModal() {
+    const listDiv = document.getElementById('recording-sessions-list');
+    listDiv.innerHTML = '';
+
+    if (recordingSessions.length === 0) {
+        listDiv.innerHTML = '<p>No recording sessions available.</p>';
+        return;
+    }
+
+    recordingSessions.forEach((session) => {
+        const div = document.createElement('div');
+        div.className = 'recording-session';
+        div.style.padding = '5px 10px';
+        div.style.borderBottom = '1px solid #444';
+        div.style.display = 'flex';
+        div.style.justifyContent = 'space-between';
+        div.style.alignItems = 'center';
+
+        const nameSpan = document.createElement('span');
+        nameSpan.textContent = session.name;
+
+        const exportBtn = document.createElement('button');
+        exportBtn.textContent = 'Export JSON';
+        exportBtn.onclick = () => exportSession(session);
+
+        div.appendChild(nameSpan);
+        div.appendChild(exportBtn);
+
+        listDiv.appendChild(div);
+    });
+}
+
+function closeRecordingSessionsModal() {
+    document.getElementById('recordingSessionsModal').classList.add('hidden');
+}
+
+/* ----------------- SAVED FILES MODAL ----------------- */
+function openSavedFilesModal() {
+    const list = document.getElementById('saved-files-modal-list');
+    list.innerHTML = '';
+
+    if (files.length === 0) {
+        list.innerHTML = '<p>No saved files.</p>';
+        return;
+    }
+
+    files.forEach(file => {
+        const fileItem = document.createElement('li');
+        fileItem.style.marginBottom = '10px';
+
+        const fileTitle = document.createElement('strong');
+        fileTitle.textContent = file.name;
+        fileItem.appendChild(fileTitle);
+
+        if (file.sessions.length > 0) {
+            const sessionList = document.createElement('ul');
+            sessionList.style.marginLeft = '15px';
+            file.sessions.forEach(session => {
+                const sessionItem = document.createElement('li');
+                sessionItem.style.display = 'flex';
+                sessionItem.style.justifyContent = 'space-between';
+                sessionItem.style.alignItems = 'center';
+                sessionItem.style.marginBottom = '3px';
+
+                const sessionName = document.createElement('span');
+                sessionName.textContent = session.name;
+
+                const exportBtn = document.createElement('button');
+                exportBtn.textContent = 'Export JSON';
+                exportBtn.onclick = () => exportSession(session);
+
+                sessionItem.appendChild(sessionName);
+                sessionItem.appendChild(exportBtn);
+                sessionList.appendChild(sessionItem);
+            });
+            fileItem.appendChild(sessionList);
+        } else {
+            const emptyMsg = document.createElement('p');
+            emptyMsg.textContent = 'No recording sessions for this file.';
+            emptyMsg.style.marginLeft = '15px';
+            fileItem.appendChild(emptyMsg);
+        }
+
+        list.appendChild(fileItem);
+    });
+}
+
+function closeSavedFilesModal() {
+    document.getElementById('savedFilesModal').classList.add('hidden');
+}
+
+/* ----------------- EXPORT SESSION ----------------- */
+function exportSession(session) {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(session.keystrokes, null, 2));
+    const dlAnchor = document.createElement('a');
+    dlAnchor.setAttribute("href", dataStr);
+    dlAnchor.setAttribute("download", `${session.name.replace(/[^a-z0-9]/gi, '_')}.json`);
+    dlAnchor.click();
+}
+
+/* ----------------- PLAYBACK PLACEHOLDERS ----------------- */
+let playbackSpeed = 1;
+function togglePlaybackSpeed() {
+    playbackSpeed = playbackSpeed === 1 ? 2 : 1;
+    const btn = document.getElementById('playback-speed-btn');
+    if (btn) btn.textContent = `⏯️ ${playbackSpeed}x`;
+}
+function togglePlayback() {
+    alert('Playback functionality not implemented yet.');
+}
+function stopPlayback() {
+    alert('Stop playback.');
+}
+
+document.querySelector('[title="View Recordings"]').onclick = function() {
+    openRecordingSessionsModal();
+    document.getElementById('recordingSessionsModal').classList.remove('hidden');
+};
+
+function openRepeatModal() {
+    const modal = document.getElementById('repeat-modal');
+    const select = document.getElementById('repeat-session-select');
+    select.innerHTML = '';
+
+    if (recordingSessions.length === 0) {
+        const opt = document.createElement('option');
+        opt.textContent = 'No recordings available';
+        opt.disabled = true;
+        select.appendChild(opt);
+    } else {
+        recordingSessions.forEach((session, index) => {
+            const opt = document.createElement('option');
+            opt.value = index;
+            opt.textContent = `Recording ${index + 1} (${session.length} actions)`;
+            select.appendChild(opt);
+        });
+    }
+
+    modal.style.display = 'block';
+}
+
+function closeRepeatModal() {
+    document.getElementById('repeat-modal').style.display = 'none';
+}
+
+function startRepeat() {
+    const sessionIndex = document.getElementById('repeat-session-select').value;
+    const speed = parseFloat(document.getElementById('repeat-speed-select').value);
+
+    if (sessionIndex === '' || recordingSessions.length === 0) return;
+
+    const selectedSession = recordingSessions[sessionIndex];
+    playRecording(selectedSession, speed);
+
+    closeRepeatModal();
+}
+
+
+
+// --- STATE MANAGEMENT ---
+let isRepeating = false;
+let repeatTimeoutId = null; // To hold the timeout ID for cancellation
+
+// --- MODAL & CONTROLS ---
+
+// Close Repeat Modal
+function closeRepeatModal() {
+    stopRepeat(); // Ensure playback stops when closing the modal
+    document.getElementById("repeat-modal").style.display = "none";
+}
+
+// Start Repeat from modal
+function startRepeat() {
+    // First, stop any currently running repeat
+    stopRepeat();
+
+    const sessionIndex = document.getElementById("repeat-session-select").value;
+    const speed = parseFloat(document.getElementById("repeat-speed-select").value);
+
+    if (sessionIndex === "" || !recordingSessions[sessionIndex]) {
+        alert("Please select a valid recording session.");
+        return;
+    }
+
+    closeRepeatModal();
+
+    isRepeating = true;
+    playRecording(recordingSessions[sessionIndex], speed, true);
+}
+
+// NEW: Function to stop the repeat
+function stopRepeat() {
+    isRepeating = false;
+    if (repeatTimeoutId) {
+        clearTimeout(repeatTimeoutId);
+        repeatTimeoutId = null;
+    }
+}
+
+
+// --- REFACTORED PLAYBACK LOGIC ---
+
+// Playback logic is now sequential and stoppable
+function playRecording(session, speed = 1, repeat = false) {
+    if (!session || !session.keystrokes || session.keystrokes.length === 0) return;
+
+    let keystrokeIndex = 0;
+
+    function playNextKeystroke() {
+        // Stop conditions
+        if (!isRepeating || keystrokeIndex >= session.keystrokes.length) {
+            // If it's the end and 'repeat' is true, loop the whole function
+            if (isRepeating && repeat && keystrokeIndex >= session.keystrokes.length) {
+                repeatTimeoutId = setTimeout(() => playRecording(session, speed, true), 500); // 500ms pause before repeating
+            }
+            return;
+        }
+
+        const action = session.keystrokes[keystrokeIndex];
+        
+        // Calculate delay from the previous keystroke
+        const baseTime = (keystrokeIndex > 0) ? timeToMs(session.keystrokes[keystrokeIndex - 1].time) : timeToMs(action.time);
+        const actionTime = timeToMs(action.time);
+        const delay = (actionTime - baseTime) / speed;
+
+        repeatTimeoutId = setTimeout(() => {
+            // Re-check in case stop was pressed during the delay
+            if (!isRepeating) return;
+
+            // Get the live editor and cursor position *just before* inserting
+            let activeEditor = getActiveEditor();
+            let cursorPos = activeEditor.getCursor();
+
+            // Insert character at the live cursor position
+            activeEditor.replaceRange(action.char, cursorPos);
+
+            // Move to the next keystroke
+            keystrokeIndex++;
+            playNextKeystroke();
+
+        }, delay);
+    }
+
+    playNextKeystroke(); // Start the playback chain
+}
+
+
+function timeToMs(timeStr) {
+    const [h, m, s] = timeStr.split(":").map(Number);
+    return ((h * 3600) + (m * 60) + s) * 1000;
+}
+
+// Detect active editor
+function getActiveEditor() {
+    const currentFile = document.getElementById("current-file-name").textContent || "";
+    if (currentFile.endsWith(".css")) return cssEditor;
+    if (currentFile.endsWith(".js")) return jsEditor;
+    return htmlEditor; // default
+}
+
+
+
+            </script>
+        </body>
+    </html>
