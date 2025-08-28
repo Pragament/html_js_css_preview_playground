@@ -19,8 +19,8 @@ npm install -g firebase-tools
 ## ⚙️ Installation & Setup
 
 ```bash
-git clone https://github.com/your-username/your-repo.git
-cd your-repo
+git clone https://github.com/Pragament/html_js_css_preview_playground.git
+cd html_js_css_preview_playground.git
 npm install
 npm install -g firebase-tools
 firebase login
