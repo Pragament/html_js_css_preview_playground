@@ -1,0 +1,1422 @@
+/* playground-features.css - Modern styles for Sample Codes, Phone Preview, Fullscreen, Permalink/QR, TTS & Fill-in-the-Blanks Quiz */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
+
+:root {
+    --pf-font: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --pf-code-font: 'Fira Code', monospace;
+    --pf-bg-dark: #12141c;
+    --pf-card-bg: rgba(26, 30, 44, 0.95);
+    --pf-card-border: rgba(255, 255, 255, 0.1);
+    --pf-accent-primary: #6366f1;
+    --pf-accent-phone: #06b6d4;
+    --pf-accent-share: #10b981;
+    --pf-accent-tts: #f59e0b;
+    --pf-accent-quiz: #ec4899;
+    --pf-text-primary: #f8fafc;
+    --pf-text-secondary: #94a3b8;
+    --pf-success: #10b981;
+    --pf-error: #ef4444;
+}
+
+/* =========================================================
+   1. FEATURE BUTTONS & TOOLBAR ENHANCEMENTS
+   ========================================================= */
+.pf-feature-btn-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0, 0, 0, 0.28);
+    padding: 4px 8px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.pf-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--pf-font);
+    font-size: 13px !important;
+    font-weight: 500;
+    padding: 6px 12px !important;
+    border-radius: 6px !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+    color: #ffffff !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.pf-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    filter: brightness(1.1);
+}
+
+.pf-btn:active {
+    transform: translateY(0);
+}
+
+.pf-btn-samples {
+    background: linear-gradient(135deg, #6366f1, #4f46e5) !important;
+}
+
+.pf-btn-phone {
+    background: linear-gradient(135deg, #0ea5e9, #0284c7) !important;
+}
+
+.pf-btn-phone.active {
+    background: linear-gradient(135deg, #06b6d4, #0891b2) !important;
+    box-shadow: 0 0 15px rgba(6, 182, 212, 0.5) !important;
+    border-color: #67e8f9 !important;
+}
+
+.pf-btn-fullscreen {
+    background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
+}
+
+.pf-btn-share {
+    background: linear-gradient(135deg, #10b981, #059669) !important;
+}
+
+.pf-btn-tts {
+    background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+}
+
+.pf-btn-tts.speaking {
+    background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+    animation: pf-pulse-btn 1.5s infinite;
+}
+
+@keyframes pf-pulse-btn {
+    0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+    70% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
+.pf-btn-quiz {
+    background: linear-gradient(135deg, #ec4899, #db2777) !important;
+}
+
+/* Sample selector dropdown */
+.pf-samples-dropdown {
+    font-family: var(--pf-font);
+    font-size: 13px;
+    padding: 6px 10px;
+    background: #1e2230;
+    color: #f1f5f9;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    outline: none;
+    cursor: pointer;
+    max-width: 170px;
+}
+
+.pf-samples-dropdown:focus {
+    border-color: var(--pf-accent-primary);
+}
+
+/* =========================================================
+   2. PHONE PREVIEW CONTAINER & SMARTPHONE FRAME
+   ========================================================= */
+.preview-container {
+    position: relative;
+    overflow: hidden;
+    background: #0f1117;
+    transition: background 0.3s ease;
+}
+
+.preview-container.phone-mode-active {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 12px 16px 24px;
+    overflow-y: auto;
+    background: radial-gradient(circle at 50% 20%, #1a1e2d 0%, #0d0f17 100%);
+}
+
+/* Phone control strip above device */
+.pf-phone-toolbar {
+    display: none;
+    align-items: center;
+    gap: 12px;
+    background: rgba(30, 35, 50, 0.85);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 30px;
+    padding: 6px 14px;
+    margin-bottom: 12px;
+    z-index: 10;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.preview-container.phone-mode-active .pf-phone-toolbar {
+    display: flex;
+}
+
+.pf-phone-toolbar label {
+    font-family: var(--pf-font);
+    font-size: 12px;
+    color: var(--pf-text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.pf-phone-select {
+    background: #131722;
+    color: #f8fafc;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    font-family: var(--pf-font);
+    font-size: 12px;
+    padding: 4px 8px;
+    outline: none;
+    cursor: pointer;
+}
+
+.pf-phone-tool-btn {
+    background: rgba(255, 255, 255, 0.08);
+    color: #f1f5f9;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-family: var(--pf-font);
+    font-size: 12px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.2s;
+}
+
+.pf-phone-tool-btn:hover {
+    background: rgba(255, 255, 255, 0.16);
+}
+
+/* Smartphone Frame Shell */
+.pf-phone-shell {
+    display: none;
+    position: relative;
+    background: #000000;
+    border-radius: 46px;
+    padding: 12px;
+    box-shadow: 
+        0 0 0 2px #3e4454,
+        0 0 0 8px #1c202a,
+        0 0 0 10px #2a3040,
+        0 25px 60px rgba(0, 0, 0, 0.7);
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+
+.preview-container.phone-mode-active .pf-phone-shell {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Dimensions for iPhone 15 Pro default */
+.pf-phone-shell.device-iphone15 {
+    width: 393px;
+    height: 780px;
+}
+
+.pf-phone-shell.device-pixel8 {
+    width: 412px;
+    height: 800px;
+    border-radius: 38px;
+}
+
+.pf-phone-shell.device-compact {
+    width: 360px;
+    height: 640px;
+    border-radius: 34px;
+}
+
+.pf-phone-shell.device-ipad {
+    width: 580px;
+    height: 780px;
+    border-radius: 28px;
+}
+
+/* Landscape Mode */
+.pf-phone-shell.landscape {
+    transform: rotate(0deg);
+}
+
+.pf-phone-shell.landscape.device-iphone15 {
+    width: 780px;
+    height: 393px;
+}
+
+.pf-phone-shell.landscape.device-pixel8 {
+    width: 800px;
+    height: 412px;
+}
+
+.pf-phone-shell.landscape.device-compact {
+    width: 640px;
+    height: 360px;
+}
+
+.pf-phone-shell.landscape.device-ipad {
+    width: 780px;
+    height: 580px;
+}
+
+/* Dynamic Island & Notch */
+.pf-phone-island {
+    position: absolute;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 25px;
+    background: #000000;
+    border-radius: 20px;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+    box-shadow: 0 0 2px rgba(255, 255, 255, 0.2);
+    pointer-events: none;
+}
+
+.pf-phone-island::before {
+    content: '';
+    width: 11px;
+    height: 11px;
+    background: #111b2d;
+    border-radius: 50%;
+    box-shadow: inset 0 0 2px #38bdf8;
+}
+
+/* Status Bar */
+.pf-phone-status-bar {
+    position: absolute;
+    top: 16px;
+    left: 30px;
+    right: 30px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    color: #ffffff;
+    z-index: 90;
+    pointer-events: none;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.pf-phone-status-icons {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+}
+
+/* Phone Screen Container for iframe */
+.pf-phone-screen {
+    width: 100%;
+    height: 100%;
+    border-radius: 36px;
+    overflow: hidden;
+    background: #ffffff;
+    position: relative;
+}
+
+.preview-container.phone-mode-active #preview {
+    width: 100% !important;
+    height: 100% !important;
+    border: none;
+    border-radius: 36px;
+}
+
+/* Home Indicator Pill at bottom */
+.pf-phone-home-indicator {
+    position: absolute;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 130px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    z-index: 95;
+    pointer-events: none;
+}
+
+/* Default desktop preview mode vs Phone mode */
+.preview-container:not(.phone-mode-active) .pf-phone-toolbar {
+    display: none !important;
+}
+
+.preview-container:not(.phone-mode-active) .pf-phone-shell {
+    display: contents !important;
+}
+
+.preview-container:not(.phone-mode-active) .pf-phone-island,
+.preview-container:not(.phone-mode-active) .pf-phone-status-bar,
+.preview-container:not(.phone-mode-active) .pf-phone-home-indicator {
+    display: none !important;
+}
+
+.preview-container:not(.phone-mode-active) .pf-phone-screen {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 0 !important;
+    overflow: visible !important;
+}
+
+.preview-container:not(.phone-mode-active) #preview {
+    width: 100% !important;
+    height: 100% !important;
+    border: none !important;
+    border-radius: 0 !important;
+    display: block !important;
+}
+
+
+/* =========================================================
+   3. FULLSCREEN PREVIEW OVERLAY
+   ========================================================= */
+.pf-fullscreen-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #0f172a;
+    z-index: 999999;
+    display: none;
+    flex-direction: column;
+}
+
+.pf-fullscreen-overlay.active {
+    display: flex;
+}
+
+.pf-fullscreen-header {
+    min-height: 44px;
+    background: #181b26;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 14px;
+    font-family: var(--pf-font);
+    color: #ffffff;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.pf-fullscreen-header-title {
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pf-live-badge {
+    background: #10b981;
+    color: #022c22;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+}
+
+.pf-fullscreen-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pf-fullscreen-action-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: var(--pf-font);
+    transition: all 0.2s;
+}
+
+.pf-fullscreen-action-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.pf-edit-code-btn {
+    background: #2563eb;
+    border-color: #60a5fa;
+    font-weight: 600;
+}
+
+.pf-edit-code-btn:hover {
+    background: #1d4ed8;
+}
+
+.pf-fullscreen-close-btn {
+    background: #ef4444;
+    color: white;
+    border: none;
+    padding: 5px 12px;
+    border-radius: 5px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: var(--pf-font);
+    font-weight: 500;
+}
+
+.pf-fullscreen-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    background: #ffffff;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.pf-fullscreen-body iframe {
+    width: 100%;
+    height: 100%;
+    flex: 1;
+    border: none;
+    background: #ffffff;
+    display: block;
+}
+
+/* =========================================================
+   4. MODALS (SHARED DIALOG BASE)
+   ========================================================= */
+.pf-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(6, 8, 15, 0.75);
+    backdrop-filter: blur(6px);
+    z-index: 99999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    padding: 16px;
+    box-sizing: border-box;
+}
+
+.pf-modal-backdrop.open {
+    display: flex;
+    opacity: 1;
+}
+
+.pf-modal-card {
+    background: var(--pf-card-bg);
+    border: 1px solid var(--pf-card-border);
+    border-radius: 16px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 1px 1px rgba(255, 255, 255, 0.1);
+    color: var(--pf-text-primary);
+    font-family: var(--pf-font);
+    max-width: 680px;
+    width: 100%;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: pf-modal-pop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes pf-modal-pop {
+    0% { transform: scale(0.92); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.pf-modal-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.pf-modal-title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.pf-modal-close-btn {
+    background: rgba(255, 255, 255, 0.08);
+    color: #94a3b8;
+    border: none;
+    font-size: 18px;
+    line-height: 1;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.pf-modal-close-btn:hover {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+}
+
+.pf-modal-body {
+    padding: 20px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.pf-modal-footer {
+    padding: 14px 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+/* =========================================================
+   5. PERMALINK & QR CODE SHARE MODAL
+   ========================================================= */
+.pf-share-card {
+    max-height: 94vh;
+}
+
+.pf-share-card .pf-modal-body {
+    padding: 12px 18px;
+}
+
+.pf-share-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+}
+
+.pf-share-host-picker {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0, 0, 0, 0.25);
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.pf-host-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+}
+
+.pf-host-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #cbd5e1;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-family: var(--pf-font);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.pf-host-btn:hover {
+    background: rgba(255, 255, 255, 0.18);
+    color: #ffffff;
+}
+
+.pf-host-btn.active {
+    background: var(--pf-accent-share);
+    border-color: #34d399;
+    color: #ffffff;
+    font-weight: 600;
+    box-shadow: 0 0 12px rgba(16, 185, 129, 0.45);
+}
+
+.pf-wifi-ip-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 4px;
+    background: rgba(255, 255, 255, 0.04);
+    padding: 5px 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.pf-wifi-ip-input {
+    background: #0b0f19;
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    color: #38bdf8;
+    font-family: var(--pf-code-font);
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 5px;
+    width: 125px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.pf-wifi-ip-input:focus {
+    border-color: #38bdf8;
+    outline: none;
+    box-shadow: 0 0 8px rgba(56, 189, 248, 0.3);
+}
+
+.pf-wifi-ip-save-btn {
+    background: #2563eb;
+    color: #ffffff;
+    border: none;
+    padding: 4px 10px;
+    border-radius: 5px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: var(--pf-font);
+    transition: all 0.2s;
+}
+
+.pf-wifi-ip-save-btn:hover {
+    background: #1d4ed8;
+}
+
+.pf-cloud-url-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 4px;
+    background: rgba(16, 185, 129, 0.08);
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    max-width: 480px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.pf-cloud-url-input {
+    background: #0b0f19;
+    border: 1px solid rgba(52, 211, 153, 0.4);
+    color: #34d399;
+    font-family: var(--pf-code-font);
+    font-size: 11px;
+    padding: 5px 8px;
+    border-radius: 5px;
+    flex: 1;
+    min-width: 0;
+}
+
+.pf-cloud-url-input:focus {
+    border-color: #34d399;
+    outline: none;
+    box-shadow: 0 0 8px rgba(52, 211, 153, 0.3);
+}
+
+.pf-cloud-url-save-btn {
+    background: #059669;
+    color: #ffffff;
+    border: none;
+    padding: 5px 12px;
+    border-radius: 5px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: var(--pf-font);
+    white-space: nowrap;
+    transition: all 0.2s;
+}
+
+.pf-cloud-url-save-btn:hover {
+    background: #047857;
+}
+
+.pf-share-view-picker {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.pf-view-options {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.pf-view-btn {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #cbd5e1;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: var(--pf-font);
+    transition: all 0.2s;
+}
+
+.pf-view-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+}
+
+.pf-view-btn.active {
+    background: #3b82f6;
+    border-color: #60a5fa;
+    color: #ffffff;
+    font-weight: 600;
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+}
+
+.pf-qr-box {
+    background: #ffffff;
+    padding: 12px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.45);
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 260px;
+    min-height: 260px;
+    transition: all 0.25s ease;
+    box-sizing: border-box;
+}
+
+.pf-qr-box.zoomed {
+    transform: scale(1.22);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.75);
+    z-index: 10;
+}
+
+.pf-qr-box img, .pf-qr-box canvas {
+    display: block;
+    max-width: 100%;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: pixelated;
+}
+
+.pf-qr-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 1px;
+}
+
+.pf-qr-action-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    color: #cbd5e1;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: var(--pf-font);
+    transition: all 0.2s;
+}
+
+.pf-qr-action-btn:hover {
+    background: rgba(255, 255, 255, 0.18);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.pf-share-hints-box {
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 11px;
+    color: #cbd5e1;
+    max-width: 480px;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: left;
+    line-height: 1.5;
+}
+
+.pf-share-hints-box strong {
+    color: #ffffff;
+}
+
+.pf-share-hints-box code {
+    background: rgba(255, 255, 255, 0.12);
+    padding: 2px 5px;
+    border-radius: 4px;
+    color: #38bdf8;
+    font-family: var(--pf-code-font);
+}
+
+.pf-permalink-input-wrap {
+    width: 100%;
+    display: flex;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.pf-permalink-input {
+    flex: 1;
+    background: #0f131f;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #cbd5e1;
+    font-family: var(--pf-code-font);
+    font-size: 12px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    outline: none;
+}
+
+.pf-copy-btn {
+    background: var(--pf-accent-share);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 0 16px;
+    font-family: var(--pf-font);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.pf-copy-btn:hover {
+    background: #059669;
+}
+
+.pf-test-btn {
+    background: rgba(56, 189, 248, 0.15);
+    color: #38bdf8;
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    border-radius: 8px;
+    padding: 0 14px;
+    font-family: var(--pf-font);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.pf-test-btn:hover {
+    background: rgba(56, 189, 248, 0.25);
+    color: #ffffff;
+}
+    filter: brightness(1.1);
+}
+
+/* =========================================================
+   6. SAMPLE CODES MODAL & BROWSER
+   ========================================================= */
+.pf-samples-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+    margin-top: 12px;
+}
+
+.pf-sample-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 14px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.pf-sample-card:hover {
+    background: rgba(99, 102, 241, 0.08);
+    border-color: rgba(99, 102, 241, 0.35);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.pf-sample-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+.pf-sample-card-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #ffffff;
+    margin: 0;
+}
+
+.pf-sample-badge {
+    font-size: 11px;
+    padding: 2px 7px;
+    border-radius: 10px;
+    background: rgba(99, 102, 241, 0.2);
+    color: #a5b4fc;
+    font-weight: 500;
+}
+
+.pf-sample-desc {
+    font-size: 12px;
+    color: var(--pf-text-secondary);
+    margin: 0 0 12px 0;
+    line-height: 1.4;
+}
+
+.pf-sample-load-btn {
+    align-self: flex-start;
+    background: var(--pf-accent-primary);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: var(--pf-font);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* =========================================================
+   7. TEXT TO SPEECH (TTS) DOCKED PLAYER & WAVEFORM
+   ========================================================= */
+.pf-tts-widget {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: rgba(22, 27, 40, 0.95);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    border-radius: 14px;
+    padding: 12px 16px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 20px rgba(245, 158, 11, 0.15);
+    z-index: 9999;
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    width: 320px;
+    font-family: var(--pf-font);
+    color: var(--pf-text-primary);
+    animation: pf-tts-slide 0.3s ease;
+}
+
+@keyframes pf-tts-slide {
+    0% { transform: translateY(20px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+.pf-tts-widget.open {
+    display: flex;
+}
+
+.pf-tts-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.pf-tts-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #fbbf24;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Audio Wave Visualizer */
+.pf-tts-wave {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    height: 16px;
+}
+
+.pf-tts-wave-bar {
+    width: 3px;
+    height: 4px;
+    background: #f59e0b;
+    border-radius: 2px;
+    transition: height 0.15s ease;
+}
+
+.pf-tts-widget.speaking .pf-tts-wave-bar:nth-child(1) { animation: pf-wave 0.8s infinite 0.1s; }
+.pf-tts-widget.speaking .pf-tts-wave-bar:nth-child(2) { animation: pf-wave 0.8s infinite 0.3s; }
+.pf-tts-widget.speaking .pf-tts-wave-bar:nth-child(3) { animation: pf-wave 0.8s infinite 0.2s; }
+.pf-tts-widget.speaking .pf-tts-wave-bar:nth-child(4) { animation: pf-wave 0.8s infinite 0.4s; }
+
+@keyframes pf-wave {
+    0%, 100% { height: 4px; }
+    50% { height: 16px; }
+}
+
+.pf-tts-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pf-tts-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: var(--pf-font);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.pf-tts-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.pf-tts-btn-primary {
+    background: #f59e0b;
+    color: #000000;
+    font-weight: 600;
+    border: none;
+}
+
+.pf-tts-btn-primary:hover {
+    background: #fbbf24;
+}
+
+.pf-tts-mode-select, .pf-tts-voice-select {
+    width: 100%;
+    background: #111420;
+    color: #cbd5e1;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    font-size: 11px;
+    padding: 5px 8px;
+    outline: none;
+    font-family: var(--pf-font);
+}
+
+/* =========================================================
+   8. POPUP FILL IN THE BLANKS (MULTIPLE BLANKS IN 1 QUESTION)
+   ========================================================= */
+.pf-quiz-card {
+    max-width: 650px;
+}
+
+.pf-quiz-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.pf-quiz-badge {
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.pf-badge-html { background: rgba(239, 68, 68, 0.18); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+.pf-badge-css { background: rgba(59, 130, 246, 0.18); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
+.pf-badge-js { background: rgba(245, 158, 11, 0.18); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+
+.pf-quiz-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin: 0 0 14px 0;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Question Sentence Box with Inline Blanks */
+.pf-quiz-sentence-box {
+    background: rgba(15, 19, 32, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    padding: 18px;
+    font-size: 15px;
+    line-height: 2.2;
+    color: #e2e8f0;
+    margin-bottom: 16px;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Inline Blank Dropdown / Input */
+.pf-quiz-blank {
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    margin: 0 4px;
+}
+
+.pf-quiz-blank select {
+    font-family: var(--pf-code-font);
+    font-size: 13px;
+    font-weight: 600;
+    background: #1e2538;
+    color: #38bdf8;
+    border: 2px dashed #0284c7;
+    border-radius: 8px;
+    padding: 4px 10px;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 110px;
+    appearance: none;
+    -webkit-appearance: none;
+    text-align: center;
+}
+
+.pf-quiz-blank select:focus {
+    border-color: #38bdf8;
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+    background: #252e46;
+}
+
+/* Blank Success State */
+.pf-quiz-blank.is-correct select {
+    background: rgba(16, 185, 129, 0.18) !important;
+    border: 2px solid #10b981 !important;
+    color: #34d399 !important;
+}
+
+/* Blank Incorrect State */
+.pf-quiz-blank.is-incorrect select {
+    background: rgba(239, 68, 68, 0.18) !important;
+    border: 2px solid #ef4444 !important;
+    color: #f87171 !important;
+}
+
+.pf-quiz-blank-hint {
+    display: none;
+    position: absolute;
+    bottom: -22px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #ef4444;
+    color: white;
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+    z-index: 10;
+    font-family: var(--pf-code-font);
+}
+
+.pf-quiz-blank.is-incorrect .pf-quiz-blank-hint {
+    display: block;
+}
+
+/* Word Bank Chips */
+.pf-word-bank-wrap {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+.pf-word-bank-label {
+    font-size: 11px;
+    color: var(--pf-text-secondary);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.pf-word-chip {
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #e2e8f0;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-family: var(--pf-code-font);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.pf-word-chip:hover {
+    background: rgba(99, 102, 241, 0.2);
+    border-color: #818cf8;
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+/* Feedback Box */
+.pf-quiz-feedback {
+    display: none;
+    margin-top: 14px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.pf-quiz-feedback.show {
+    display: block;
+    animation: pf-fade-in 0.3s ease;
+}
+
+@keyframes pf-fade-in {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.pf-quiz-feedback.success {
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: #a7f3d0;
+}
+
+.pf-quiz-feedback.partial {
+    background: rgba(245, 158, 11, 0.12);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    color: #fde68a;
+}
+
+.pf-quiz-code-preview {
+    margin-top: 10px;
+    background: #0b0e17;
+    border-radius: 8px;
+    padding: 12px;
+    font-family: var(--pf-code-font);
+    font-size: 12px;
+    color: #cbd5e1;
+    overflow-x: auto;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Pagination & Quiz Footers */
+.pf-quiz-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pf-quiz-dots {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.pf-quiz-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.pf-quiz-dot.active {
+    background: var(--pf-accent-quiz);
+    transform: scale(1.3);
+}
+
+.pf-quiz-dot.completed {
+    background: var(--pf-success);
+}
+
+/* Custom JSON Editor drawer */
+.pf-custom-json-panel {
+    display: none;
+    margin-top: 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 14px;
+}
+
+.pf-custom-json-panel.open {
+    display: block;
+}
+
+.pf-custom-json-textarea {
+    width: 100%;
+    height: 140px;
+    background: #090c14;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    color: #86efac;
+    font-family: var(--pf-code-font);
+    font-size: 12px;
+    padding: 10px;
+    box-sizing: border-box;
+    outline: none;
+}
+
+/* Toast Message */
+.pf-toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(18, 22, 36, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    font-family: var(--pf-font);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 10px 18px;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    z-index: 1000000;
+    transform: translateY(-20px);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+}
+
+.pf-toast.show {
+    transform: translateY(0);
+    opacity: 1;
+}

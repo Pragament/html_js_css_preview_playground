@@ -1,58 +1,45 @@
-// Default sample code
-const defaultHTML = `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Playground</title>
-    <!-- Uncomment the following line to include an external CSS file -->
-    <!-- <link rel="stylesheet" href="style.css"> -->
-    <style>
-        /* Add your internal CSS here */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            text-align: center;
-            padding: 50px;
-        }
-        h1 {
-            color: #333;
-        }
-    </style>
-</head>
-<body>
-    <h1>Hello, World!</h1>
-    <p>Welcome to the Code Playground.</p>
-    <!-- Uncomment the following line to include an external JS file -->
-    <!-- <script src="script.js"><\/script> -->
-    <script>
-        // Add your internal JavaScript here
-        console.log('Hello from the script!');
-    <\/script>
-</body>
-</html>`;
+// Default sample code (clean, compact & instant QR scannable)
+const defaultHTML = `<h1>Hello, World!</h1>
+<p>Welcome to Code Playground.</p>
+<button onclick="changeColor()">🎨 Change Color</button>`;
 
-const defaultCSS = `/* Add your CSS here */
-body {
-    background-color: #f0f0f0;
-    font-family: Arial, sans-serif;
-}
-
-h1 {
-    color: #333;
+const defaultCSS = `body {
+    font-family: system-ui, -apple-system, sans-serif;
+    background-color: #f8fafc;
     text-align: center;
+    padding: 40px 20px;
 }
-
+h1 {
+    color: #1e293b;
+    margin-bottom: 8px;
+}
 p {
-    color: #666;
+    color: #64748b;
+    margin-bottom: 24px;
+}
+button {
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    transition: transform 0.15s, background-color 0.15s;
+}
+button:hover {
+    background-color: #2563eb;
+    transform: translateY(-2px);
 }`;
 
-const defaultJS = `// Add your JavaScript here
-console.log('Hello from script.js!');
-
-document.querySelector('h1').addEventListener('click', () => {
-    alert('You clicked the heading!');
-});`;
+const defaultJS = `function changeColor() {
+    const colors = ['#f8fafc', '#ecfdf5', '#eff6ff', '#fef3c7', '#fdf2f8', '#f3e8ff'];
+    const random = colors[Math.floor(Math.random() * colors.length)];
+    document.body.style.backgroundColor = random;
+    console.log('Background updated to', random);
+};`;
 
 // Initialize CodeMirror editors with default content
 const htmlEditor = CodeMirror.fromTextArea(document.getElementById('html-code'), {
@@ -78,6 +65,26 @@ const jsEditor = CodeMirror.fromTextArea(document.getElementById('js-code'), {
     extraKeys: { "Ctrl-Space": "autocomplete" },
 });
 
+// Explicitly attach editors to window for interoperability
+window.htmlEditor = htmlEditor;
+window.cssEditor = cssEditor;
+window.jsEditor = jsEditor;
+window.updatePreview = updatePreview;
+
+// If editors only contain placeholder comments or are empty, populate with default template
+const initialHtml = htmlEditor.getValue().trim();
+if (!initialHtml || initialHtml === '<!-- Add your HTML code here -->') {
+    htmlEditor.setValue(defaultHTML);
+}
+const initialCss = cssEditor.getValue().trim();
+if (!initialCss || initialCss === '/* Add your CSS here */') {
+    cssEditor.setValue(defaultCSS);
+}
+const initialJs = jsEditor.getValue().trim();
+if (!initialJs || initialJs === '// Add your JavaScript here') {
+    jsEditor.setValue(defaultJS);
+}
+
 // Automatically show hints while typing
 cssEditor.on("inputRead", function (cm, event) {
     if (!cm.state.completionActive) {  // Prevent multiple popups
@@ -88,7 +95,7 @@ cssEditor.on("inputRead", function (cm, event) {
 // Automatically show hints while typing
 htmlEditor.on("inputRead", function (cm, event) {
     const autocompleteButton = document.getElementById('autocomplete-button');
-    const isOn = autocompleteButton.textContent.includes('On');
+    const isOn = autocompleteButton && autocompleteButton.textContent.includes('On');
     if (isOn && !cm.state.completionActive) {  // Prevent multiple popups
         CodeMirror.commands.autocomplete(cm, null, { completeSingle: false });
     }
@@ -103,18 +110,35 @@ jsEditor.on("inputRead", function (cm, event) {
 
 // Function to update the preview
 function updatePreview() {
-    const html = htmlEditor.getValue();
-    const css = `<style>${cssEditor.getValue()}</style>`;
-    const js = `<script>
-                try {
-                    ${jsEditor.getValue()}
-                } catch (error) {
-                    console.error(error);
-                }
-            <\/script>`;
+    const rawHtml = htmlEditor.getValue();
+    const rawCss = cssEditor.getValue();
+    const rawJs = jsEditor.getValue();
+
     const preview = document.getElementById('preview');
-    preview.srcdoc = html + css + js;
+    if (preview) {
+        if (window.PlaygroundFeatures && typeof window.PlaygroundFeatures.buildPreviewDoc === 'function') {
+            preview.srcdoc = window.PlaygroundFeatures.buildPreviewDoc(rawHtml, rawCss, rawJs);
+        } else {
+            const css = `<style>${rawCss}</style>`;
+            const js = `<script>try { ${rawJs} } catch(e){ console.error(e); }<\/script>`;
+            preview.srcdoc = rawHtml + css + js;
+        }
+    }
+
+    const fsIframe = document.getElementById('pf-fullscreen-iframe');
+    if (fsIframe) {
+        if (window.PlaygroundFeatures && typeof window.PlaygroundFeatures.buildPreviewDoc === 'function') {
+            fsIframe.srcdoc = window.PlaygroundFeatures.buildPreviewDoc(rawHtml, rawCss, rawJs);
+        } else {
+            const css = `<style>${rawCss}</style>`;
+            const js = `<script>try { ${rawJs} } catch(e){ console.error(e); }<\/script>`;
+            fsIframe.srcdoc = rawHtml + css + js;
+        }
+    }
 }
+
+// Initial preview render on startup
+updatePreview();
 
 // Update preview on editor change
 htmlEditor.on('change', updatePreview);
