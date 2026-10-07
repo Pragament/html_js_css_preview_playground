@@ -10,6 +10,7 @@
         <link rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/theme/material.min.css">
         <link rel="stylesheet" href="app.css">
+        <link rel="stylesheet" href="playground-features.css">
         <script
             src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify.min.js"></script>
         <script
@@ -18,6 +19,10 @@
             src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify-css.min.js"></script>
         <script
             src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
         <style>
         /* Existing inline styles from your original file */
@@ -252,6 +257,40 @@
                     onclick="document.getElementById('recordingSessionsModal').classList.remove('hidden')"
                     title="View Recordings">📹 View Recordings</button>
 
+                <!-- PythonStudio Inspired Features Toolbar Group -->
+                <div class="button-group pf-feature-btn-group">
+                    <select id="pf-sample-select" class="pf-samples-dropdown" onchange="if(this.value) window.PlaygroundFeatures.loadSample(this.value)" title="Choose a sample code to load">
+                        <option value="">📚 Load Sample...</option>
+                        <optgroup label="Web Apps">
+                            <option value="calculator">📱 Glass Calculator</option>
+                            <option value="clock">⏱️ Neon Digital Clock</option>
+                            <option value="todo">🎯 Task Manager</option>
+                        </optgroup>
+                        <optgroup label="Effects & UI">
+                            <option value="particles">✨ Particle Network</option>
+                            <option value="weather">🌦️ Weather Forecast Card</option>
+                        </optgroup>
+                    </select>
+                    <button class="pf-btn pf-btn-samples" onclick="window.PlaygroundFeatures.openSamplesModal()" title="Browse all sample codes">
+                        📚 Samples
+                    </button>
+                    <button class="pf-btn pf-btn-phone" id="pf-phone-btn" onclick="window.PlaygroundFeatures.togglePhonePreview()" title="Toggle Smartphone Frame Preview">
+                        📱 Phone Preview
+                    </button>
+                    <button class="pf-btn pf-btn-fullscreen" onclick="window.PlaygroundFeatures.toggleFullscreenPreview()" title="Open preview in Fullscreen">
+                        ⛶ Fullscreen
+                    </button>
+                    <button class="pf-btn pf-btn-share" onclick="window.PlaygroundFeatures.openShareModal()" title="Share code via Permalink & QR Code">
+                        🔗 Share & QR
+                    </button>
+                    <button class="pf-btn pf-btn-tts" id="pf-tts-btn" onclick="window.PlaygroundFeatures.toggleTTSWidget()" title="Text-to-speech code and question reader">
+                        🔊 Read Aloud
+                    </button>
+                    <button class="pf-btn pf-btn-quiz" onclick="window.PlaygroundFeatures.openModal('pf-quiz-modal')" title="Fill in the blanks quiz challenge">
+                        🧩 Daily Quiz
+                    </button>
+                </div>
+
                 <p id="capsWarning">⚠️ Caps Lock is ON!</p>
 
                 <div class="button-group" id="special-char-buttons">
@@ -409,8 +448,37 @@
                     <textarea id="js-code" class="hidden">
 // Add your JavaScript here
 </textarea>
-                    <div class="preview-container">
-                        <iframe id="preview"></iframe>
+                    <div class="preview-container" id="preview-container">
+                        <!-- Phone Preview Controls Bar (visible in phone mode) -->
+                        <div class="pf-phone-toolbar">
+                            <label>📱 Device:
+                                <select class="pf-phone-select" onchange="window.PlaygroundFeatures.setPhoneDevice(this.value)">
+                                    <option value="iphone15">iPhone 15 Pro (393 × 780)</option>
+                                    <option value="pixel8">Google Pixel 8 (412 × 800)</option>
+                                    <option value="compact">Compact Phone (360 × 640)</option>
+                                    <option value="ipad">iPad Mini (580 × 780)</option>
+                                </select>
+                            </label>
+                            <button class="pf-phone-tool-btn" onclick="window.PlaygroundFeatures.togglePhoneOrientation()">🔄 Rotate</button>
+                            <button class="pf-phone-tool-btn" onclick="window.PlaygroundFeatures.togglePhonePreview(false)">🖥️ Desktop</button>
+                        </div>
+
+                        <!-- Phone Shell Mockup (wraps preview iframe) -->
+                        <div class="pf-phone-shell device-iphone15" id="pf-phone-shell">
+                            <div class="pf-phone-island"></div>
+                            <div class="pf-phone-status-bar">
+                                <span id="pf-phone-time">9:41</span>
+                                <div class="pf-phone-status-icons">
+                                    <span>5G</span>
+                                    <span>📶</span>
+                                    <span>🔋</span>
+                                </div>
+                            </div>
+                            <div class="pf-phone-screen">
+                                <iframe id="preview"></iframe>
+                            </div>
+                            <div class="pf-phone-home-indicator"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1124,5 +1192,231 @@ function getActiveEditor() {
 
 
             </script>
+
+            <!-- Fullscreen Live Preview Overlay -->
+            <div id="pf-fullscreen-overlay" class="pf-fullscreen-overlay">
+                <div class="pf-fullscreen-header">
+                    <div class="pf-fullscreen-header-title">
+                        <span>📱 Live Output</span>
+                        <span class="pf-live-badge">RUNNING</span>
+                    </div>
+                    <div class="pf-fullscreen-header-actions">
+                        <button class="pf-fullscreen-action-btn" onclick="window.PlaygroundFeatures.toggleFullscreenPreview()" title="Refresh preview">
+                            🔄 Refresh
+                        </button>
+                        <button class="pf-fullscreen-action-btn pf-edit-code-btn" onclick="window.PlaygroundFeatures.closeFullscreenPreview()" title="View & Edit HTML/CSS/JS">
+                            💻 View / Edit Code
+                        </button>
+                        <button class="pf-fullscreen-close-btn" onclick="window.PlaygroundFeatures.closeFullscreenPreview()">
+                            ✕ Exit (Esc)
+                        </button>
+                    </div>
+                </div>
+                <div class="pf-fullscreen-body">
+                    <iframe id="pf-fullscreen-iframe"></iframe>
+                </div>
+            </div>
+
+            <!-- Sample Codes Modal -->
+            <div id="pf-samples-modal" class="pf-modal-backdrop">
+                <div class="pf-modal-card" style="max-width: 720px;">
+                    <div class="pf-modal-header">
+                        <h3 class="pf-modal-title">📚 Sample Codes Library</h3>
+                        <button class="pf-modal-close-btn" onclick="window.PlaygroundFeatures.closeModal('pf-samples-modal')">✕</button>
+                    </div>
+                    <div class="pf-modal-body">
+                        <p style="color: #94a3b8; font-size: 13px; margin: 0 0 10px;">Select any interactive sample project to load directly into the editor:</p>
+                        <div class="pf-samples-grid" id="pf-samples-grid"></div>
+                    </div>
+                    <div class="pf-modal-footer">
+                        <span style="font-size: 12px; color: #94a3b8;">Click any project to load into editor</span>
+                        <button class="pf-btn pf-btn-samples" onclick="window.PlaygroundFeatures.closeModal('pf-samples-modal')">Close</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Permalink & QR Code Share Modal -->
+            <div id="pf-share-modal" class="pf-modal-backdrop">
+                <div class="pf-modal-card pf-share-card" style="max-width: 540px;">
+                    <div class="pf-modal-header">
+                        <h3 class="pf-modal-title">🔗 Share Code & Mobile QR</h3>
+                        <button class="pf-modal-close-btn" onclick="window.PlaygroundFeatures.closeModal('pf-share-modal')">✕</button>
+                    </div>
+                    <div class="pf-modal-body">
+                        <div class="pf-share-container">
+                            <!-- Scan Target Selector for Mobile Phones -->
+                            <div class="pf-share-host-picker">
+                                <label style="font-size: 11px; color: #94a3b8; font-weight: 600; text-transform: uppercase;">1. Choose Target Network:</label>
+                                <div class="pf-host-options">
+                                    <button class="pf-host-btn" id="pf-host-cloud" onclick="window.PlaygroundFeatures.setShareHost('cloud')" title="Works anywhere on any phone worldwide (4G/5G/any Wi-Fi)">
+                                        🌐 Cloud Web (codestudio.pragament.com)
+                                    </button>
+                                    <button class="pf-host-btn active" id="pf-host-wifi" onclick="window.PlaygroundFeatures.setShareHost('wifi')" title="Use when phone and laptop are on the same Wi-Fi">
+                                        🏠 Same Wi-Fi (192.168.1.6)
+                                    </button>
+                                    <button class="pf-host-btn" id="pf-host-local" onclick="window.PlaygroundFeatures.setShareHost('local')" title="For laptop browser only">
+                                        💻 Localhost
+                                    </button>
+                                </div>
+
+                                <!-- Editable Cloud URL row -->
+                                <div class="pf-cloud-url-row" id="pf-cloud-url-row" style="display: none;">
+                                    <span style="font-size: 11px; color: #94a3b8;">Public URL:</span>
+                                    <input type="text" id="pf-cloud-url-input" class="pf-cloud-url-input" value="https://codestudio.pragament.com" placeholder="https://..." />
+                                    <button class="pf-cloud-url-save-btn" onclick="window.PlaygroundFeatures.updateCloudUrl()">Save URL</button>
+                                </div>
+
+                                <!-- Editable Wi-Fi IP row -->
+                                <div class="pf-wifi-ip-row" id="pf-wifi-ip-row" style="display: flex;">
+                                    <span style="font-size: 11px; color: #94a3b8;">Laptop Wi-Fi IP:</span>
+                                    <input type="text" id="pf-wifi-ip-input" class="pf-wifi-ip-input" value="192.168.1.6" placeholder="192.168.x.x" />
+                                    <button class="pf-wifi-ip-save-btn" onclick="window.PlaygroundFeatures.updateWifiIp()">Save IP</button>
+                                </div>
+                            </div>
+
+                            <!-- Output vs Editor View Selector -->
+                            <div class="pf-share-view-picker">
+                                <label style="font-size: 11px; color: #94a3b8; font-weight: 600; text-transform: uppercase;">2. When Scanned on Mobile, Open:</label>
+                                <div class="pf-view-options">
+                                    <button class="pf-view-btn active" id="pf-view-output" onclick="window.PlaygroundFeatures.setShareView('output')" title="Phone immediately shows live rendered output">
+                                        📱 Live Output Only (Recommended)
+                                    </button>
+                                    <button class="pf-view-btn" id="pf-view-editor" onclick="window.PlaygroundFeatures.setShareView('editor')" title="Phone opens code editor and preview">
+                                        💻 Full Playground (Code + Output)
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="pf-qr-box" id="pf-qr-container">
+                                <!-- QR code rendered here -->
+                            </div>
+
+                            <div class="pf-qr-actions" id="pf-qr-actions">
+                                <button class="pf-qr-action-btn" id="pf-qr-zoom-btn" onclick="window.PlaygroundFeatures.toggleZoomQr()" title="Enlarge QR code for effortless camera scanning">
+                                    🔍 Enlarge QR
+                                </button>
+                                <button class="pf-qr-action-btn" id="pf-qr-mode-btn" onclick="window.PlaygroundFeatures.toggleQrMode()" title="Switch to simple URL for ultra-fast camera scanning">
+                                    ⚡ Simple URL QR
+                                </button>
+                                <button class="pf-qr-action-btn" onclick="window.PlaygroundFeatures.downloadQrImage()" title="Save QR code image file">
+                                    💾 Save Image
+                                </button>
+                            </div>
+
+                            <!-- Contextual Instructions and Warnings -->
+                            <div class="pf-share-hints-box" id="pf-share-hint">
+                                <!-- Populated dynamically based on wifi vs cloud -->
+                            </div>
+
+                            <div class="pf-permalink-input-wrap">
+                                <input type="text" id="pf-permalink-input" class="pf-permalink-input" readonly>
+                                <button id="pf-copy-btn" class="pf-copy-btn" onclick="window.PlaygroundFeatures.copyPermalink()">
+                                    📋 Copy Link
+                                </button>
+                                <button id="pf-test-btn" class="pf-test-btn" onclick="window.PlaygroundFeatures.testPermalink()" title="Open this link in a new tab">
+                                    ↗️ Open
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pf-modal-footer">
+                        <span style="font-size: 12px; color: #94a3b8;">Full HTML/CSS/JS is stored in the URL permalink</span>
+                        <button class="pf-btn pf-btn-share" onclick="window.PlaygroundFeatures.closeModal('pf-share-modal')">Done</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Text to Speech Floating Player Widget -->
+            <div id="pf-tts-widget" class="pf-tts-widget">
+                <div class="pf-tts-header">
+                    <span class="pf-tts-title">
+                        🔊 Audio Reader
+                        <div class="pf-tts-wave">
+                            <div class="pf-tts-wave-bar"></div>
+                            <div class="pf-tts-wave-bar"></div>
+                            <div class="pf-tts-wave-bar"></div>
+                            <div class="pf-tts-wave-bar"></div>
+                        </div>
+                    </span>
+                    <button class="pf-modal-close-btn" style="width: 24px; height: 24px; font-size: 14px;" onclick="window.PlaygroundFeatures.toggleTTSWidget()">✕</button>
+                </div>
+                <select id="pf-tts-mode-select" class="pf-tts-mode-select">
+                    <option value="explain">💡 Explain Current Playground Code</option>
+                    <option value="code">📝 Read HTML Code Aloud</option>
+                    <option value="quiz">🧩 Read Current Quiz Question</option>
+                </select>
+                <select id="pf-tts-voice-select" class="pf-tts-voice-select" title="System Voices">
+                    <option value="">Default System Voice</option>
+                </select>
+                <div class="pf-tts-controls">
+                    <button id="pf-tts-play-btn" class="pf-tts-btn pf-tts-btn-primary" onclick="window.PlaygroundFeatures.triggerTTSAction()">
+                        ▶️ Speak
+                    </button>
+                    <button class="pf-tts-btn" onclick="window.PlaygroundFeatures.setTTSSpeed(0.8)">0.8x</button>
+                    <button class="pf-tts-btn" onclick="window.PlaygroundFeatures.setTTSSpeed(1.0)">1.0x</button>
+                    <button class="pf-tts-btn" onclick="window.PlaygroundFeatures.setTTSSpeed(1.3)">1.3x</button>
+                </div>
+            </div>
+
+            <!-- Fill in the Blanks Challenge Modal (Popup on refresh with multiple blanks) -->
+            <div id="pf-quiz-modal" class="pf-modal-backdrop">
+                <div class="pf-modal-card pf-quiz-card">
+                    <div class="pf-modal-header">
+                        <h3 class="pf-modal-title">
+                            🧩 Fill in the Blanks Challenge
+                        </h3>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <button class="pf-btn pf-btn-tts" style="font-size: 11px !important; padding: 4px 8px !important;" onclick="window.PlaygroundFeatures.speakCurrentQuizQuestion()" title="Read question aloud">
+                                🔊 Read Aloud
+                            </button>
+                            <button class="pf-modal-close-btn" onclick="window.PlaygroundFeatures.closeModal('pf-quiz-modal')" title="Close quiz">✕</button>
+                        </div>
+                    </div>
+                    <div class="pf-modal-body">
+                        <div class="pf-quiz-meta" id="pf-quiz-meta"></div>
+                        <div class="pf-quiz-title" id="pf-quiz-title">
+                            <span id="pf-quiz-title-text">Challenge</span>
+                        </div>
+
+                        <div class="pf-quiz-sentence-box" id="pf-quiz-sentence">
+                            <!-- Inline question with multiple blanks rendered here -->
+                        </div>
+
+                        <div class="pf-word-bank-wrap">
+                            <span class="pf-word-bank-label">Word Bank:</span>
+                            <div id="pf-quiz-word-bank" style="display: inline-flex; flex-wrap: wrap; gap: 6px;"></div>
+                        </div>
+
+                        <div id="pf-quiz-feedback" class="pf-quiz-feedback"></div>
+
+                        <!-- Custom JSON panel -->
+                        <div id="pf-custom-json-panel" class="pf-custom-json-panel">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                <span style="font-size: 12px; font-weight: 600; color: #94a3b8;">Custom Questions JSON (Multiple Blanks Supported):</span>
+                                <button class="pf-btn pf-btn-share" style="padding: 3px 8px !important; font-size: 11px !important;" onclick="window.PlaygroundFeatures.applyCustomJson()">Apply JSON</button>
+                            </div>
+                            <textarea id="pf-custom-json-textarea" class="pf-custom-json-textarea" placeholder="Paste custom questions JSON array here..."></textarea>
+                        </div>
+                    </div>
+                    <div class="pf-modal-footer">
+                        <div class="pf-quiz-nav">
+                            <button class="pf-btn pf-btn-samples" style="padding: 5px 10px !important; font-size: 12px !important;" onclick="window.PlaygroundFeatures.prevQuizQuestion()">⏮️ Prev</button>
+                            <div class="pf-quiz-dots" id="pf-quiz-dots"></div>
+                            <button class="pf-btn pf-btn-samples" style="padding: 5px 10px !important; font-size: 12px !important;" onclick="window.PlaygroundFeatures.nextQuizQuestion()">Next ⏭️</button>
+                        </div>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <button class="pf-btn" style="background: rgba(255,255,255,0.08) !important; font-size: 11px !important; padding: 5px 8px !important;" onclick="window.PlaygroundFeatures.toggleCustomJsonPanel()">
+                                📝 Edit JSON
+                            </button>
+                            <button class="pf-btn pf-btn-quiz" onclick="window.PlaygroundFeatures.checkQuizAnswers()">
+                                ✓ Check Answers
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Playground Features Script -->
+            <script src="playground-features.js"></script>
         </body>
     </html>
