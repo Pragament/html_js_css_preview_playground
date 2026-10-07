@@ -1329,6 +1329,34 @@ function setUnit(u) {
         }
     }
 
+    let currentQrMode = 'full'; // 'full' (with code in URL) or 'simple' (direct clean URL)
+
+    function getBasePageUrl() {
+        const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || /^\d+\.\d+\.\d+\.\d+$/.test(window.location.hostname);
+        if (isLocal) {
+            if (currentShareHostMode === 'wifi') {
+                const port = window.location.port ? `:${window.location.port}` : '';
+                return `${window.location.protocol}//${getWifiIp()}${port}${window.location.pathname}`;
+            } else if (currentShareHostMode === 'cloud') {
+                return `${getCloudUrl()}/index.html`;
+            } else {
+                const port = window.location.port ? `:${window.location.port}` : '';
+                return `${window.location.protocol}//localhost${port}${window.location.pathname}`;
+            }
+        }
+        return window.location.href.split('#')[0];
+    }
+
+    function toggleQrMode() {
+        currentQrMode = currentQrMode === 'full' ? 'simple' : 'full';
+        const btn = document.getElementById('pf-qr-mode-btn');
+        if (btn) {
+            btn.innerHTML = currentQrMode === 'full' ? '⚡ Simple URL QR' : '📦 Full Code QR';
+        }
+        showPfToast(currentQrMode === 'simple' ? '⚡ Switched to Instant-Scan Clean URL!' : '📦 Switched to Full Project Code QR');
+        refreshShareQrAndLink();
+    }
+
     function refreshShareQrAndLink() {
         let permalink = window.location.href;
         try {
@@ -1343,7 +1371,8 @@ function setUnit(u) {
         const qrContainer = document.getElementById('pf-qr-container');
         if (qrContainer) {
             qrContainer.innerHTML = '';
-            renderQRCodeSafe(qrContainer, permalink);
+            const targetUrl = currentQrMode === 'simple' ? getBasePageUrl() : permalink;
+            renderQRCodeSafe(qrContainer, targetUrl);
         }
     }
 
@@ -1414,19 +1443,19 @@ function setUnit(u) {
         refreshShareQrAndLink();
     }
 
-    function renderQRCodeSafe(container, permalink) {
+    function renderQRCodeSafe(container, targetUrl) {
         container.innerHTML = '';
 
-        // Standard QR code limit check: if payload is <= 2200 chars, render full QR
-        const isShortEnough = permalink.length <= 2200;
+        // Standard QR code limit check: if payload is <= 2500 chars, render full QR
+        const isShortEnough = targetUrl.length <= 2500;
 
         if (isShortEnough) {
-            // High-resolution dedicated QR image with quiet zone & Lowest ECC for ultra-large modules
+            // Ultra-sharp 600x600 QR code rendered with clean 2-module margin and Medium error correction
             const qrImg = document.createElement('img');
             qrImg.alt = 'Scan with Phone Camera';
             qrImg.id = 'pf-qr-image';
-            qrImg.style.cssText = 'width: 250px; height: 250px; display: block; border-radius: 6px; margin: 0 auto; box-shadow: 0 4px 12px rgba(0,0,0,0.08); image-rendering: pixelated;';
-            qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&margin=12&ecc=L&format=png&color=000000&data=${encodeURIComponent(permalink)}`;
+            qrImg.style.cssText = 'width: 280px; height: 280px; display: block; border-radius: 4px; margin: 0 auto; box-shadow: 0 2px 8px rgba(0,0,0,0.06);';
+            qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=600x600&margin=2&ecc=M&format=png&color=000000&data=${encodeURIComponent(targetUrl)}`;
 
             // Offline client-side QRCode fallback
             qrImg.onerror = () => {
@@ -1434,14 +1463,13 @@ function setUnit(u) {
                 if (typeof QRCode !== 'undefined') {
                     try {
                         new QRCode(container, {
-                            text: permalink,
-                            width: 250,
-                            height: 250,
+                            text: targetUrl,
+                            width: 280,
+                            height: 280,
                             colorDark: '#000000',
                             colorLight: '#ffffff',
                             correctLevel: QRCode.CorrectLevel.L
                         });
-                        // qrcodejs creates both a canvas and a hidden img; hide any duplicate img
                         const imgs = container.querySelectorAll('img');
                         const canvases = container.querySelectorAll('canvas');
                         if (canvases.length > 0 && imgs.length > 0) {
@@ -1454,20 +1482,27 @@ function setUnit(u) {
             };
 
             container.appendChild(qrImg);
+
+            if (targetUrl.length > 500) {
+                const hint = document.createElement('div');
+                hint.style.cssText = 'font-size: 11px; color: #64748b; margin-top: 6px; text-align: center;';
+                hint.innerHTML = '💡 <em>Camera can\'t focus? Tap <strong>"🔍 Enlarge QR"</strong> or <strong>"⚡ Simple URL QR"</strong></em>';
+                container.appendChild(hint);
+            }
             return;
         }
 
-        // If code is too large for single QR code matrix (> 2.2 KB):
-        const basePageUrl = window.location.origin + window.location.pathname;
+        // If code is too large (> 2.5 KB)
+        const basePageUrl = getBasePageUrl();
         const qrImg = document.createElement('img');
         qrImg.alt = 'Scan QR Code';
-        qrImg.style.cssText = 'width: 240px; height: 240px; display: block; border-radius: 8px; margin: 0 auto; image-rendering: pixelated;';
-        qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=12&ecc=L&format=png&data=${encodeURIComponent(basePageUrl)}`;
+        qrImg.style.cssText = 'width: 280px; height: 280px; display: block; border-radius: 4px; margin: 0 auto;';
+        qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=600x600&margin=2&ecc=M&format=png&data=${encodeURIComponent(basePageUrl)}`;
         container.appendChild(qrImg);
 
         const notice = document.createElement('div');
-        notice.style.cssText = 'font-size: 11px; color: #fbbf24; margin-top: 8px; max-width: 260px; text-align: center;';
-        notice.innerHTML = `⚠️ Project code is <strong>${Math.round(permalink.length / 1024 * 10) / 10} KB</strong>. Click <strong>"📋 Copy Link"</strong> below to share the full project!`;
+        notice.style.cssText = 'font-size: 11px; color: #fbbf24; margin-top: 8px; max-width: 280px; text-align: center;';
+        notice.innerHTML = `⚠️ Project code is <strong>${Math.round(targetUrl.length / 1024 * 10) / 10} KB</strong>. Click <strong>"📋 Copy Link"</strong> below to share the full project!`;
         container.appendChild(notice);
     }
 
@@ -1951,6 +1986,7 @@ function setUnit(u) {
         updateWifiIp,
         updateCloudUrl,
         toggleZoomQr,
+        toggleQrMode,
         downloadQrImage,
         testPermalink,
         copyPermalink,
