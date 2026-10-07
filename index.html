@@ -290,12 +290,12 @@
                     <div class="pf-share-host-picker">
                         <label style="font-size: 11px; color: #94a3b8; font-weight: 600; text-transform: uppercase;">1. Choose Target Network:</label>
                         <div class="pf-host-options">
-                            <button class="pf-host-btn active" id="pf-host-cloud"
+                            <button class="pf-host-btn" id="pf-host-cloud"
                                 onclick="window.PlaygroundFeatures.setShareHost('cloud')"
                                 title="Works anywhere on any phone worldwide (4G/5G/any Wi-Fi)">
-                                🌐 Cloud Web (Send to Users)
+                                🌐 Cloud Web (codestudio.pragament.com)
                             </button>
-                            <button class="pf-host-btn" id="pf-host-wifi"
+                            <button class="pf-host-btn active" id="pf-host-wifi"
                                 onclick="window.PlaygroundFeatures.setShareHost('wifi')"
                                 title="Use when phone and laptop are on the same Wi-Fi">
                                 🏠 Same Wi-Fi (192.168.1.6)
@@ -307,14 +307,14 @@
                         </div>
 
                         <!-- Editable Cloud URL row -->
-                        <div class="pf-cloud-url-row" id="pf-cloud-url-row" style="display: flex;">
+                        <div class="pf-cloud-url-row" id="pf-cloud-url-row" style="display: none;">
                             <span style="font-size: 11px; color: #94a3b8;">Public URL:</span>
-                            <input type="text" id="pf-cloud-url-input" class="pf-cloud-url-input" value="https://ease-massage-anti-greetings.trycloudflare.com" placeholder="https://..." />
+                            <input type="text" id="pf-cloud-url-input" class="pf-cloud-url-input" value="https://codestudio.pragament.com" placeholder="https://..." />
                             <button class="pf-cloud-url-save-btn" onclick="window.PlaygroundFeatures.updateCloudUrl()">Save URL</button>
                         </div>
 
                         <!-- Editable Wi-Fi IP row -->
-                        <div class="pf-wifi-ip-row" id="pf-wifi-ip-row" style="display: none;">
+                        <div class="pf-wifi-ip-row" id="pf-wifi-ip-row" style="display: flex;">
                             <span style="font-size: 11px; color: #94a3b8;">Laptop Wi-Fi IP:</span>
                             <input type="text" id="pf-wifi-ip-input" class="pf-wifi-ip-input" value="192.168.1.6" placeholder="192.168.x.x" />
                             <button class="pf-wifi-ip-save-btn" onclick="window.PlaygroundFeatures.updateWifiIp()">Save IP</button>

@@ -1205,13 +1205,13 @@ function setUnit(u) {
     // -------------------------------------------------------------
     // 8. CODE IN PERMALINK & QR CODE SHARE
     // -------------------------------------------------------------
-    let currentShareHostMode = 'cloud'; // Default to 'cloud' so links and QR work on ANY network (4G/5G/any Wi-Fi)!
+    let currentShareHostMode = 'wifi'; // Default to 'wifi' for direct phone scanning without needing any .exe tunnels!
     let currentShareViewMode = 'output'; // 'output' (Live Preview) or 'editor' (Code + Output)
-    const DEFAULT_CLOUD_TUNNEL_URL = 'https://ease-massage-anti-greetings.trycloudflare.com';
+    const DEFAULT_CLOUD_TUNNEL_URL = 'https://codestudio.pragament.com';
 
     function getCloudUrl() {
         const stored = localStorage.getItem('pf_cloud_url');
-        if (stored) return stored;
+        if (stored && !stored.includes('trycloudflare.com')) return stored;
         return DEFAULT_CLOUD_TUNNEL_URL;
     }
 
