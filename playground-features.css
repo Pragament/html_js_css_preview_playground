@@ -942,7 +942,6 @@
 .pf-test-btn:hover {
     background: rgba(56, 189, 248, 0.25);
     color: #ffffff;
-}
     filter: brightness(1.1);
 }
 
