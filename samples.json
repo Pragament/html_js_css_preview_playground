@@ -1,0 +1,1516 @@
+[
+  {
+    "id": "multiplication-details",
+    "title": "Multiplication Quiz — Click to Reveal",
+    "badge": "Class 6 · HTML",
+    "category": "HTML",
+    "description": "Choose an answer and expand it to reveal feedback using details and summary.",
+    "html": "<h2>What is 6 × 4?</h2>\n\n<details>\n  <summary>20</summary>\n  Try again!\n</details>\n\n<details>\n  <summary>24</summary>\n  Correct! 🎉\n</details>\n\n<details>\n  <summary>28</summary>\n  Try again!\n</details>",
+    "css": "",
+    "js": "",
+    "classLevels": [
+      6
+    ],
+    "subject": "Interactive multiplication quiz",
+    "difficulty": 1,
+    "prerequisites": [],
+    "topics": [
+      "details and summary"
+    ]
+  },
+  {
+    "id": "multiplication-hover",
+    "title": "Multiplication Quiz — Hover to Reveal",
+    "badge": "Class 6 · CSS",
+    "category": "CSS",
+    "description": "Hover over an answer button to reveal its feedback with CSS.",
+    "html": "<style>\n  button span { display: none }\n  button:hover span { display: inline }\n</style>\n\n<h2>What is 6 × 4?</h2>\n\n<button>20 <span>❌ Try again</span></button>\n<button>24 <span>✅ Correct!</span></button>\n<button>28 <span>❌ Try again</span></button>",
+    "css": "",
+    "js": "",
+    "classLevels": [
+      6
+    ],
+    "subject": "Interactive multiplication quiz",
+    "difficulty": 1,
+    "prerequisites": [],
+    "topics": [
+      "hover selectors"
+    ]
+  },
+  {
+    "id": "class-6-html-1",
+    "title": "Class 6 · HTML · Document skeleton",
+    "badge": "Class 6 · HTML",
+    "category": "HTML",
+    "classLevels": [
+      6
+    ],
+    "subject": "Web structure",
+    "difficulty": 1,
+    "prerequisites": [],
+    "topics": [
+      "Document skeleton"
+    ],
+    "description": "The doctype selects HTML5 standards mode. Head contains metadata; body contains visible page content.",
+    "html": "<!DOCTYPE html>\n<html lang=\"en\">\n<head><title>My page</title></head>\n<body><p>Hello!</p></body>\n</html>",
+    "css": "",
+    "js": ""
+  },
+  {
+    "id": "class-6-html-2",
+    "title": "Class 6 · HTML · Headings and paragraphs",
+    "badge": "Class 6 · HTML",
+    "category": "HTML",
+    "classLevels": [
+      6
+    ],
+    "subject": "Web structure",
+    "difficulty": 1,
+    "prerequisites": [],
+    "topics": [
+      "Headings and paragraphs"
+    ],
+    "description": "Headings organize content. Paragraphs group sentences; br inserts a line break within text.",
+    "html": "<h1>My school</h1>\n<p>Welcome!<br>Come and learn.</p>",
+    "css": "",
+    "js": ""
+  },
+  {
+    "id": "class-6-html-3",
+    "title": "Class 6 · HTML · Links and images",
+    "badge": "Class 6 · HTML",
+    "category": "HTML",
+    "classLevels": [
+      6
+    ],
+    "subject": "Web structure",
+    "difficulty": 1,
+    "prerequisites": [],
+    "topics": [
+      "Links and images"
+    ],
+    "description": "Anchor links use href, while images load their source from src.",
+    "html": "<a href=\"#school\">Visit</a>\n<img src=\"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22640%22%20height%3D%22480%22%20viewBox%3D%220%200%20640%20480%22%3E%3Crect%20width%3D%22640%22%20height%3D%22480%22%20fill%3D%22%23dbeafe%22/%3E%3Ccircle%20cx%3D%22320%22%20cy%3D%22200%22%20r%3D%2290%22%20fill%3D%22%23facc15%22/%3E%3Cpath%20d%3D%22M0%20480%20L180%20240%20L360%20480%20M240%20480%20L460%20200%20L640%20480%22%20fill%3D%22%2322c55e%22/%3E%3Ctext%20x%3D%2224%22%20y%3D%22450%22%20font-size%3D%2228%22%3ESchool%20garden%3C/text%3E%3C/svg%3E\" alt=\"Our school building\">\n<p id=\"school\">Welcome to our school!</p>",
+    "css": "",
+    "js": ""
+  },
+  {
+    "id": "class-6-html-4",
+    "title": "Class 6 · HTML · Lists",
+    "badge": "Class 6 · HTML",
+    "category": "HTML",
+    "classLevels": [
+      6
+    ],
+    "subject": "Web structure",
+    "difficulty": 1,
+    "prerequisites": [],
+    "topics": [
+      "Lists"
+    ],
+    "description": "Use unordered lists when order does not matter and ordered lists for steps or rankings.",
+    "html": "<ul><li>Apple</li><li>Mango</li></ul>\n<ol><li>Read</li><li>Practice</li></ol>",
+    "css": "",
+    "js": ""
+  },
+  {
+    "id": "class-6-html-5",
+    "title": "Class 6 · HTML · Page title and language",
+    "badge": "Class 6 · HTML",
+    "category": "HTML",
+    "classLevels": [
+      6
+    ],
+    "subject": "Web structure",
+    "difficulty": 1,
+    "prerequisites": [],
+    "topics": [
+      "Page title and language"
+    ],
+    "description": "Title names the browser tab. Lang helps screen readers pronounce the page correctly.",
+    "html": "<!DOCTYPE html>\n<html lang=\"en\"><head><title>Class 6</title></head>\n<body><p>My first page</p></body></html>",
+    "css": "",
+    "js": ""
+  },
+  {
+    "id": "class-6-html-6",
+    "title": "Class 6 · HTML · Meaning and emphasis",
+    "badge": "Class 6 · HTML",
+    "category": "HTML",
+    "classLevels": [
+      6
+    ],
+    "subject": "Web structure",
+    "difficulty": 1,
+    "prerequisites": [],
+    "topics": [
+      "Meaning and emphasis"
+    ],
+    "description": "Strong and em communicate meaning. Useful alternative text describes informative images; decorative images use alt=\"\".",
+    "html": "<p><strong>Warning:</strong> Walk <em>carefully</em>.</p>\n<img src=\"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22640%22%20height%3D%22480%22%20viewBox%3D%220%200%20640%20480%22%3E%3Crect%20width%3D%22640%22%20height%3D%22480%22%20fill%3D%22%23dbeafe%22/%3E%3Ccircle%20cx%3D%22320%22%20cy%3D%22200%22%20r%3D%2290%22%20fill%3D%22%23facc15%22/%3E%3Cpath%20d%3D%22M0%20480%20L180%20240%20L360%20480%20M240%20480%20L460%20200%20L640%20480%22%20fill%3D%22%2322c55e%22/%3E%3Ctext%20x%3D%2224%22%20y%3D%22450%22%20font-size%3D%2228%22%3ESchool%20garden%3C/text%3E%3C/svg%3E\" alt=\"Map showing the school entrance\">",
+    "css": "",
+    "js": ""
+  },
+  {
+    "id": "class-6-css-7",
+    "title": "Class 6 · CSS · CSS rules",
+    "badge": "Class 6 · CSS",
+    "category": "CSS",
+    "classLevels": [
+      6
+    ],
+    "subject": "Web styling",
+    "difficulty": 1,
+    "prerequisites": [],
+    "topics": [
+      "CSS rules"
+    ],
+    "description": "A selector chooses elements. A colon separates a property from its value, and a semicolon separates declarations.",
+    "html": "<h2>Styling a paragraph</h2><p>This paragraph matches the p selector.</p>",
+    "css": "p { color: blue; }",
+    "js": ""
+  },
+  {
+    "id": "class-6-css-8",
+    "title": "Class 6 · CSS · Text and background colors",
+    "badge": "Class 6 · CSS",
+    "category": "CSS",
+    "classLevels": [
+      6
+    ],
+    "subject": "Web styling",
+    "difficulty": 1,
+    "prerequisites": [],
+    "topics": [
+      "Text and background colors"
+    ],
+    "description": "Choose readable text and background colors with enough contrast.",
+    "html": "<h2>Color contrast</h2><p>Read this text on its colored background.</p>",
+    "css": "p { color: navy; background-color: lightyellow; }",
+    "js": ""
+  },
+  {
+    "id": "class-6-css-9",
+    "title": "Class 6 · CSS · Font basics",
+    "badge": "Class 6 · CSS",
+    "category": "CSS",
+    "classLevels": [
+      6
+    ],
+    "subject": "Web styling",
+    "difficulty": 1,
+    "prerequisites": [],
+    "topics": [
+      "Font basics"
+    ],
+    "description": "Font families choose typefaces; font size and weight control size and thickness.",
+    "html": "<h2>Font experiment</h2><p>Change the font family, size, and weight.</p>",
+    "css": "p { font-family: sans-serif; font-size: 18px; font-weight: bold; }",
+    "js": ""
+  },
+  {
+    "id": "class-6-css-10",
+    "title": "Class 6 · CSS · Connecting a stylesheet",
+    "badge": "Class 6 · CSS",
+    "category": "CSS",
+    "classLevels": [
+      6
+    ],
+    "subject": "Web styling",
+    "difficulty": 1,
+    "prerequisites": [],
+    "topics": [
+      "Connecting a stylesheet"
+    ],
+    "description": "Link a CSS file from the document head so several pages can share the same styles.",
+    "html": "<h2>One stylesheet, many elements</h2><p>The CSS editor acts as our stylesheet.</p><p>Edit its rules to update both paragraphs.</p>",
+    "css": "p { color: navy; background-color: lightyellow; padding: 12px; }",
+    "js": ""
+  },
+  {
+    "id": "class-6-css-11",
+    "title": "Class 6 · CSS · Spacing",
+    "badge": "Class 6 · CSS",
+    "category": "CSS",
+    "classLevels": [
+      6
+    ],
+    "subject": "Web styling",
+    "difficulty": 1,
+    "prerequisites": [],
+    "topics": [
+      "Spacing"
+    ],
+    "description": "Padding separates content from its border; margin separates the element from its neighbors.",
+    "html": "<h2>Inside and outside spacing</h2><article>Content inside a bordered article.</article><article>Another article shows the margin between boxes.</article>",
+    "css": "article { padding: 16px; margin: 12px; border: 1px solid navy; }",
+    "js": ""
+  },
+  {
+    "id": "class-6-css-12",
+    "title": "Class 6 · CSS · Dimensions and alignment",
+    "badge": "Class 6 · CSS",
+    "category": "CSS",
+    "classLevels": [
+      6
+    ],
+    "subject": "Web styling",
+    "difficulty": 1,
+    "prerequisites": [],
+    "topics": [
+      "Dimensions and alignment"
+    ],
+    "description": "Width and height size an element. Text-align positions inline content within its container.",
+    "html": "<h2>Size a box</h2><div>A 200 × 100 box</div>",
+    "css": "div { width: 200px; height: 100px; text-align: center; }",
+    "js": ""
+  },
+  {
+    "id": "class-6-javascript-13",
+    "title": "Class 6 · JavaScript · Variables",
+    "badge": "Class 6 · JavaScript",
+    "category": "JavaScript",
+    "classLevels": [
+      6
+    ],
+    "subject": "Programming fundamentals",
+    "difficulty": 1,
+    "prerequisites": [],
+    "topics": [
+      "Variables"
+    ],
+    "description": "Let permits reassignment. Const prevents reassignment of the binding; objects stored in it can still change.",
+    "html": "<h2>Variables</h2>\n<p id=\"result\">Watch the result below.</p>\n<pre id=\"sample-output\" aria-live=\"polite\"></pre>",
+    "css": "",
+    "js": "const output = document.getElementById('sample-output');\nfunction show(...values) {\n  output.textContent += values.map(value => typeof value === 'object' ? JSON.stringify(value) : String(value)).join(' ') + '\\n';\n}\nlet score = 0;\nscore = 10;\nconst player = \"Asha\";\nshow(\"Score:\", score, \"Player:\", player);"
+  },
+  {
+    "id": "class-6-javascript-14",
+    "title": "Class 6 · JavaScript · Basic values",
+    "badge": "Class 6 · JavaScript",
+    "category": "JavaScript",
+    "classLevels": [
+      6
+    ],
+    "subject": "Programming fundamentals",
+    "difficulty": 1,
+    "prerequisites": [],
+    "topics": [
+      "Basic values"
+    ],
+    "description": "Strings store text, numbers store numeric values, and booleans represent true or false.",
+    "html": "<h2>Basic values</h2>\n<p id=\"result\">Watch the result below.</p>\n<pre id=\"sample-output\" aria-live=\"polite\"></pre>",
+    "css": "",
+    "js": "const output = document.getElementById('sample-output');\nfunction show(...values) {\n  output.textContent += values.map(value => typeof value === 'object' ? JSON.stringify(value) : String(value)).join(' ') + '\\n';\n}\nconst greeting = \"Hello\";\nconst age = 12;\nconst isReady = true;\nshow(greeting, age, isReady);"
+  },
+  {
+    "id": "class-6-javascript-15",
+    "title": "Class 6 · JavaScript · Console output",
+    "badge": "Class 6 · JavaScript",
+    "category": "JavaScript",
+    "classLevels": [
+      6
+    ],
+    "subject": "Programming fundamentals",
+    "difficulty": 1,
+    "prerequisites": [],
+    "topics": [
+      "Console output"
+    ],
+    "description": "Console.log helps inspect values while writing or debugging a program.",
+    "html": "<h2>Console output</h2>\n<p id=\"result\">Watch the result below.</p>\n<pre id=\"sample-output\" aria-live=\"polite\"></pre>",
+    "css": "",
+    "js": "const output = document.getElementById('sample-output');\nfunction show(...values) {\n  output.textContent += values.map(value => typeof value === 'object' ? JSON.stringify(value) : String(value)).join(' ') + '\\n';\n}\nshow(\"Hello, class 6!\");"
+  },
+  {
+    "id": "class-6-javascript-16",
+    "title": "Class 6 · JavaScript · Arithmetic",
+    "badge": "Class 6 · JavaScript",
+    "category": "JavaScript",
+    "classLevels": [
+      6
+    ],
+    "subject": "Programming fundamentals",
+    "difficulty": 1,
+    "prerequisites": [],
+    "topics": [
+      "Arithmetic"
+    ],
+    "description": "Numbers support arithmetic operators. Parentheses can control the calculation order.",
+    "html": "<h2>Arithmetic</h2>\n<p id=\"result\">Watch the result below.</p>\n<pre id=\"sample-output\" aria-live=\"polite\"></pre>",
+    "css": "",
+    "js": "const output = document.getElementById('sample-output');\nfunction show(...values) {\n  output.textContent += values.map(value => typeof value === 'object' ? JSON.stringify(value) : String(value)).join(' ') + '\\n';\n}\nshow(8 + 2);\nshow(8 * 2);\nshow(8 / 2);"
+  },
+  {
+    "id": "class-6-javascript-17",
+    "title": "Class 6 · JavaScript · Comments",
+    "badge": "Class 6 · JavaScript",
+    "category": "JavaScript",
+    "classLevels": [
+      6
+    ],
+    "subject": "Programming fundamentals",
+    "difficulty": 1,
+    "prerequisites": [],
+    "topics": [
+      "Comments"
+    ],
+    "description": "Comments explain intent and are ignored when JavaScript executes.",
+    "html": "<h2>Comments</h2>\n<p id=\"result\">Watch the result below.</p>\n<pre id=\"sample-output\" aria-live=\"polite\"></pre>",
+    "css": "",
+    "js": "const output = document.getElementById('sample-output');\nfunction show(...values) {\n  output.textContent += values.map(value => typeof value === 'object' ? JSON.stringify(value) : String(value)).join(' ') + '\\n';\n}\n// This is a single-line comment.\n/* This comment\n   spans two lines. */\nshow(\"Comments explain the code without running as instructions.\");"
+  },
+  {
+    "id": "class-6-javascript-18",
+    "title": "Class 6 · JavaScript · Joining text",
+    "badge": "Class 6 · JavaScript",
+    "category": "JavaScript",
+    "classLevels": [
+      6
+    ],
+    "subject": "Programming fundamentals",
+    "difficulty": 1,
+    "prerequisites": [],
+    "topics": [
+      "Joining text"
+    ],
+    "description": "Joining strings is called concatenation. Both single and double quotation marks can delimit strings.",
+    "html": "<h2>Joining text</h2>\n<p id=\"result\">Watch the result below.</p>\n<pre id=\"sample-output\" aria-live=\"polite\"></pre>",
+    "css": "",
+    "js": "const output = document.getElementById('sample-output');\nfunction show(...values) {\n  output.textContent += values.map(value => typeof value === 'object' ? JSON.stringify(value) : String(value)).join(' ') + '\\n';\n}\nconst name = \"Asha\";\nshow(\"Hello, \" + name);"
+  },
+  {
+    "id": "class-7-html-19",
+    "title": "Class 7 · HTML · Semantic page sections",
+    "badge": "Class 7 · HTML",
+    "category": "HTML",
+    "classLevels": [
+      7
+    ],
+    "subject": "Web structure",
+    "difficulty": 1,
+    "prerequisites": [
+      "HTML foundations"
+    ],
+    "topics": [
+      "Semantic page sections"
+    ],
+    "description": "Semantic elements describe page regions and make navigation easier for assistive technology.",
+    "html": "<nav><a href=\"#news\">News</a></nav>\n<main id=\"news\"><h1>School news</h1></main>\n<footer>School club</footer>",
+    "css": "",
+    "js": ""
+  },
+  {
+    "id": "class-7-html-20",
+    "title": "Class 7 · HTML · Tables",
+    "badge": "Class 7 · HTML",
+    "category": "HTML",
+    "classLevels": [
+      7
+    ],
+    "subject": "Web structure",
+    "difficulty": 1,
+    "prerequisites": [
+      "HTML foundations"
+    ],
+    "topics": [
+      "Tables"
+    ],
+    "description": "Tables represent tabular data. Captions and correctly marked headers improve accessibility.",
+    "html": "<table><caption>Scores</caption>\n<tr><th scope=\"col\">Name</th><th scope=\"col\">Score</th></tr>\n<tr><td>Asha</td><td>10</td></tr></table>",
+    "css": "",
+    "js": ""
+  },
+  {
+    "id": "class-7-html-21",
+    "title": "Class 7 · HTML · Form labels",
+    "badge": "Class 7 · HTML",
+    "category": "HTML",
+    "classLevels": [
+      7
+    ],
+    "subject": "Web structure",
+    "difficulty": 1,
+    "prerequisites": [
+      "HTML foundations"
+    ],
+    "topics": [
+      "Form labels"
+    ],
+    "description": "Associate labels and controls so users can identify fields and click their labels to focus them.",
+    "html": "<label for=\"name\">Name</label>\n<input id=\"name\" name=\"name\" type=\"text\">",
+    "css": "",
+    "js": ""
+  },
+  {
+    "id": "class-7-html-22",
+    "title": "Class 7 · HTML · Form controls",
+    "badge": "Class 7 · HTML",
+    "category": "HTML",
+    "classLevels": [
+      7
+    ],
+    "subject": "Web structure",
+    "difficulty": 1,
+    "prerequisites": [
+      "HTML foundations"
+    ],
+    "topics": [
+      "Form controls"
+    ],
+    "description": "Select offers a list of choices. Textarea accepts multiple lines of text.",
+    "html": "<label for=\"club\">Club</label>\n<select id=\"club\"><option>Art</option><option>Science</option></select>\n<label for=\"note\">Note</label><textarea id=\"note\"></textarea>",
+    "css": "",
+    "js": ""
+  },
+  {
+    "id": "class-7-html-23",
+    "title": "Class 7 · HTML · Containers and identifiers",
+    "badge": "Class 7 · HTML",
+    "category": "HTML",
+    "classLevels": [
+      7
+    ],
+    "subject": "Web structure",
+    "difficulty": 1,
+    "prerequisites": [
+      "HTML foundations"
+    ],
+    "topics": [
+      "Containers and identifiers"
+    ],
+    "description": "Use meaningful semantic elements when available. Class values can be shared; an id identifies one element in a document.",
+    "html": "<div class=\"card\"><p>Hello <span class=\"name\">Asha</span></p></div>",
+    "css": "",
+    "js": ""
+  },
+  {
+    "id": "class-7-html-24",
+    "title": "Class 7 · HTML · Paths and fragments",
+    "badge": "Class 7 · HTML",
+    "category": "HTML",
+    "classLevels": [
+      7
+    ],
+    "subject": "Web structure",
+    "difficulty": 1,
+    "prerequisites": [
+      "HTML foundations"
+    ],
+    "topics": [
+      "Paths and fragments"
+    ],
+    "description": "Fragments jump to element ids. Relative paths locate files in relation to the current document.",
+    "html": "<a href=\"#contact\">Contact</a>\n<!-- A parent-folder link would use href=\"../index.html\". -->\n<section id=\"contact\"><h2>Contact</h2></section>",
+    "css": "",
+    "js": ""
+  },
+  {
+    "id": "class-7-css-25",
+    "title": "Class 7 · CSS · Class and id selectors",
+    "badge": "Class 7 · CSS",
+    "category": "CSS",
+    "classLevels": [
+      7
+    ],
+    "subject": "Web styling",
+    "difficulty": 1,
+    "prerequisites": [
+      "CSS foundations"
+    ],
+    "topics": [
+      "Class and id selectors"
+    ],
+    "description": "A dot selects a class; a hash selects an id. Element selectors use the tag name without a prefix.",
+    "html": "<h2>Classes and identifiers</h2><div class=\"card\">A reusable card</div><div class=\"card\" id=\"featured\">A featured card</div>",
+    "css": ".card { padding: 12px; }\n#featured { border: 2px solid navy; }",
+    "js": ""
+  },
+  {
+    "id": "class-7-css-26",
+    "title": "Class 7 · CSS · Borders and rounded corners",
+    "badge": "Class 7 · CSS",
+    "category": "CSS",
+    "classLevels": [
+      7
+    ],
+    "subject": "Web styling",
+    "difficulty": 1,
+    "prerequisites": [
+      "CSS foundations"
+    ],
+    "topics": [
+      "Borders and rounded corners"
+    ],
+    "description": "Border combines width, style, and color. Border-radius rounds corners.",
+    "html": "<h2>A rounded card</h2><div class=\"card\">Change my border and corner radius.</div>",
+    "css": ".card { border: 2px solid navy; border-radius: 10px; }",
+    "js": ""
+  },
+  {
+    "id": "class-7-css-27",
+    "title": "Class 7 · CSS · Display modes",
+    "badge": "Class 7 · CSS",
+    "category": "CSS",
+    "classLevels": [
+      7
+    ],
+    "subject": "Web styling",
+    "difficulty": 1,
+    "prerequisites": [
+      "CSS foundations"
+    ],
+    "topics": [
+      "Display modes"
+    ],
+    "description": "Display affects layout participation. Display none also hides content from the accessibility tree.",
+    "html": "<h2>Display modes</h2><span class=\"panel\">A block panel</span><div class=\"tag\">An inline tag</div><div class=\"tag\">Another inline tag</div><p class=\"hidden\">Hidden content</p>",
+    "css": ".panel { display: block; }\n.tag { display: inline; }\n.hidden { display: none; }",
+    "js": ""
+  },
+  {
+    "id": "class-7-css-28",
+    "title": "Class 7 · CSS · Hover and focus",
+    "badge": "Class 7 · CSS",
+    "category": "CSS",
+    "classLevels": [
+      7
+    ],
+    "subject": "Web styling",
+    "difficulty": 1,
+    "prerequisites": [
+      "CSS foundations"
+    ],
+    "topics": [
+      "Hover and focus"
+    ],
+    "description": "Keep a visible focus indicator so keyboard users can see where they are.",
+    "html": "<h2>Pointer and keyboard states</h2><a href=\"#example\">Hover over this link</a><p id=\"example\">Use Tab to focus the button.</p><button>Focus me</button>",
+    "css": "a:hover { text-decoration: underline; }\nbutton:focus { outline: 3px solid orange; }",
+    "js": ""
+  },
+  {
+    "id": "class-7-css-29",
+    "title": "Class 7 · CSS · Cascade basics",
+    "badge": "Class 7 · CSS",
+    "category": "CSS",
+    "classLevels": [
+      7
+    ],
+    "subject": "Web styling",
+    "difficulty": 1,
+    "prerequisites": [
+      "CSS foundations"
+    ],
+    "topics": [
+      "Cascade basics"
+    ],
+    "description": "Within the same cascade origin, importance and layer, specificity breaks ties; source order resolves equal specificity.",
+    "html": "<h2>Which color wins?</h2><p>Two p rules compete.</p><p class=\"notice\">A class selector has more specificity.</p>",
+    "css": "p { color: blue; }\np { color: green; }\n.notice { color: navy; }",
+    "js": ""
+  },
+  {
+    "id": "class-7-css-30",
+    "title": "Class 7 · CSS · Box sizing and units",
+    "badge": "Class 7 · CSS",
+    "category": "CSS",
+    "classLevels": [
+      7
+    ],
+    "subject": "Web styling",
+    "difficulty": 1,
+    "prerequisites": [
+      "CSS foundations"
+    ],
+    "topics": [
+      "Box sizing and units"
+    ],
+    "description": "Border-box makes sizing easier to predict. Rem supports sizing relative to the document root font.",
+    "html": "<h2>Predictable sizing</h2><div class=\"card\">A 20rem card including its padding.</div>",
+    "css": "* { box-sizing: border-box; }\n.card { width: 20rem; padding: 1rem; }",
+    "js": ""
+  },
+  {
+    "id": "class-7-javascript-31",
+    "title": "Class 7 · JavaScript · Comparisons",
+    "badge": "Class 7 · JavaScript",
+    "category": "JavaScript",
+    "classLevels": [
+      7
+    ],
+    "subject": "Programming fundamentals",
+    "difficulty": 1,
+    "prerequisites": [
+      "JavaScript foundations"
+    ],
+    "topics": [
+      "Comparisons"
+    ],
+    "description": "Strict comparisons do not convert a string to a number before checking equality.",
+    "html": "<h2>Comparisons</h2>\n<p id=\"result\">Watch the result below.</p>\n<pre id=\"sample-output\" aria-live=\"polite\"></pre>",
+    "css": "",
+    "js": "const output = document.getElementById('sample-output');\nfunction show(...values) {\n  output.textContent += values.map(value => typeof value === 'object' ? JSON.stringify(value) : String(value)).join(' ') + '\\n';\n}\nshow(3 === 3);\nshow(3 !== \"3\");\nshow(10 >= 8);"
+  },
+  {
+    "id": "class-7-javascript-32",
+    "title": "Class 7 · JavaScript · Decisions",
+    "badge": "Class 7 · JavaScript",
+    "category": "JavaScript",
+    "classLevels": [
+      7
+    ],
+    "subject": "Programming fundamentals",
+    "difficulty": 1,
+    "prerequisites": [
+      "JavaScript foundations"
+    ],
+    "topics": [
+      "Decisions"
+    ],
+    "description": "If executes a branch when its condition is truthy; else runs when it is falsy.",
+    "html": "<h2>Decisions</h2>\n<p id=\"result\">Watch the result below.</p>\n<pre id=\"sample-output\" aria-live=\"polite\"></pre>",
+    "css": "",
+    "js": "const output = document.getElementById('sample-output');\nfunction show(...values) {\n  output.textContent += values.map(value => typeof value === 'object' ? JSON.stringify(value) : String(value)).join(' ') + '\\n';\n}\nconst score = 8;\nif (score >= 5) { show(\"Pass\"); }\nelse { show(\"Keep practicing\"); }"
+  },
+  {
+    "id": "class-7-javascript-33",
+    "title": "Class 7 · JavaScript · Logical operators",
+    "badge": "Class 7 · JavaScript",
+    "category": "JavaScript",
+    "classLevels": [
+      7
+    ],
+    "subject": "Programming fundamentals",
+    "difficulty": 1,
+    "prerequisites": [
+      "JavaScript foundations"
+    ],
+    "topics": [
+      "Logical operators"
+    ],
+    "description": "Logical operators combine conditions or negate them.",
+    "html": "<h2>Logical operators</h2>\n<p id=\"result\">Watch the result below.</p>\n<pre id=\"sample-output\" aria-live=\"polite\"></pre>",
+    "css": "",
+    "js": "const output = document.getElementById('sample-output');\nfunction show(...values) {\n  output.textContent += values.map(value => typeof value === 'object' ? JSON.stringify(value) : String(value)).join(' ') + '\\n';\n}\nconst age = 12;\nconst hasPermission = true;\nshow(age >= 10 && hasPermission);\nshow(!hasPermission);"
+  },
+  {
+    "id": "class-7-javascript-34",
+    "title": "Class 7 · JavaScript · For loops",
+    "badge": "Class 7 · JavaScript",
+    "category": "JavaScript",
+    "classLevels": [
+      7
+    ],
+    "subject": "Programming fundamentals",
+    "difficulty": 1,
+    "prerequisites": [
+      "JavaScript foundations"
+    ],
+    "topics": [
+      "For loops"
+    ],
+    "description": "A for loop combines initialization, a continuation condition, and an update expression.",
+    "html": "<h2>For loops</h2>\n<p id=\"result\">Watch the result below.</p>\n<pre id=\"sample-output\" aria-live=\"polite\"></pre>",
+    "css": "",
+    "js": "const output = document.getElementById('sample-output');\nfunction show(...values) {\n  output.textContent += values.map(value => typeof value === 'object' ? JSON.stringify(value) : String(value)).join(' ') + '\\n';\n}\nfor (let i = 0; i < 3; i++) {\n  show(i);\n}"
+  },
+  {
+    "id": "class-7-javascript-35",
+    "title": "Class 7 · JavaScript · Arrays",
+    "badge": "Class 7 · JavaScript",
+    "category": "JavaScript",
+    "classLevels": [
+      7
+    ],
+    "subject": "Programming fundamentals",
+    "difficulty": 1,
+    "prerequisites": [
+      "JavaScript foundations"
+    ],
+    "topics": [
+      "Arrays"
+    ],
+    "description": "Arrays store ordered values with zero-based indexes.",
+    "html": "<h2>Arrays</h2>\n<p id=\"result\">Watch the result below.</p>\n<pre id=\"sample-output\" aria-live=\"polite\"></pre>",
+    "css": "",
+    "js": "const output = document.getElementById('sample-output');\nfunction show(...values) {\n  output.textContent += values.map(value => typeof value === 'object' ? JSON.stringify(value) : String(value)).join(' ') + '\\n';\n}\nconst colors = [\"red\", \"blue\"];\nshow(colors[0]);\nshow(colors.length);"
+  },
+  {
+    "id": "class-7-javascript-36",
+    "title": "Class 7 · JavaScript · Functions",
+    "badge": "Class 7 · JavaScript",
+    "category": "JavaScript",
+    "classLevels": [
+      7
+    ],
+    "subject": "Programming fundamentals",
+    "difficulty": 1,
+    "prerequisites": [
+      "JavaScript foundations"
+    ],
+    "topics": [
+      "Functions"
+    ],
+    "description": "Functions group reusable instructions. Parameters receive arguments supplied by the caller.",
+    "html": "<h2>Functions</h2>\n<p id=\"result\">Watch the result below.</p>\n<pre id=\"sample-output\" aria-live=\"polite\"></pre>",
+    "css": "",
+    "js": "const output = document.getElementById('sample-output');\nfunction show(...values) {\n  output.textContent += values.map(value => typeof value === 'object' ? JSON.stringify(value) : String(value)).join(' ') + '\\n';\n}\nfunction add(a, b) { return a + b; }\nshow(add(2, 3));"
+  },
+  {
+    "id": "class-8-html-37",
+    "title": "Class 8 · HTML · Input types",
+    "badge": "Class 8 · HTML",
+    "category": "HTML",
+    "classLevels": [
+      8
+    ],
+    "subject": "Web structure",
+    "difficulty": 1,
+    "prerequisites": [
+      "HTML foundations"
+    ],
+    "topics": [
+      "Input types"
+    ],
+    "description": "Input types supply appropriate controls and built-in validation. Required prevents empty submission.",
+    "html": "<form><label>Email <input type=\"email\" name=\"email\" required></label>\n<label>Age <input type=\"number\" name=\"age\" min=\"1\"></label><button>Send</button></form>\n<p id=\"results\" role=\"status\"></p>",
+    "css": "",
+    "js": "document.querySelector('form').addEventListener('submit', event => {\n  event.preventDefault();\n  document.getElementById('results').textContent = 'Form submitted: ' + new URLSearchParams(new FormData(event.currentTarget)).toString();\n});"
+  },
+  {
+    "id": "class-8-html-38",
+    "title": "Class 8 · HTML · Forms and submission",
+    "badge": "Class 8 · HTML",
+    "category": "HTML",
+    "classLevels": [
+      8
+    ],
+    "subject": "Web structure",
+    "difficulty": 1,
+    "prerequisites": [
+      "HTML foundations"
+    ],
+    "topics": [
+      "Forms and submission"
+    ],
+    "description": "Action sets the target URL. Method selects the request method; named, enabled controls contribute submitted data.",
+    "html": "<form action=\"#results\" method=\"get\">\n<label>Search <input name=\"q\"></label><button type=\"submit\">Search</button></form>\n<p id=\"results\" role=\"status\"></p>",
+    "css": "",
+    "js": "document.querySelector('form').addEventListener('submit', event => {\n  event.preventDefault();\n  document.getElementById('results').textContent = 'Form submitted: ' + new URLSearchParams(new FormData(event.currentTarget)).toString();\n});"
+  },
+  {
+    "id": "class-8-html-39",
+    "title": "Class 8 · HTML · Audio and video",
+    "badge": "Class 8 · HTML",
+    "category": "HTML",
+    "classLevels": [
+      8
+    ],
+    "subject": "Web structure",
+    "difficulty": 1,
+    "prerequisites": [
+      "HTML foundations"
+    ],
+    "topics": [
+      "Audio and video"
+    ],
+    "description": "Native controls support playback. Videos with speech should include captions.",
+    "html": "<h2>Audio and video controls</h2>\n<audio controls src=\"data:audio/wav;base64,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\"></audio>\n<p>Play the short tone above. Replace the video source below with your own captioned video.</p>\n<video controls width=\"280\" poster=\"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22640%22%20height%3D%22480%22%20viewBox%3D%220%200%20640%20480%22%3E%3Crect%20width%3D%22640%22%20height%3D%22480%22%20fill%3D%22%23dbeafe%22/%3E%3Ccircle%20cx%3D%22320%22%20cy%3D%22200%22%20r%3D%2290%22%20fill%3D%22%23facc15%22/%3E%3Cpath%20d%3D%22M0%20480%20L180%20240%20L360%20480%20M240%20480%20L460%20200%20L640%20480%22%20fill%3D%22%2322c55e%22/%3E%3Ctext%20x%3D%2224%22%20y%3D%22450%22%20font-size%3D%2228%22%3ESchool%20garden%3C/text%3E%3C/svg%3E\"><track kind=\"captions\" srclang=\"en\" label=\"English\"></video>",
+    "css": "",
+    "js": ""
+  },
+  {
+    "id": "class-8-html-40",
+    "title": "Class 8 · HTML · Accessible buttons",
+    "badge": "Class 8 · HTML",
+    "category": "HTML",
+    "classLevels": [
+      8
+    ],
+    "subject": "Web structure",
+    "difficulty": 2,
+    "prerequisites": [
+      "HTML foundations"
+    ],
+    "topics": [
+      "Accessible buttons"
+    ],
+    "description": "Native buttons support keyboard operation. An accessible name tells assistive technology what the action does.",
+    "html": "<button type=\"button\" aria-label=\"Close dialog\">×</button>",
+    "css": "",
+    "js": ""
+  },
+  {
+    "id": "class-8-html-41",
+    "title": "Class 8 · HTML · Viewport and character encoding",
+    "badge": "Class 8 · HTML",
+    "category": "HTML",
+    "classLevels": [
+      8
+    ],
+    "subject": "Web structure",
+    "difficulty": 2,
+    "prerequisites": [
+      "HTML foundations"
+    ],
+    "topics": [
+      "Viewport and character encoding"
+    ],
+    "description": "UTF-8 supports international text. The viewport tag helps layouts fit mobile device widths.",
+    "html": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n<title>Responsive page</title>\n</head>\n<body>\n<h2>A mobile-ready page</h2>\n<p>UTF-8 supports text such as नमस्ते. The viewport meta tag lets this page fit the phone width.</p>\n</body>\n</html>",
+    "css": "",
+    "js": ""
+  },
+  {
+    "id": "class-8-html-42",
+    "title": "Class 8 · HTML · Loading scripts",
+    "badge": "Class 8 · HTML",
+    "category": "HTML",
+    "classLevels": [
+      8
+    ],
+    "subject": "Web structure",
+    "difficulty": 2,
+    "prerequisites": [
+      "HTML foundations"
+    ],
+    "topics": [
+      "Loading scripts"
+    ],
+    "description": "Defer allows HTML parsing to continue while a classic external script downloads, then executes it before DOMContentLoaded.",
+    "html": "<h2>Deferred external script</h2><p id=\"message\">Waiting for the script…</p>\n<script src=\"data:text/javascript,document.getElementById('message').textContent%3D'Deferred%20script%20loaded!'\" defer></script>",
+    "css": "",
+    "js": ""
+  },
+  {
+    "id": "class-8-css-43",
+    "title": "Class 8 · CSS · Flexbox",
+    "badge": "Class 8 · CSS",
+    "category": "CSS",
+    "classLevels": [
+      8
+    ],
+    "subject": "Web styling",
+    "difficulty": 1,
+    "prerequisites": [
+      "CSS foundations"
+    ],
+    "topics": [
+      "Flexbox"
+    ],
+    "description": "In a default row flex container, the main axis is horizontal and the cross axis is vertical.",
+    "html": "<h2>Flexbox alignment</h2><div class=\"row\"><button>One</button><button>Two</button><button>Three</button></div>",
+    "css": ".row { display: flex; justify-content: center; align-items: center; gap: 1rem; }",
+    "js": ""
+  },
+  {
+    "id": "class-8-css-44",
+    "title": "Class 8 · CSS · Grid layout",
+    "badge": "Class 8 · CSS",
+    "category": "CSS",
+    "classLevels": [
+      8
+    ],
+    "subject": "Web styling",
+    "difficulty": 1,
+    "prerequisites": [
+      "CSS foundations"
+    ],
+    "topics": [
+      "Grid layout"
+    ],
+    "description": "Grid arranges elements in rows and columns. Fr shares available space between flexible tracks.",
+    "html": "<h2>Three-column grid</h2><div class=\"gallery\"><button>One</button><button>Two</button><button>Three</button><button>Four</button></div>",
+    "css": ".gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }",
+    "js": ""
+  },
+  {
+    "id": "class-8-css-45",
+    "title": "Class 8 · CSS · Responsive breakpoints",
+    "badge": "Class 8 · CSS",
+    "category": "CSS",
+    "classLevels": [
+      8
+    ],
+    "subject": "Web styling",
+    "difficulty": 1,
+    "prerequisites": [
+      "CSS foundations"
+    ],
+    "topics": [
+      "Responsive breakpoints"
+    ],
+    "description": "Media queries adapt presentation to available space without changing content.",
+    "html": "<h2>Responsive cards</h2><p>Resize the preview to change the column count.</p><div class=\"cards\"><button>One</button><button>Two</button><button>Three</button></div>",
+    "css": ".cards { display: grid; grid-template-columns: repeat(3, 1fr); }\n@media (max-width: 600px) { .cards { grid-template-columns: 1fr; } }",
+    "js": ""
+  },
+  {
+    "id": "class-8-css-46",
+    "title": "Class 8 · CSS · Positioning",
+    "badge": "Class 8 · CSS",
+    "category": "CSS",
+    "classLevels": [
+      8
+    ],
+    "subject": "Web styling",
+    "difficulty": 2,
+    "prerequisites": [
+      "CSS foundations"
+    ],
+    "topics": [
+      "Positioning"
+    ],
+    "description": "An absolutely positioned child often uses its nearest positioned ancestor as its containing block.",
+    "html": "<h2>A positioned badge</h2><div class=\"card\" style=\"height:120px;border:1px solid\"><span class=\"badge\">NEW</span>Card content</div>",
+    "css": ".card { position: relative; }\n.badge { position: absolute; top: 0; right: 0; }",
+    "js": ""
+  },
+  {
+    "id": "class-8-css-47",
+    "title": "Class 8 · CSS · Responsive images",
+    "badge": "Class 8 · CSS",
+    "category": "CSS",
+    "classLevels": [
+      8
+    ],
+    "subject": "Web styling",
+    "difficulty": 2,
+    "prerequisites": [
+      "CSS foundations"
+    ],
+    "topics": [
+      "Responsive images"
+    ],
+    "description": "Responsive images can shrink to fit narrow containers without stretching their proportions.",
+    "html": "<h2>A flexible image</h2><img src=\"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22640%22%20height%3D%22480%22%20viewBox%3D%220%200%20640%20480%22%3E%3Crect%20width%3D%22640%22%20height%3D%22480%22%20fill%3D%22%23dbeafe%22/%3E%3Ccircle%20cx%3D%22320%22%20cy%3D%22200%22%20r%3D%2290%22%20fill%3D%22%23facc15%22/%3E%3Cpath%20d%3D%22M0%20480%20L180%20240%20L360%20480%20M240%20480%20L460%20200%20L640%20480%22%20fill%3D%22%2322c55e%22/%3E%3Ctext%20x%3D%2224%22%20y%3D%22450%22%20font-size%3D%2228%22%3ESchool%20garden%3C/text%3E%3C/svg%3E\" alt=\"Illustration of a garden with hills and sun\">",
+    "css": "img { max-width: 100%; height: auto; }",
+    "js": ""
+  },
+  {
+    "id": "class-8-css-48",
+    "title": "Class 8 · CSS · Overflow and line spacing",
+    "badge": "Class 8 · CSS",
+    "category": "CSS",
+    "classLevels": [
+      8
+    ],
+    "subject": "Web styling",
+    "difficulty": 2,
+    "prerequisites": [
+      "CSS foundations"
+    ],
+    "topics": [
+      "Overflow and line spacing"
+    ],
+    "description": "Overflow controls content that exceeds a box. Unitless line-height scales with the font size.",
+    "html": "<h2>A scrollable note</h2><div class=\"notes\"><p>Practice note 1: keep learning and experimenting.</p><p>Practice note 2: keep learning and experimenting.</p><p>Practice note 3: keep learning and experimenting.</p><p>Practice note 4: keep learning and experimenting.</p><p>Practice note 5: keep learning and experimenting.</p><p>Practice note 6: keep learning and experimenting.</p><p>Practice note 7: keep learning and experimenting.</p><p>Practice note 8: keep learning and experimenting.</p><p>Practice note 9: keep learning and experimenting.</p></div>",
+    "css": ".notes { max-height: 12rem; overflow: auto; line-height: 1.5; }",
+    "js": ""
+  },
+  {
+    "id": "class-8-javascript-49",
+    "title": "Class 8 · JavaScript · DOM selection",
+    "badge": "Class 8 · JavaScript",
+    "category": "JavaScript",
+    "classLevels": [
+      8
+    ],
+    "subject": "Programming fundamentals",
+    "difficulty": 1,
+    "prerequisites": [
+      "JavaScript foundations"
+    ],
+    "topics": [
+      "DOM selection"
+    ],
+    "description": "QuerySelector returns an element or null. QuerySelectorAll returns a static NodeList.",
+    "html": "<h2>DOM selection</h2><p>First paragraph</p><p>Second paragraph</p><pre id=\"sample-output\" aria-live=\"polite\"></pre>",
+    "css": "",
+    "js": "const output = document.getElementById('sample-output');\nfunction show(...values) {\n  output.textContent += values.map(value => typeof value === 'object' ? JSON.stringify(value) : String(value)).join(' ') + '\\n';\n}\nconst first = document.querySelector(\"p\");\nconst paragraphs = document.querySelectorAll(\"p\");\nshow(first, paragraphs.length);"
+  },
+  {
+    "id": "class-8-javascript-50",
+    "title": "Class 8 · JavaScript · Updating page content",
+    "badge": "Class 8 · JavaScript",
+    "category": "JavaScript",
+    "classLevels": [
+      8
+    ],
+    "subject": "Programming fundamentals",
+    "difficulty": 1,
+    "prerequisites": [
+      "JavaScript foundations"
+    ],
+    "topics": [
+      "Updating page content"
+    ],
+    "description": "TextContent treats input as text rather than HTML. Value reads or changes a form control value.",
+    "html": "<h2>Read an input value</h2><label>Name <input value=\"Asha\"></label><p></p><pre id=\"sample-output\"></pre>",
+    "css": "",
+    "js": "const output = document.getElementById('sample-output');\nfunction show(...values) {\n  output.textContent += values.map(value => typeof value === 'object' ? JSON.stringify(value) : String(value)).join(' ') + '\\n';\n}\nconst input = document.querySelector(\"input\");\nconst result = document.querySelector(\"p\");\nif (input && result) result.textContent = input.value;"
+  },
+  {
+    "id": "class-8-javascript-51",
+    "title": "Class 8 · JavaScript · Event listeners",
+    "badge": "Class 8 · JavaScript",
+    "category": "JavaScript",
+    "classLevels": [
+      8
+    ],
+    "subject": "Programming fundamentals",
+    "difficulty": 1,
+    "prerequisites": [
+      "JavaScript foundations"
+    ],
+    "topics": [
+      "Event listeners"
+    ],
+    "description": "Event listeners respond to user actions. PreventDefault can stop a form navigating away on submission.",
+    "html": "<h2>Handle a form event</h2><form><label>Name <input name=\"name\" value=\"Asha\"></label><button type=\"submit\">Submit</button></form><pre id=\"sample-output\" aria-live=\"polite\"></pre>",
+    "css": "",
+    "js": "const output = document.getElementById('sample-output');\nfunction show(...values) {\n  output.textContent += values.map(value => typeof value === 'object' ? JSON.stringify(value) : String(value)).join(' ') + '\\n';\n}\nconst form = document.querySelector(\"form\");\nif (form) form.addEventListener(\"submit\", event => {\n  event.preventDefault();\n  show(\"Handled submit\");\n});"
+  },
+  {
+    "id": "class-8-javascript-52",
+    "title": "Class 8 · JavaScript · Objects",
+    "badge": "Class 8 · JavaScript",
+    "category": "JavaScript",
+    "classLevels": [
+      8
+    ],
+    "subject": "Programming fundamentals",
+    "difficulty": 2,
+    "prerequisites": [
+      "JavaScript foundations"
+    ],
+    "topics": [
+      "Objects"
+    ],
+    "description": "Objects group related values. Dot notation accesses a property using its identifier.",
+    "html": "<h2>Objects</h2>\n<p id=\"result\">Watch the result below.</p>\n<pre id=\"sample-output\" aria-live=\"polite\"></pre>",
+    "css": "",
+    "js": "const output = document.getElementById('sample-output');\nfunction show(...values) {\n  output.textContent += values.map(value => typeof value === 'object' ? JSON.stringify(value) : String(value)).join(' ') + '\\n';\n}\nconst student = { name: \"Asha\", score: 9 };\nshow(student.name);"
+  },
+  {
+    "id": "class-8-javascript-53",
+    "title": "Class 8 · JavaScript · Array updates",
+    "badge": "Class 8 · JavaScript",
+    "category": "JavaScript",
+    "classLevels": [
+      8
+    ],
+    "subject": "Programming fundamentals",
+    "difficulty": 2,
+    "prerequisites": [
+      "JavaScript foundations"
+    ],
+    "topics": [
+      "Array updates"
+    ],
+    "description": "Push and pop change an array. A const array binding still allows its contents to be modified.",
+    "html": "<h2>Array updates</h2>\n<p id=\"result\">Watch the result below.</p>\n<pre id=\"sample-output\" aria-live=\"polite\"></pre>",
+    "css": "",
+    "js": "const output = document.getElementById('sample-output');\nfunction show(...values) {\n  output.textContent += values.map(value => typeof value === 'object' ? JSON.stringify(value) : String(value)).join(' ') + '\\n';\n}\nconst tasks = [\"Read\"];\ntasks.push(\"Practice\");\nshow(tasks.pop());"
+  },
+  {
+    "id": "class-8-javascript-54",
+    "title": "Class 8 · JavaScript · Number conversion and remainder",
+    "badge": "Class 8 · JavaScript",
+    "category": "JavaScript",
+    "classLevels": [
+      8
+    ],
+    "subject": "Programming fundamentals",
+    "difficulty": 2,
+    "prerequisites": [
+      "JavaScript foundations"
+    ],
+    "topics": [
+      "Number conversion and remainder"
+    ],
+    "description": "Number converts numeric text. The remainder operator is useful for checks such as even or odd numbers.",
+    "html": "<h2>Number conversion and remainder</h2>\n<p id=\"result\">Watch the result below.</p>\n<pre id=\"sample-output\" aria-live=\"polite\"></pre>",
+    "css": "",
+    "js": "const output = document.getElementById('sample-output');\nfunction show(...values) {\n  output.textContent += values.map(value => typeof value === 'object' ? JSON.stringify(value) : String(value)).join(' ') + '\\n';\n}\nconst count = Number(\"12\");\nshow(count + 1);\nshow(count % 5);"
+  },
+  {
+    "id": "class-9-html-55",
+    "title": "Class 9 · HTML · Accessible form groups",
+    "badge": "Class 9 · HTML",
+    "category": "HTML",
+    "classLevels": [
+      9
+    ],
+    "subject": "Web structure",
+    "difficulty": 1,
+    "prerequisites": [
+      "HTML foundations"
+    ],
+    "topics": [
+      "Accessible form groups"
+    ],
+    "description": "Fieldset and legend describe related choices. Radio controls with the same name form a single-choice group.",
+    "html": "<fieldset><legend>Choose a club</legend>\n<label><input type=\"radio\" name=\"club\" value=\"art\"> Art</label>\n<label><input type=\"radio\" name=\"club\" value=\"science\"> Science</label></fieldset>",
+    "css": "",
+    "js": ""
+  },
+  {
+    "id": "class-9-html-56",
+    "title": "Class 9 · HTML · Details and summaries",
+    "badge": "Class 9 · HTML",
+    "category": "HTML",
+    "classLevels": [
+      9
+    ],
+    "subject": "Web structure",
+    "difficulty": 1,
+    "prerequisites": [
+      "HTML foundations"
+    ],
+    "topics": [
+      "Details and summaries"
+    ],
+    "description": "Details and summary provide an expandable section with built-in keyboard support.",
+    "html": "<details><summary>How to play</summary><p>Choose a question and answer it.</p></details>",
+    "css": "",
+    "js": ""
+  },
+  {
+    "id": "class-9-html-57",
+    "title": "Class 9 · HTML · Figures and captions",
+    "badge": "Class 9 · HTML",
+    "category": "HTML",
+    "classLevels": [
+      9
+    ],
+    "subject": "Web structure",
+    "difficulty": 1,
+    "prerequisites": [
+      "HTML foundations"
+    ],
+    "topics": [
+      "Figures and captions"
+    ],
+    "description": "Figure groups media with a caption. Image alternative text and captions serve related but distinct purposes.",
+    "html": "<figure><img src=\"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22640%22%20height%3D%22480%22%20viewBox%3D%220%200%20640%20480%22%3E%3Crect%20width%3D%22640%22%20height%3D%22480%22%20fill%3D%22%23dbeafe%22/%3E%3Ccircle%20cx%3D%22320%22%20cy%3D%22200%22%20r%3D%2290%22%20fill%3D%22%23facc15%22/%3E%3Cpath%20d%3D%22M0%20480%20L180%20240%20L360%20480%20M240%20480%20L460%20200%20L640%20480%22%20fill%3D%22%2322c55e%22/%3E%3Ctext%20x%3D%2224%22%20y%3D%22450%22%20font-size%3D%2228%22%3ESchool%20garden%3C/text%3E%3C/svg%3E\" alt=\"A seedling with two leaves\">\n<figcaption>Seedling after one week</figcaption></figure>",
+    "css": "",
+    "js": ""
+  },
+  {
+    "id": "class-9-html-58",
+    "title": "Class 9 · HTML · Data attributes",
+    "badge": "Class 9 · HTML",
+    "category": "HTML",
+    "classLevels": [
+      9
+    ],
+    "subject": "Web structure",
+    "difficulty": 2,
+    "prerequisites": [
+      "HTML foundations"
+    ],
+    "topics": [
+      "Data attributes"
+    ],
+    "description": "Data attributes attach custom information to elements; dataset exposes their values as strings.",
+    "html": "<button type=\"button\" data-score=\"10\">Choose</button>\n<p id=\"data-result\">Click the button to read its data-score.</p>\n<script>\nconst button = document.querySelector(\"button\");\nbutton.addEventListener('click', () => { document.getElementById('data-result').textContent = 'Score: ' + button.dataset.score; });\n</script>",
+    "css": "",
+    "js": ""
+  },
+  {
+    "id": "class-9-html-59",
+    "title": "Class 9 · HTML · Loading images efficiently",
+    "badge": "Class 9 · HTML",
+    "category": "HTML",
+    "classLevels": [
+      9
+    ],
+    "subject": "Web structure",
+    "difficulty": 2,
+    "prerequisites": [
+      "HTML foundations"
+    ],
+    "topics": [
+      "Loading images efficiently"
+    ],
+    "description": "Lazy loading can reduce initial network work. Explicit dimensions help prevent layout movement.",
+    "html": "<h2>Loading images efficiently</h2>\n<p>The image reserves its space with width and height. Loading is deferred until it approaches the viewport.</p>\n<img src=\"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22640%22%20height%3D%22480%22%20viewBox%3D%220%200%20640%20480%22%3E%3Crect%20width%3D%22640%22%20height%3D%22480%22%20fill%3D%22%23dbeafe%22/%3E%3Ccircle%20cx%3D%22320%22%20cy%3D%22200%22%20r%3D%2290%22%20fill%3D%22%23facc15%22/%3E%3Cpath%20d%3D%22M0%20480%20L180%20240%20L360%20480%20M240%20480%20L460%20200%20L640%20480%22%20fill%3D%22%2322c55e%22/%3E%3Ctext%20x%3D%2224%22%20y%3D%22450%22%20font-size%3D%2228%22%3ESchool%20garden%3C/text%3E%3C/svg%3E\" alt=\"School garden\" loading=\"lazy\" width=\"640\" height=\"480\">",
+    "css": "",
+    "js": ""
+  },
+  {
+    "id": "class-9-html-60",
+    "title": "Class 9 · HTML · HTML entities",
+    "badge": "Class 9 · HTML",
+    "category": "HTML",
+    "classLevels": [
+      9
+    ],
+    "subject": "Web structure",
+    "difficulty": 2,
+    "prerequisites": [
+      "HTML foundations"
+    ],
+    "topics": [
+      "HTML entities"
+    ],
+    "description": "Character references let reserved characters appear as text instead of being interpreted as markup.",
+    "html": "<p>Use &lt;p&gt; for a paragraph. Tea &amp; snacks.</p>",
+    "css": "",
+    "js": ""
+  },
+  {
+    "id": "class-9-css-61",
+    "title": "Class 9 · CSS · Custom properties",
+    "badge": "Class 9 · CSS",
+    "category": "CSS",
+    "classLevels": [
+      9
+    ],
+    "subject": "Web styling",
+    "difficulty": 1,
+    "prerequisites": [
+      "CSS foundations"
+    ],
+    "topics": [
+      "Custom properties"
+    ],
+    "description": "Custom properties let several rules share values and can inherit through the document tree.",
+    "html": "<h2>One shared accent</h2><button>First button</button> <button>Second button</button><p>Edit --accent in the CSS editor.</p>",
+    "css": ":root { --accent: navy; }\nbutton { background: var(--accent); color: white; }",
+    "js": ""
+  },
+  {
+    "id": "class-9-css-62",
+    "title": "Class 9 · CSS · Transitions and transforms",
+    "badge": "Class 9 · CSS",
+    "category": "CSS",
+    "classLevels": [
+      9
+    ],
+    "subject": "Web styling",
+    "difficulty": 1,
+    "prerequisites": [
+      "CSS foundations"
+    ],
+    "topics": [
+      "Transitions and transforms"
+    ],
+    "description": "Transitions interpolate supported property changes. Respect reduced-motion preferences.",
+    "html": "<h2>A gentle hover effect</h2><button>Hover over me</button>",
+    "css": "button { transition: transform 0.2s; }\nbutton:hover { transform: scale(1.05); }\n@media (prefers-reduced-motion: reduce) { button { transition: none; } }",
+    "js": ""
+  },
+  {
+    "id": "class-9-css-63",
+    "title": "Class 9 · CSS · Keyframe animation",
+    "badge": "Class 9 · CSS",
+    "category": "CSS",
+    "classLevels": [
+      9
+    ],
+    "subject": "Web styling",
+    "difficulty": 1,
+    "prerequisites": [
+      "CSS foundations"
+    ],
+    "topics": [
+      "Keyframe animation"
+    ],
+    "description": "Keyframes describe intermediate styles. An animation has a name, duration, and optional repetition settings.",
+    "html": "<h2>Fade-in animation</h2><p class=\"notice\">Hello! Rerun the preview to replay the animation.</p>",
+    "css": "@keyframes fade { from { opacity: 0; } to { opacity: 1; } }\n.notice { animation-name: fade; animation-duration: 1s; }\n@media (prefers-reduced-motion: reduce) { .notice { animation: none; } }",
+    "js": ""
+  },
+  {
+    "id": "class-9-css-64",
+    "title": "Class 9 · CSS · Flexible layouts",
+    "badge": "Class 9 · CSS",
+    "category": "CSS",
+    "classLevels": [
+      9
+    ],
+    "subject": "Web styling",
+    "difficulty": 2,
+    "prerequisites": [
+      "CSS foundations"
+    ],
+    "topics": [
+      "Flexible layouts"
+    ],
+    "description": "Wrapping and flexible grid tracks adapt a layout to the available space.",
+    "html": "<h2>Wrapping row</h2><div class=\"row\"><button>Item 1</button><button>Item 2</button><button>Item 3</button><button>Item 4</button><button>Item 5</button></div><h2>Flexible grid</h2><div class=\"grid\"><button>One</button><button>Two</button><button>Three</button></div>",
+    "css": ".row { display: flex; flex-wrap: wrap; gap: 1rem; }\n.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: 1rem; }",
+    "js": ""
+  },
+  {
+    "id": "class-9-css-65",
+    "title": "Class 9 · CSS · Visibility and stacking",
+    "badge": "Class 9 · CSS",
+    "category": "CSS",
+    "classLevels": [
+      9
+    ],
+    "subject": "Web styling",
+    "difficulty": 2,
+    "prerequisites": [
+      "CSS foundations"
+    ],
+    "topics": [
+      "Visibility and stacking"
+    ],
+    "description": "Opacity affects the entire element and its descendants. Z-index ordering is constrained by stacking contexts.",
+    "html": "<h2>Layering demo</h2><p class=\"muted\">This text is partly transparent.</p><div class=\"overlay\"><p style=\"background:white;padding:20px;color:black\">Overlay with z-index 10. Change its CSS to see the page underneath.</p></div>",
+    "css": ".overlay { position: fixed; inset: 0; z-index: 10; background: rgb(0 0 0 / 50%); }\n.muted { opacity: 0.6; }",
+    "js": ""
+  },
+  {
+    "id": "class-9-css-66",
+    "title": "Class 9 · CSS · Sticky positioning",
+    "badge": "Class 9 · CSS",
+    "category": "CSS",
+    "classLevels": [
+      9
+    ],
+    "subject": "Web styling",
+    "difficulty": 2,
+    "prerequisites": [
+      "CSS foundations"
+    ],
+    "topics": [
+      "Sticky positioning"
+    ],
+    "description": "Sticky elements remain in normal flow and stick within their scroll container and containing block.",
+    "html": "<h2>Sticky heading</h2><section style=\"height:220px;overflow:auto;border:1px solid\"><h3 class=\"section-heading\">I stick to the top</h3><p>Scroll item 1</p><p>Scroll item 2</p><p>Scroll item 3</p><p>Scroll item 4</p><p>Scroll item 5</p><p>Scroll item 6</p><p>Scroll item 7</p><p>Scroll item 8</p><p>Scroll item 9</p><p>Scroll item 10</p><p>Scroll item 11</p><p>Scroll item 12</p><p>Scroll item 13</p></section>",
+    "css": ".section-heading { position: sticky; top: 0; background: white; }",
+    "js": ""
+  },
+  {
+    "id": "class-9-javascript-67",
+    "title": "Class 9 · JavaScript · Array transformations",
+    "badge": "Class 9 · JavaScript",
+    "category": "JavaScript",
+    "classLevels": [
+      9
+    ],
+    "subject": "Programming fundamentals",
+    "difficulty": 1,
+    "prerequisites": [
+      "JavaScript foundations"
+    ],
+    "topics": [
+      "Array transformations"
+    ],
+    "description": "Map transforms each item; filter selects items. Neither method mutates the original array by itself.",
+    "html": "<h2>Array transformations</h2>\n<p id=\"result\">Watch the result below.</p>\n<pre id=\"sample-output\" aria-live=\"polite\"></pre>",
+    "css": "",
+    "js": "const output = document.getElementById('sample-output');\nfunction show(...values) {\n  output.textContent += values.map(value => typeof value === 'object' ? JSON.stringify(value) : String(value)).join(' ') + '\\n';\n}\nconst scores = [2, 5, 8];\nshow(scores.map(score => score * 2));\nshow(scores.filter(score => score >= 5));"
+  },
+  {
+    "id": "class-9-javascript-68",
+    "title": "Class 9 · JavaScript · JSON and local storage",
+    "badge": "Class 9 · JavaScript",
+    "category": "JavaScript",
+    "classLevels": [
+      9
+    ],
+    "subject": "Programming fundamentals",
+    "difficulty": 1,
+    "prerequisites": [
+      "JavaScript foundations"
+    ],
+    "topics": [
+      "JSON and local storage"
+    ],
+    "description": "Local storage stores strings by origin. JSON converts structured data to text and back; malformed JSON throws an error.",
+    "html": "<h2>JSON and local storage</h2>\n<p id=\"result\">Watch the result below.</p>\n<pre id=\"sample-output\" aria-live=\"polite\"></pre>",
+    "css": "",
+    "js": "const output = document.getElementById('sample-output');\nfunction show(...values) {\n  output.textContent += values.map(value => typeof value === 'object' ? JSON.stringify(value) : String(value)).join(' ') + '\\n';\n}\nconst scores = [4, 8];\nlocalStorage.setItem(\"scores\", JSON.stringify(scores));\nconst saved = JSON.parse(localStorage.getItem(\"scores\") || \"[]\");\nshow(saved);"
+  },
+  {
+    "id": "class-9-javascript-69",
+    "title": "Class 9 · JavaScript · Timers",
+    "badge": "Class 9 · JavaScript",
+    "category": "JavaScript",
+    "classLevels": [
+      9
+    ],
+    "subject": "Programming fundamentals",
+    "difficulty": 1,
+    "prerequisites": [
+      "JavaScript foundations"
+    ],
+    "topics": [
+      "Timers"
+    ],
+    "description": "Timer delays are measured in milliseconds and describe a minimum delay, not an exact execution time.",
+    "html": "<h2>Timers</h2>\n<p id=\"result\">Watch the result below.</p>\n<pre id=\"sample-output\" aria-live=\"polite\"></pre>",
+    "css": "",
+    "js": "const output = document.getElementById('sample-output');\nfunction show(...values) {\n  output.textContent += values.map(value => typeof value === 'object' ? JSON.stringify(value) : String(value)).join(' ') + '\\n';\n}\nconst timer = setTimeout(() => show(\"Time!\"), 1000);\n// Uncomment to cancel the callback:\n// clearTimeout(timer);"
+  },
+  {
+    "id": "class-9-javascript-70",
+    "title": "Class 9 · JavaScript · Fetching JSON",
+    "badge": "Class 9 · JavaScript",
+    "category": "JavaScript",
+    "classLevels": [
+      9
+    ],
+    "subject": "Programming fundamentals",
+    "difficulty": 2,
+    "prerequisites": [
+      "JavaScript foundations"
+    ],
+    "topics": [
+      "Fetching JSON"
+    ],
+    "description": "Fetch returns a promise. Check the HTTP status and handle both request and parsing failures.",
+    "html": "<h2>Fetching JSON</h2>\n<p id=\"result\">Watch the result below.</p>\n<pre id=\"sample-output\" aria-live=\"polite\"></pre>",
+    "css": "",
+    "js": "const output = document.getElementById('sample-output');\nfunction show(...values) {\n  output.textContent += values.map(value => typeof value === 'object' ? JSON.stringify(value) : String(value)).join(' ') + '\\n';\n}\nasync function loadData() {\n  const response = await fetch(\"data:application/json,%7B%22message%22%3A%22Hello%20from%20JSON%22%2C%22scores%22%3A%5B4%2C8%5D%7D\");\n  if (!response.ok) throw new Error(\"Request failed\");\n  return await response.json();\n}\nloadData().then(show).catch(show);"
+  },
+  {
+    "id": "class-9-javascript-71",
+    "title": "Class 9 · JavaScript · Error handling",
+    "badge": "Class 9 · JavaScript",
+    "category": "JavaScript",
+    "classLevels": [
+      9
+    ],
+    "subject": "Programming fundamentals",
+    "difficulty": 2,
+    "prerequisites": [
+      "JavaScript foundations"
+    ],
+    "topics": [
+      "Error handling"
+    ],
+    "description": "Try and catch let a program handle errors and show useful feedback instead of stopping unexpectedly.",
+    "html": "<h2>Error handling</h2>\n<p id=\"result\">Watch the result below.</p>\n<pre id=\"sample-output\" aria-live=\"polite\"></pre>",
+    "css": "",
+    "js": "const output = document.getElementById('sample-output');\nfunction show(...values) {\n  output.textContent += values.map(value => typeof value === 'object' ? JSON.stringify(value) : String(value)).join(' ') + '\\n';\n}\ntry {\n  const data = JSON.parse(\"invalid JSON\");\n  show(data);\n} catch (error) { show(\"Could not read data\"); }"
+  },
+  {
+    "id": "class-9-javascript-72",
+    "title": "Class 9 · JavaScript · Classes and event targets",
+    "badge": "Class 9 · JavaScript",
+    "category": "JavaScript",
+    "classLevels": [
+      9
+    ],
+    "subject": "Programming fundamentals",
+    "difficulty": 2,
+    "prerequisites": [
+      "JavaScript foundations"
+    ],
+    "topics": [
+      "Classes and event targets"
+    ],
+    "description": "ClassList changes styling classes. Target is the original event element; currentTarget is the listener element.",
+    "html": "<h2>Toggle a class</h2><button type=\"button\">Click to toggle</button><pre id=\"sample-output\" aria-live=\"polite\"></pre>",
+    "css": ".active { background: navy; color: white; }",
+    "js": "const output = document.getElementById('sample-output');\nfunction show(...values) {\n  output.textContent += values.map(value => typeof value === 'object' ? JSON.stringify(value) : String(value)).join(' ') + '\\n';\n}\nconst button = document.querySelector(\"button\");\nif (button) button.addEventListener(\"click\", event => {\n  event.currentTarget.classList.toggle(\"active\");\n  show(event.target);\n});"
+  }
+]

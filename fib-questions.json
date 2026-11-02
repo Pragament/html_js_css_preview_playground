@@ -1,0 +1,2194 @@
+[
+  {
+    "id": 1,
+    "title": "Document skeleton",
+    "category": "HTML",
+    "difficulty": 1,
+    "classLevels": [
+      6
+    ],
+    "subject": "Web structure",
+    "description": "The doctype selects HTML5 standards mode. Head contains metadata; body contains visible page content.",
+    "prerequisites": [],
+    "template": "Start an HTML5 page with <!DOCTYPE [blank1]>. The <[blank2]> contains page metadata and <[blank3]> contains visible content.",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "html"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "head"
+      },
+      {
+        "id": "blank3",
+        "placeholder": "Blank 3",
+        "answer": "body"
+      }
+    ],
+    "explanation": "The doctype selects HTML5 standards mode. Head contains metadata; body contains visible page content.",
+    "codeSnippet": "<!DOCTYPE html>\n<html lang=\"en\">\n<head><title>My page</title></head>\n<body><p>Hello!</p></body>\n</html>"
+  },
+  {
+    "id": 2,
+    "title": "Headings and paragraphs",
+    "category": "HTML",
+    "difficulty": 1,
+    "classLevels": [
+      6
+    ],
+    "subject": "Web structure",
+    "description": "Headings organize content. Paragraphs group sentences; br inserts a line break within text.",
+    "prerequisites": [],
+    "template": "Use <[blank1]> for the main heading and <[blank2]> for a paragraph. A line break uses <[blank3]>.",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "h1"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "p"
+      },
+      {
+        "id": "blank3",
+        "placeholder": "Blank 3",
+        "answer": "br"
+      }
+    ],
+    "explanation": "Headings organize content. Paragraphs group sentences; br inserts a line break within text.",
+    "codeSnippet": "<h1>My school</h1>\n<p>Welcome!<br>Come and learn.</p>"
+  },
+  {
+    "id": 3,
+    "title": "Links and images",
+    "category": "HTML",
+    "difficulty": 1,
+    "classLevels": [
+      6
+    ],
+    "subject": "Web structure",
+    "description": "Anchor links use href, while images load their source from src.",
+    "prerequisites": [],
+    "template": "The <[blank1]> element creates a link with an [blank2] attribute. An image uses <[blank3]> with its file URL in [blank4].",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "a"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "href"
+      },
+      {
+        "id": "blank3",
+        "placeholder": "Blank 3",
+        "answer": "img"
+      },
+      {
+        "id": "blank4",
+        "placeholder": "Blank 4",
+        "answer": "src"
+      }
+    ],
+    "explanation": "Anchor links use href, while images load their source from src.",
+    "codeSnippet": "<a href=\"https://example.com\">Visit</a>\n<img src=\"school.png\" alt=\"Our school building\">"
+  },
+  {
+    "id": 4,
+    "title": "Lists",
+    "category": "HTML",
+    "difficulty": 1,
+    "classLevels": [
+      6
+    ],
+    "subject": "Web structure",
+    "description": "Use unordered lists when order does not matter and ordered lists for steps or rankings.",
+    "prerequisites": [],
+    "template": "A bullet list uses <[blank1]>, a numbered list uses <[blank2]>, and each item uses <[blank3]>.",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "ul"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "ol"
+      },
+      {
+        "id": "blank3",
+        "placeholder": "Blank 3",
+        "answer": "li"
+      }
+    ],
+    "explanation": "Use unordered lists when order does not matter and ordered lists for steps or rankings.",
+    "codeSnippet": "<ul><li>Apple</li><li>Mango</li></ul>\n<ol><li>Read</li><li>Practice</li></ol>"
+  },
+  {
+    "id": 5,
+    "title": "Page title and language",
+    "category": "HTML",
+    "difficulty": 1,
+    "classLevels": [
+      6
+    ],
+    "subject": "Web structure",
+    "description": "Title names the browser tab. Lang helps screen readers pronounce the page correctly.",
+    "prerequisites": [],
+    "template": "The browser tab label goes in <[blank1]>. Set the document language with the [blank2] attribute on <html>.",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "title"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "lang"
+      }
+    ],
+    "explanation": "Title names the browser tab. Lang helps screen readers pronounce the page correctly.",
+    "codeSnippet": "<!DOCTYPE html>\n<html lang=\"en\"><head><title>Class 6</title></head>\n<body><p>My first page</p></body></html>"
+  },
+  {
+    "id": 6,
+    "title": "Meaning and emphasis",
+    "category": "HTML",
+    "difficulty": 1,
+    "classLevels": [
+      6
+    ],
+    "subject": "Web structure",
+    "description": "Strong and em communicate meaning. Useful alternative text describes informative images; decorative images use alt=\"\".",
+    "prerequisites": [],
+    "template": "Use <[blank1]> for strong importance and <[blank2]> for stressed emphasis. An image text alternative uses [blank3].",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "strong"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "em"
+      },
+      {
+        "id": "blank3",
+        "placeholder": "Blank 3",
+        "answer": "alt"
+      }
+    ],
+    "explanation": "Strong and em communicate meaning. Useful alternative text describes informative images; decorative images use alt=\"\".",
+    "codeSnippet": "<p><strong>Warning:</strong> Walk <em>carefully</em>.</p>\n<img src=\"map.png\" alt=\"Map showing the school entrance\">"
+  },
+  {
+    "id": 7,
+    "title": "CSS rules",
+    "category": "CSS",
+    "difficulty": 1,
+    "classLevels": [
+      6
+    ],
+    "subject": "Web styling",
+    "description": "A selector chooses elements. A colon separates a property from its value, and a semicolon separates declarations.",
+    "prerequisites": [],
+    "template": "A CSS rule begins with a [blank1] and encloses declarations in braces. Each declaration separates a property and value with a [blank2].",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "selector"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": ":"
+      }
+    ],
+    "explanation": "A selector chooses elements. A colon separates a property from its value, and a semicolon separates declarations.",
+    "codeSnippet": "p { color: blue; }"
+  },
+  {
+    "id": 8,
+    "title": "Text and background colors",
+    "category": "CSS",
+    "difficulty": 1,
+    "classLevels": [
+      6
+    ],
+    "subject": "Web styling",
+    "description": "Choose readable text and background colors with enough contrast.",
+    "prerequisites": [],
+    "template": "The [blank1] property changes text color. The [blank2] property changes the background color.",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "color"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "background-color"
+      }
+    ],
+    "explanation": "Choose readable text and background colors with enough contrast.",
+    "codeSnippet": "p { color: navy; background-color: lightyellow; }"
+  },
+  {
+    "id": 9,
+    "title": "Font basics",
+    "category": "CSS",
+    "difficulty": 1,
+    "classLevels": [
+      6
+    ],
+    "subject": "Web styling",
+    "description": "Font families choose typefaces; font size and weight control size and thickness.",
+    "prerequisites": [],
+    "template": "Use [blank1] to choose a typeface and [blank2] to set text size. Bold text can use font-weight: [blank3].",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "font-family"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "font-size"
+      },
+      {
+        "id": "blank3",
+        "placeholder": "Blank 3",
+        "answer": "bold"
+      }
+    ],
+    "explanation": "Font families choose typefaces; font size and weight control size and thickness.",
+    "codeSnippet": "p { font-family: sans-serif; font-size: 18px; font-weight: bold; }"
+  },
+  {
+    "id": 10,
+    "title": "Connecting a stylesheet",
+    "category": "CSS",
+    "difficulty": 1,
+    "classLevels": [
+      6
+    ],
+    "subject": "Web styling",
+    "description": "Link a CSS file from the document head so several pages can share the same styles.",
+    "prerequisites": [],
+    "template": "An external stylesheet uses a <[blank1]> element with rel=\"[blank2]\". Its file path is set with [blank3].",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "link"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "stylesheet"
+      },
+      {
+        "id": "blank3",
+        "placeholder": "Blank 3",
+        "answer": "href"
+      }
+    ],
+    "explanation": "Link a CSS file from the document head so several pages can share the same styles.",
+    "codeSnippet": "<!-- Place this in the document head. -->\n<link rel=\"stylesheet\" href=\"styles.css\">"
+  },
+  {
+    "id": 11,
+    "title": "Spacing",
+    "category": "CSS",
+    "difficulty": 1,
+    "classLevels": [
+      6
+    ],
+    "subject": "Web styling",
+    "description": "Padding separates content from its border; margin separates the element from its neighbors.",
+    "prerequisites": [],
+    "template": "Space inside a border is [blank1]. Space outside the border is [blank2].",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "padding"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "margin"
+      }
+    ],
+    "explanation": "Padding separates content from its border; margin separates the element from its neighbors.",
+    "codeSnippet": "article { padding: 16px; margin: 12px; border: 1px solid navy; }"
+  },
+  {
+    "id": 12,
+    "title": "Dimensions and alignment",
+    "category": "CSS",
+    "difficulty": 1,
+    "classLevels": [
+      6
+    ],
+    "subject": "Web styling",
+    "description": "Width and height size an element. Text-align positions inline content within its container.",
+    "prerequisites": [],
+    "template": "Set a box horizontal size with [blank1] and vertical size with [blank2]. Center inline text using text-align: [blank3].",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "width"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "height"
+      },
+      {
+        "id": "blank3",
+        "placeholder": "Blank 3",
+        "answer": "center"
+      }
+    ],
+    "explanation": "Width and height size an element. Text-align positions inline content within its container.",
+    "codeSnippet": "div { width: 200px; height: 100px; text-align: center; }"
+  },
+  {
+    "id": 13,
+    "title": "Variables",
+    "category": "JavaScript",
+    "difficulty": 1,
+    "classLevels": [
+      6
+    ],
+    "subject": "Programming fundamentals",
+    "description": "Let permits reassignment. Const prevents reassignment of the binding; objects stored in it can still change.",
+    "prerequisites": [],
+    "template": "Declare a reassignable variable using [blank1]. Declare a binding that cannot be reassigned using [blank2].",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "let"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "const"
+      }
+    ],
+    "explanation": "Let permits reassignment. Const prevents reassignment of the binding; objects stored in it can still change.",
+    "codeSnippet": "let score = 0;\nscore = 10;\nconst player = \"Asha\";"
+  },
+  {
+    "id": 14,
+    "title": "Basic values",
+    "category": "JavaScript",
+    "difficulty": 1,
+    "classLevels": [
+      6
+    ],
+    "subject": "Programming fundamentals",
+    "description": "Strings store text, numbers store numeric values, and booleans represent true or false.",
+    "prerequisites": [],
+    "template": "Text such as \"Hello\" is a [blank1]. The value 12 is a [blank2]. True or false is a [blank3].",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "string"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "number"
+      },
+      {
+        "id": "blank3",
+        "placeholder": "Blank 3",
+        "answer": "boolean"
+      }
+    ],
+    "explanation": "Strings store text, numbers store numeric values, and booleans represent true or false.",
+    "codeSnippet": "const greeting = \"Hello\";\nconst age = 12;\nconst isReady = true;"
+  },
+  {
+    "id": 15,
+    "title": "Console output",
+    "category": "JavaScript",
+    "difficulty": 1,
+    "classLevels": [
+      6
+    ],
+    "subject": "Programming fundamentals",
+    "description": "Console.log helps inspect values while writing or debugging a program.",
+    "prerequisites": [],
+    "template": "Print a message to developer tools using [blank1].[blank2](\"Hello\").",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "console"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "log"
+      }
+    ],
+    "explanation": "Console.log helps inspect values while writing or debugging a program.",
+    "codeSnippet": "console.log(\"Hello, class 6!\");"
+  },
+  {
+    "id": 16,
+    "title": "Arithmetic",
+    "category": "JavaScript",
+    "difficulty": 1,
+    "classLevels": [
+      6
+    ],
+    "subject": "Programming fundamentals",
+    "description": "Numbers support arithmetic operators. Parentheses can control the calculation order.",
+    "prerequisites": [],
+    "template": "Use [blank1] for addition, [blank2] for multiplication, and [blank3] for division.",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "+"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "*"
+      },
+      {
+        "id": "blank3",
+        "placeholder": "Blank 3",
+        "answer": "/"
+      }
+    ],
+    "explanation": "Numbers support arithmetic operators. Parentheses can control the calculation order.",
+    "codeSnippet": "console.log(8 + 2);\nconsole.log(8 * 2);\nconsole.log(8 / 2);"
+  },
+  {
+    "id": 17,
+    "title": "Comments",
+    "category": "JavaScript",
+    "difficulty": 1,
+    "classLevels": [
+      6
+    ],
+    "subject": "Programming fundamentals",
+    "description": "Comments explain intent and are ignored when JavaScript executes.",
+    "prerequisites": [],
+    "template": "A single-line JavaScript comment starts with [blank1]. A block comment opens with [blank2] and closes with [blank3].",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "//"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "/*"
+      },
+      {
+        "id": "blank3",
+        "placeholder": "Blank 3",
+        "answer": "*/"
+      }
+    ],
+    "explanation": "Comments explain intent and are ignored when JavaScript executes.",
+    "codeSnippet": "// This is a single-line comment.\n/* This comment\n   spans two lines. */"
+  },
+  {
+    "id": 18,
+    "title": "Joining text",
+    "category": "JavaScript",
+    "difficulty": 1,
+    "classLevels": [
+      6
+    ],
+    "subject": "Programming fundamentals",
+    "description": "Joining strings is called concatenation. Both single and double quotation marks can delimit strings.",
+    "prerequisites": [],
+    "template": "Use the [blank1] operator to join two strings. A string value can be enclosed in matching [blank2] marks.",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "+"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "quotation"
+      }
+    ],
+    "explanation": "Joining strings is called concatenation. Both single and double quotation marks can delimit strings.",
+    "codeSnippet": "const name = \"Asha\";\nconsole.log(\"Hello, \" + name);"
+  },
+  {
+    "id": 19,
+    "title": "Semantic page sections",
+    "category": "HTML",
+    "difficulty": 1,
+    "classLevels": [
+      7
+    ],
+    "subject": "Web structure",
+    "description": "Semantic elements describe page regions and make navigation easier for assistive technology.",
+    "prerequisites": [
+      "HTML foundations"
+    ],
+    "template": "Use <[blank1]> for primary navigation, <[blank2]> for the main content, and <[blank3]> for footer information.",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "nav"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "main"
+      },
+      {
+        "id": "blank3",
+        "placeholder": "Blank 3",
+        "answer": "footer"
+      }
+    ],
+    "explanation": "Semantic elements describe page regions and make navigation easier for assistive technology.",
+    "codeSnippet": "<nav><a href=\"#news\">News</a></nav>\n<main id=\"news\"><h1>School news</h1></main>\n<footer>School club</footer>"
+  },
+  {
+    "id": 20,
+    "title": "Tables",
+    "category": "HTML",
+    "difficulty": 1,
+    "classLevels": [
+      7
+    ],
+    "subject": "Web structure",
+    "description": "Tables represent tabular data. Captions and correctly marked headers improve accessibility.",
+    "prerequisites": [
+      "HTML foundations"
+    ],
+    "template": "A table row uses <[blank1]>. A header cell uses <[blank2]>, while a data cell uses <[blank3]>.",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "tr"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "th"
+      },
+      {
+        "id": "blank3",
+        "placeholder": "Blank 3",
+        "answer": "td"
+      }
+    ],
+    "explanation": "Tables represent tabular data. Captions and correctly marked headers improve accessibility.",
+    "codeSnippet": "<table><caption>Scores</caption>\n<tr><th scope=\"col\">Name</th><th scope=\"col\">Score</th></tr>\n<tr><td>Asha</td><td>10</td></tr></table>"
+  },
+  {
+    "id": 21,
+    "title": "Form labels",
+    "category": "HTML",
+    "difficulty": 1,
+    "classLevels": [
+      7
+    ],
+    "subject": "Web structure",
+    "description": "Associate labels and controls so users can identify fields and click their labels to focus them.",
+    "prerequisites": [
+      "HTML foundations"
+    ],
+    "template": "A text field uses <[blank1]>. A <[blank2]> describes it; its for attribute matches the field [blank3].",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "input"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "label"
+      },
+      {
+        "id": "blank3",
+        "placeholder": "Blank 3",
+        "answer": "id"
+      }
+    ],
+    "explanation": "Associate labels and controls so users can identify fields and click their labels to focus them.",
+    "codeSnippet": "<label for=\"name\">Name</label>\n<input id=\"name\" name=\"name\" type=\"text\">"
+  },
+  {
+    "id": 22,
+    "title": "Form controls",
+    "category": "HTML",
+    "difficulty": 1,
+    "classLevels": [
+      7
+    ],
+    "subject": "Web structure",
+    "description": "Select offers a list of choices. Textarea accepts multiple lines of text.",
+    "prerequisites": [
+      "HTML foundations"
+    ],
+    "template": "A dropdown uses <[blank1]> with <[blank2]> items. Multiline text uses <[blank3]>.",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "select"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "option"
+      },
+      {
+        "id": "blank3",
+        "placeholder": "Blank 3",
+        "answer": "textarea"
+      }
+    ],
+    "explanation": "Select offers a list of choices. Textarea accepts multiple lines of text.",
+    "codeSnippet": "<label for=\"club\">Club</label>\n<select id=\"club\"><option>Art</option><option>Science</option></select>\n<label for=\"note\">Note</label><textarea id=\"note\"></textarea>"
+  },
+  {
+    "id": 23,
+    "title": "Containers and identifiers",
+    "category": "HTML",
+    "difficulty": 1,
+    "classLevels": [
+      7
+    ],
+    "subject": "Web structure",
+    "description": "Use meaningful semantic elements when available. Class values can be shared; an id identifies one element in a document.",
+    "prerequisites": [
+      "HTML foundations"
+    ],
+    "template": "A generic block container is <[blank1]> and a generic inline container is <[blank2]>. A shared styling group uses a [blank3] attribute.",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "div"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "span"
+      },
+      {
+        "id": "blank3",
+        "placeholder": "Blank 3",
+        "answer": "class"
+      }
+    ],
+    "explanation": "Use meaningful semantic elements when available. Class values can be shared; an id identifies one element in a document.",
+    "codeSnippet": "<div class=\"card\"><p>Hello <span class=\"name\">Asha</span></p></div>"
+  },
+  {
+    "id": 24,
+    "title": "Paths and fragments",
+    "category": "HTML",
+    "difficulty": 1,
+    "classLevels": [
+      7
+    ],
+    "subject": "Web structure",
+    "description": "Fragments jump to element ids. Relative paths locate files in relation to the current document.",
+    "prerequisites": [
+      "HTML foundations"
+    ],
+    "template": "Link to an element on the same page by prefixing its id with [blank1]. A relative path to a parent folder starts with [blank2].",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "#"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "../"
+      }
+    ],
+    "explanation": "Fragments jump to element ids. Relative paths locate files in relation to the current document.",
+    "codeSnippet": "<a href=\"#contact\">Contact</a>\n<a href=\"../index.html\">Home</a>\n<section id=\"contact\"><h2>Contact</h2></section>"
+  },
+  {
+    "id": 25,
+    "title": "Class and id selectors",
+    "category": "CSS",
+    "difficulty": 1,
+    "classLevels": [
+      7
+    ],
+    "subject": "Web styling",
+    "description": "A dot selects a class; a hash selects an id. Element selectors use the tag name without a prefix.",
+    "prerequisites": [
+      "CSS foundations"
+    ],
+    "template": "A class selector begins with [blank1]. An id selector begins with [blank2].",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "."
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "#"
+      }
+    ],
+    "explanation": "A dot selects a class; a hash selects an id. Element selectors use the tag name without a prefix.",
+    "codeSnippet": ".card { padding: 12px; }\n#featured { border: 2px solid navy; }"
+  },
+  {
+    "id": 26,
+    "title": "Borders and rounded corners",
+    "category": "CSS",
+    "difficulty": 1,
+    "classLevels": [
+      7
+    ],
+    "subject": "Web styling",
+    "description": "Border combines width, style, and color. Border-radius rounds corners.",
+    "prerequisites": [
+      "CSS foundations"
+    ],
+    "template": "Use [blank1] to draw an element edge and [blank2] to round its corners.",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "border"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "border-radius"
+      }
+    ],
+    "explanation": "Border combines width, style, and color. Border-radius rounds corners.",
+    "codeSnippet": ".card { border: 2px solid navy; border-radius: 10px; }"
+  },
+  {
+    "id": 27,
+    "title": "Display modes",
+    "category": "CSS",
+    "difficulty": 1,
+    "classLevels": [
+      7
+    ],
+    "subject": "Web styling",
+    "description": "Display affects layout participation. Display none also hides content from the accessibility tree.",
+    "prerequisites": [
+      "CSS foundations"
+    ],
+    "template": "A display: [blank1] box normally starts a new line. A display: [blank2] element flows within text. Display: [blank3] removes a box from layout.",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "block"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "inline"
+      },
+      {
+        "id": "blank3",
+        "placeholder": "Blank 3",
+        "answer": "none"
+      }
+    ],
+    "explanation": "Display affects layout participation. Display none also hides content from the accessibility tree.",
+    "codeSnippet": ".panel { display: block; }\n.tag { display: inline; }\n.hidden { display: none; }"
+  },
+  {
+    "id": 28,
+    "title": "Hover and focus",
+    "category": "CSS",
+    "difficulty": 1,
+    "classLevels": [
+      7
+    ],
+    "subject": "Web styling",
+    "description": "Keep a visible focus indicator so keyboard users can see where they are.",
+    "prerequisites": [
+      "CSS foundations"
+    ],
+    "template": "Style a pointed-at link with the :[blank1] pseudo-class. Style a keyboard-focused control with :[blank2].",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "hover"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "focus"
+      }
+    ],
+    "explanation": "Keep a visible focus indicator so keyboard users can see where they are.",
+    "codeSnippet": "a:hover { text-decoration: underline; }\nbutton:focus { outline: 3px solid orange; }"
+  },
+  {
+    "id": 29,
+    "title": "Cascade basics",
+    "category": "CSS",
+    "difficulty": 1,
+    "classLevels": [
+      7
+    ],
+    "subject": "Web styling",
+    "description": "Within the same cascade origin, importance and layer, specificity breaks ties; source order resolves equal specificity.",
+    "prerequisites": [
+      "CSS foundations"
+    ],
+    "template": "For declarations of equal priority, the more [blank1] selector wins. When specificity ties, the declaration appearing [blank2] wins.",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "specific"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "later"
+      }
+    ],
+    "explanation": "Within the same cascade origin, importance and layer, specificity breaks ties; source order resolves equal specificity.",
+    "codeSnippet": "p { color: blue; }\np { color: green; }\n.notice { color: navy; }"
+  },
+  {
+    "id": 30,
+    "title": "Box sizing and units",
+    "category": "CSS",
+    "difficulty": 1,
+    "classLevels": [
+      7
+    ],
+    "subject": "Web styling",
+    "description": "Border-box makes sizing easier to predict. Rem supports sizing relative to the document root font.",
+    "prerequisites": [
+      "CSS foundations"
+    ],
+    "template": "Use box-sizing: [blank1] to include border and padding in a declared width. The [blank2] unit is relative to the root font size.",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "border-box"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "rem"
+      }
+    ],
+    "explanation": "Border-box makes sizing easier to predict. Rem supports sizing relative to the document root font.",
+    "codeSnippet": "* { box-sizing: border-box; }\n.card { width: 20rem; padding: 1rem; }"
+  },
+  {
+    "id": 31,
+    "title": "Comparisons",
+    "category": "JavaScript",
+    "difficulty": 1,
+    "classLevels": [
+      7
+    ],
+    "subject": "Programming fundamentals",
+    "description": "Strict comparisons do not convert a string to a number before checking equality.",
+    "prerequisites": [
+      "JavaScript foundations"
+    ],
+    "template": "Strict equality uses [blank1]. Strict inequality uses [blank2]. Check greater than or equal with [blank3].",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "==="
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "!=="
+      },
+      {
+        "id": "blank3",
+        "placeholder": "Blank 3",
+        "answer": ">="
+      }
+    ],
+    "explanation": "Strict comparisons do not convert a string to a number before checking equality.",
+    "codeSnippet": "console.log(3 === 3);\nconsole.log(3 !== \"3\");\nconsole.log(10 >= 8);"
+  },
+  {
+    "id": 32,
+    "title": "Decisions",
+    "category": "JavaScript",
+    "difficulty": 1,
+    "classLevels": [
+      7
+    ],
+    "subject": "Programming fundamentals",
+    "description": "If executes a branch when its condition is truthy; else runs when it is falsy.",
+    "prerequisites": [
+      "JavaScript foundations"
+    ],
+    "template": "Begin a conditional branch with [blank1]. Use [blank2] for the fallback branch.",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "if"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "else"
+      }
+    ],
+    "explanation": "If executes a branch when its condition is truthy; else runs when it is falsy.",
+    "codeSnippet": "const score = 8;\nif (score >= 5) { console.log(\"Pass\"); }\nelse { console.log(\"Keep practicing\"); }"
+  },
+  {
+    "id": 33,
+    "title": "Logical operators",
+    "category": "JavaScript",
+    "difficulty": 1,
+    "classLevels": [
+      7
+    ],
+    "subject": "Programming fundamentals",
+    "description": "Logical operators combine conditions or negate them.",
+    "prerequisites": [
+      "JavaScript foundations"
+    ],
+    "template": "Logical AND uses [blank1], logical OR uses [blank2], and logical NOT uses [blank3].",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "&&"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "||"
+      },
+      {
+        "id": "blank3",
+        "placeholder": "Blank 3",
+        "answer": "!"
+      }
+    ],
+    "explanation": "Logical operators combine conditions or negate them.",
+    "codeSnippet": "const age = 12;\nconst hasPermission = true;\nconsole.log(age >= 10 && hasPermission);\nconsole.log(!hasPermission);"
+  },
+  {
+    "id": 34,
+    "title": "For loops",
+    "category": "JavaScript",
+    "difficulty": 1,
+    "classLevels": [
+      7
+    ],
+    "subject": "Programming fundamentals",
+    "description": "A for loop combines initialization, a continuation condition, and an update expression.",
+    "prerequisites": [
+      "JavaScript foundations"
+    ],
+    "template": "A counting loop begins with [blank1]. Increase a counter by one using [blank2].",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "for"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "++"
+      }
+    ],
+    "explanation": "A for loop combines initialization, a continuation condition, and an update expression.",
+    "codeSnippet": "for (let i = 0; i < 3; i++) {\n  console.log(i);\n}"
+  },
+  {
+    "id": 35,
+    "title": "Arrays",
+    "category": "JavaScript",
+    "difficulty": 1,
+    "classLevels": [
+      7
+    ],
+    "subject": "Programming fundamentals",
+    "description": "Arrays store ordered values with zero-based indexes.",
+    "prerequisites": [
+      "JavaScript foundations"
+    ],
+    "template": "An ordered collection uses an [blank1]. Its first element has index [blank2]. Get the number of elements with [blank3].",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "array"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "0"
+      },
+      {
+        "id": "blank3",
+        "placeholder": "Blank 3",
+        "answer": "length"
+      }
+    ],
+    "explanation": "Arrays store ordered values with zero-based indexes.",
+    "codeSnippet": "const colors = [\"red\", \"blue\"];\nconsole.log(colors[0]);\nconsole.log(colors.length);"
+  },
+  {
+    "id": 36,
+    "title": "Functions",
+    "category": "JavaScript",
+    "difficulty": 1,
+    "classLevels": [
+      7
+    ],
+    "subject": "Programming fundamentals",
+    "description": "Functions group reusable instructions. Parameters receive arguments supplied by the caller.",
+    "prerequisites": [
+      "JavaScript foundations"
+    ],
+    "template": "Declare a function with [blank1]. Send a value back to its caller using [blank2].",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "function"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "return"
+      }
+    ],
+    "explanation": "Functions group reusable instructions. Parameters receive arguments supplied by the caller.",
+    "codeSnippet": "function add(a, b) { return a + b; }\nconsole.log(add(2, 3));"
+  },
+  {
+    "id": 37,
+    "title": "Input types",
+    "category": "HTML",
+    "difficulty": 1,
+    "classLevels": [
+      8
+    ],
+    "subject": "Web structure",
+    "description": "Input types supply appropriate controls and built-in validation. Required prevents empty submission.",
+    "prerequisites": [
+      "HTML foundations"
+    ],
+    "template": "Use type=\"[blank1]\" for an email address and type=\"[blank2]\" for a numeric field. The [blank3] attribute marks a mandatory field.",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "email"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "number"
+      },
+      {
+        "id": "blank3",
+        "placeholder": "Blank 3",
+        "answer": "required"
+      }
+    ],
+    "explanation": "Input types supply appropriate controls and built-in validation. Required prevents empty submission.",
+    "codeSnippet": "<form><label>Email <input type=\"email\" name=\"email\" required></label>\n<label>Age <input type=\"number\" name=\"age\" min=\"1\"></label><button>Send</button></form>"
+  },
+  {
+    "id": 38,
+    "title": "Forms and submission",
+    "category": "HTML",
+    "difficulty": 1,
+    "classLevels": [
+      8
+    ],
+    "subject": "Web structure",
+    "description": "Action sets the target URL. Method selects the request method; named, enabled controls contribute submitted data.",
+    "prerequisites": [
+      "HTML foundations"
+    ],
+    "template": "A form destination is set by [blank1]. The HTTP submission method is set by [blank2]. A control needs a [blank3] to contribute its value to form submission.",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "action"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "method"
+      },
+      {
+        "id": "blank3",
+        "placeholder": "Blank 3",
+        "answer": "name"
+      }
+    ],
+    "explanation": "Action sets the target URL. Method selects the request method; named, enabled controls contribute submitted data.",
+    "codeSnippet": "<form action=\"/search\" method=\"get\">\n<label>Search <input name=\"q\"></label><button type=\"submit\">Search</button></form>"
+  },
+  {
+    "id": 39,
+    "title": "Audio and video",
+    "category": "HTML",
+    "difficulty": 1,
+    "classLevels": [
+      8
+    ],
+    "subject": "Web structure",
+    "description": "Native controls support playback. Videos with speech should include captions.",
+    "prerequisites": [
+      "HTML foundations"
+    ],
+    "template": "Embed a movie with <[blank1]> or sound with <[blank2]>. Add the [blank3] attribute for built-in playback controls.",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "video"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "audio"
+      },
+      {
+        "id": "blank3",
+        "placeholder": "Blank 3",
+        "answer": "controls"
+      }
+    ],
+    "explanation": "Native controls support playback. Videos with speech should include captions.",
+    "codeSnippet": "<video controls src=\"lesson.mp4\"><track kind=\"captions\" src=\"captions.vtt\" srclang=\"en\" label=\"English\"></video>\n<audio controls src=\"lesson.mp3\"></audio>"
+  },
+  {
+    "id": 40,
+    "title": "Accessible buttons",
+    "category": "HTML",
+    "difficulty": 2,
+    "classLevels": [
+      8
+    ],
+    "subject": "Web structure",
+    "description": "Native buttons support keyboard operation. An accessible name tells assistive technology what the action does.",
+    "prerequisites": [
+      "HTML foundations"
+    ],
+    "template": "Use a <[blank1]> element for an action. An icon-only button can have an accessible name through [blank2].",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "button"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "aria-label"
+      }
+    ],
+    "explanation": "Native buttons support keyboard operation. An accessible name tells assistive technology what the action does.",
+    "codeSnippet": "<button type=\"button\" aria-label=\"Close dialog\">×</button>"
+  },
+  {
+    "id": 41,
+    "title": "Viewport and character encoding",
+    "category": "HTML",
+    "difficulty": 2,
+    "classLevels": [
+      8
+    ],
+    "subject": "Web structure",
+    "description": "UTF-8 supports international text. The viewport tag helps layouts fit mobile device widths.",
+    "prerequisites": [
+      "HTML foundations"
+    ],
+    "template": "Declare UTF-8 with <meta [blank1]=\"UTF-8\">. Responsive pages use a viewport meta tag with width=[blank2].",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "charset"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "device-width"
+      }
+    ],
+    "explanation": "UTF-8 supports international text. The viewport tag helps layouts fit mobile device widths.",
+    "codeSnippet": "<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
+  },
+  {
+    "id": 42,
+    "title": "Loading scripts",
+    "category": "HTML",
+    "difficulty": 2,
+    "classLevels": [
+      8
+    ],
+    "subject": "Web structure",
+    "description": "Defer allows HTML parsing to continue while a classic external script downloads, then executes it before DOMContentLoaded.",
+    "prerequisites": [
+      "HTML foundations"
+    ],
+    "template": "An external script URL is set using [blank1]. A classic external script with [blank2] runs after HTML parsing while preserving script order.",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "src"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "defer"
+      }
+    ],
+    "explanation": "Defer allows HTML parsing to continue while a classic external script downloads, then executes it before DOMContentLoaded.",
+    "codeSnippet": "<script src=\"app.js\" defer></script>"
+  },
+  {
+    "id": 43,
+    "title": "Flexbox",
+    "category": "CSS",
+    "difficulty": 1,
+    "classLevels": [
+      8
+    ],
+    "subject": "Web styling",
+    "description": "In a default row flex container, the main axis is horizontal and the cross axis is vertical.",
+    "prerequisites": [
+      "CSS foundations"
+    ],
+    "template": "Start Flexbox with display: [blank1]. Align along the main axis using [blank2], and along the cross axis using [blank3].",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "flex"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "justify-content"
+      },
+      {
+        "id": "blank3",
+        "placeholder": "Blank 3",
+        "answer": "align-items"
+      }
+    ],
+    "explanation": "In a default row flex container, the main axis is horizontal and the cross axis is vertical.",
+    "codeSnippet": ".row { display: flex; justify-content: center; align-items: center; gap: 1rem; }"
+  },
+  {
+    "id": 44,
+    "title": "Grid layout",
+    "category": "CSS",
+    "difficulty": 1,
+    "classLevels": [
+      8
+    ],
+    "subject": "Web styling",
+    "description": "Grid arranges elements in rows and columns. Fr shares available space between flexible tracks.",
+    "prerequisites": [
+      "CSS foundations"
+    ],
+    "template": "Start Grid with display: [blank1]. Define column tracks with [blank2] and spacing between tracks with [blank3].",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "grid"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "grid-template-columns"
+      },
+      {
+        "id": "blank3",
+        "placeholder": "Blank 3",
+        "answer": "gap"
+      }
+    ],
+    "explanation": "Grid arranges elements in rows and columns. Fr shares available space between flexible tracks.",
+    "codeSnippet": ".gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }"
+  },
+  {
+    "id": 45,
+    "title": "Responsive breakpoints",
+    "category": "CSS",
+    "difficulty": 1,
+    "classLevels": [
+      8
+    ],
+    "subject": "Web styling",
+    "description": "Media queries adapt presentation to available space without changing content.",
+    "prerequisites": [
+      "CSS foundations"
+    ],
+    "template": "A CSS conditional block for screen features begins with [blank1]. A max-width condition applies at widths [blank2] or equal to the given size.",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "@media"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "less"
+      }
+    ],
+    "explanation": "Media queries adapt presentation to available space without changing content.",
+    "codeSnippet": ".cards { display: grid; grid-template-columns: repeat(3, 1fr); }\n@media (max-width: 600px) { .cards { grid-template-columns: 1fr; } }"
+  },
+  {
+    "id": 46,
+    "title": "Positioning",
+    "category": "CSS",
+    "difficulty": 2,
+    "classLevels": [
+      8
+    ],
+    "subject": "Web styling",
+    "description": "An absolutely positioned child often uses its nearest positioned ancestor as its containing block.",
+    "prerequisites": [
+      "CSS foundations"
+    ],
+    "template": "Position: [blank1] keeps an element in normal flow while allowing offsets. Position: [blank2] removes it from flow and positions it relative to its containing block.",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "relative"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "absolute"
+      }
+    ],
+    "explanation": "An absolutely positioned child often uses its nearest positioned ancestor as its containing block.",
+    "codeSnippet": ".card { position: relative; }\n.badge { position: absolute; top: 0; right: 0; }"
+  },
+  {
+    "id": 47,
+    "title": "Responsive images",
+    "category": "CSS",
+    "difficulty": 2,
+    "classLevels": [
+      8
+    ],
+    "subject": "Web styling",
+    "description": "Responsive images can shrink to fit narrow containers without stretching their proportions.",
+    "prerequisites": [
+      "CSS foundations"
+    ],
+    "template": "Set max-width: [blank1] to keep an image within its container. Height: [blank2] preserves its intrinsic aspect ratio.",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "100%"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "auto"
+      }
+    ],
+    "explanation": "Responsive images can shrink to fit narrow containers without stretching their proportions.",
+    "codeSnippet": "img { max-width: 100%; height: auto; }"
+  },
+  {
+    "id": 48,
+    "title": "Overflow and line spacing",
+    "category": "CSS",
+    "difficulty": 2,
+    "classLevels": [
+      8
+    ],
+    "subject": "Web styling",
+    "description": "Overflow controls content that exceeds a box. Unitless line-height scales with the font size.",
+    "prerequisites": [
+      "CSS foundations"
+    ],
+    "template": "Use overflow: [blank1] to add scrolling only when needed. Text line spacing is controlled by [blank2].",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "auto"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "line-height"
+      }
+    ],
+    "explanation": "Overflow controls content that exceeds a box. Unitless line-height scales with the font size.",
+    "codeSnippet": ".notes { max-height: 12rem; overflow: auto; line-height: 1.5; }"
+  },
+  {
+    "id": 49,
+    "title": "DOM selection",
+    "category": "JavaScript",
+    "difficulty": 1,
+    "classLevels": [
+      8
+    ],
+    "subject": "Programming fundamentals",
+    "description": "QuerySelector returns an element or null. QuerySelectorAll returns a static NodeList.",
+    "prerequisites": [
+      "JavaScript foundations"
+    ],
+    "template": "Select the first CSS selector match with document.[blank1](). Select every match with document.[blank2]().",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "querySelector"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "querySelectorAll"
+      }
+    ],
+    "explanation": "QuerySelector returns an element or null. QuerySelectorAll returns a static NodeList.",
+    "codeSnippet": "const first = document.querySelector(\"p\");\nconst paragraphs = document.querySelectorAll(\"p\");\nconsole.log(first, paragraphs.length);"
+  },
+  {
+    "id": 50,
+    "title": "Updating page content",
+    "category": "JavaScript",
+    "difficulty": 1,
+    "classLevels": [
+      8
+    ],
+    "subject": "Programming fundamentals",
+    "description": "TextContent treats input as text rather than HTML. Value reads or changes a form control value.",
+    "prerequisites": [
+      "JavaScript foundations"
+    ],
+    "template": "Use [blank1] to set plain text safely. A form input current value is accessed through [blank2].",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "textContent"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "value"
+      }
+    ],
+    "explanation": "TextContent treats input as text rather than HTML. Value reads or changes a form control value.",
+    "codeSnippet": "const input = document.querySelector(\"input\");\nconst result = document.querySelector(\"p\");\nif (input && result) result.textContent = input.value;"
+  },
+  {
+    "id": 51,
+    "title": "Event listeners",
+    "category": "JavaScript",
+    "difficulty": 1,
+    "classLevels": [
+      8
+    ],
+    "subject": "Programming fundamentals",
+    "description": "Event listeners respond to user actions. PreventDefault can stop a form navigating away on submission.",
+    "prerequisites": [
+      "JavaScript foundations"
+    ],
+    "template": "Register an event handler using [blank1]. Cancel a cancelable event default action using event.[blank2]().",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "addEventListener"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "preventDefault"
+      }
+    ],
+    "explanation": "Event listeners respond to user actions. PreventDefault can stop a form navigating away on submission.",
+    "codeSnippet": "const form = document.querySelector(\"form\");\nif (form) form.addEventListener(\"submit\", event => {\n  event.preventDefault();\n  console.log(\"Handled submit\");\n});"
+  },
+  {
+    "id": 52,
+    "title": "Objects",
+    "category": "JavaScript",
+    "difficulty": 2,
+    "classLevels": [
+      8
+    ],
+    "subject": "Programming fundamentals",
+    "description": "Objects group related values. Dot notation accesses a property using its identifier.",
+    "prerequisites": [
+      "JavaScript foundations"
+    ],
+    "template": "An object stores named [blank1]. Access the name property of student with student[blank2]name.",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "properties"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "."
+      }
+    ],
+    "explanation": "Objects group related values. Dot notation accesses a property using its identifier.",
+    "codeSnippet": "const student = { name: \"Asha\", score: 9 };\nconsole.log(student.name);"
+  },
+  {
+    "id": 53,
+    "title": "Array updates",
+    "category": "JavaScript",
+    "difficulty": 2,
+    "classLevels": [
+      8
+    ],
+    "subject": "Programming fundamentals",
+    "description": "Push and pop change an array. A const array binding still allows its contents to be modified.",
+    "prerequisites": [
+      "JavaScript foundations"
+    ],
+    "template": "Append an item with [blank1](). Remove the final item with [blank2]().",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "push"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "pop"
+      }
+    ],
+    "explanation": "Push and pop change an array. A const array binding still allows its contents to be modified.",
+    "codeSnippet": "const tasks = [\"Read\"];\ntasks.push(\"Practice\");\nconsole.log(tasks.pop());"
+  },
+  {
+    "id": 54,
+    "title": "Number conversion and remainder",
+    "category": "JavaScript",
+    "difficulty": 2,
+    "classLevels": [
+      8
+    ],
+    "subject": "Programming fundamentals",
+    "description": "Number converts numeric text. The remainder operator is useful for checks such as even or odd numbers.",
+    "prerequisites": [
+      "JavaScript foundations"
+    ],
+    "template": "Convert text to a number with [blank1](\"12\"). Use [blank2] to compute a remainder.",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "Number"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "%"
+      }
+    ],
+    "explanation": "Number converts numeric text. The remainder operator is useful for checks such as even or odd numbers.",
+    "codeSnippet": "const count = Number(\"12\");\nconsole.log(count + 1);\nconsole.log(count % 5);"
+  },
+  {
+    "id": 55,
+    "title": "Accessible form groups",
+    "category": "HTML",
+    "difficulty": 1,
+    "classLevels": [
+      9
+    ],
+    "subject": "Web structure",
+    "description": "Fieldset and legend describe related choices. Radio controls with the same name form a single-choice group.",
+    "prerequisites": [
+      "HTML foundations"
+    ],
+    "template": "Group related form controls inside <[blank1]>. Give the group a caption with <[blank2]>.",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "fieldset"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "legend"
+      }
+    ],
+    "explanation": "Fieldset and legend describe related choices. Radio controls with the same name form a single-choice group.",
+    "codeSnippet": "<fieldset><legend>Choose a club</legend>\n<label><input type=\"radio\" name=\"club\" value=\"art\"> Art</label>\n<label><input type=\"radio\" name=\"club\" value=\"science\"> Science</label></fieldset>"
+  },
+  {
+    "id": 56,
+    "title": "Details and summaries",
+    "category": "HTML",
+    "difficulty": 1,
+    "classLevels": [
+      9
+    ],
+    "subject": "Web structure",
+    "description": "Details and summary provide an expandable section with built-in keyboard support.",
+    "prerequisites": [
+      "HTML foundations"
+    ],
+    "template": "A native disclosure widget uses <[blank1]>. Its visible heading uses <[blank2]>.",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "details"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "summary"
+      }
+    ],
+    "explanation": "Details and summary provide an expandable section with built-in keyboard support.",
+    "codeSnippet": "<details><summary>How to play</summary><p>Choose a question and answer it.</p></details>"
+  },
+  {
+    "id": 57,
+    "title": "Figures and captions",
+    "category": "HTML",
+    "difficulty": 1,
+    "classLevels": [
+      9
+    ],
+    "subject": "Web structure",
+    "description": "Figure groups media with a caption. Image alternative text and captions serve related but distinct purposes.",
+    "prerequisites": [
+      "HTML foundations"
+    ],
+    "template": "A self-contained illustration can use <[blank1]>. Add its caption using <[blank2]>.",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "figure"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "figcaption"
+      }
+    ],
+    "explanation": "Figure groups media with a caption. Image alternative text and captions serve related but distinct purposes.",
+    "codeSnippet": "<figure><img src=\"plant.png\" alt=\"A seedling with two leaves\">\n<figcaption>Seedling after one week</figcaption></figure>"
+  },
+  {
+    "id": 58,
+    "title": "Data attributes",
+    "category": "HTML",
+    "difficulty": 2,
+    "classLevels": [
+      9
+    ],
+    "subject": "Web structure",
+    "description": "Data attributes attach custom information to elements; dataset exposes their values as strings.",
+    "prerequisites": [
+      "HTML foundations"
+    ],
+    "template": "Custom application metadata uses attributes starting with [blank1]. JavaScript accesses data-score through element.dataset.[blank2].",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "data-"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "score"
+      }
+    ],
+    "explanation": "Data attributes attach custom information to elements; dataset exposes their values as strings.",
+    "codeSnippet": "<button type=\"button\" data-score=\"10\">Choose</button>\n<script>\nconst button = document.querySelector(\"button\");\nconsole.log(button.dataset.score);\n</script>"
+  },
+  {
+    "id": 59,
+    "title": "Loading images efficiently",
+    "category": "HTML",
+    "difficulty": 2,
+    "classLevels": [
+      9
+    ],
+    "subject": "Web structure",
+    "description": "Lazy loading can reduce initial network work. Explicit dimensions help prevent layout movement.",
+    "prerequisites": [
+      "HTML foundations"
+    ],
+    "template": "Defer off-screen image loading with loading=\"[blank1]\". Supplying [blank2] and height helps reserve space before the image loads.",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "lazy"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "width"
+      }
+    ],
+    "explanation": "Lazy loading can reduce initial network work. Explicit dimensions help prevent layout movement.",
+    "codeSnippet": "<img src=\"garden.jpg\" alt=\"School garden\" loading=\"lazy\" width=\"640\" height=\"480\">"
+  },
+  {
+    "id": 60,
+    "title": "HTML entities",
+    "category": "HTML",
+    "difficulty": 2,
+    "classLevels": [
+      9
+    ],
+    "subject": "Web structure",
+    "description": "Character references let reserved characters appear as text instead of being interpreted as markup.",
+    "prerequisites": [
+      "HTML foundations"
+    ],
+    "template": "Write a literal less-than sign with [blank1] and a literal ampersand with [blank2].",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "&lt;"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "&amp;"
+      }
+    ],
+    "explanation": "Character references let reserved characters appear as text instead of being interpreted as markup.",
+    "codeSnippet": "<p>Use &lt;p&gt; for a paragraph. Tea &amp; snacks.</p>"
+  },
+  {
+    "id": 61,
+    "title": "Custom properties",
+    "category": "CSS",
+    "difficulty": 1,
+    "classLevels": [
+      9
+    ],
+    "subject": "Web styling",
+    "description": "Custom properties let several rules share values and can inherit through the document tree.",
+    "prerequisites": [
+      "CSS foundations"
+    ],
+    "template": "A custom property name starts with [blank1]. Read its value using [blank2]().",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "--"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "var"
+      }
+    ],
+    "explanation": "Custom properties let several rules share values and can inherit through the document tree.",
+    "codeSnippet": ":root { --accent: navy; }\nbutton { background: var(--accent); color: white; }"
+  },
+  {
+    "id": 62,
+    "title": "Transitions and transforms",
+    "category": "CSS",
+    "difficulty": 1,
+    "classLevels": [
+      9
+    ],
+    "subject": "Web styling",
+    "description": "Transitions interpolate supported property changes. Respect reduced-motion preferences.",
+    "prerequisites": [
+      "CSS foundations"
+    ],
+    "template": "Animate changes between CSS values using [blank1]. Move or scale a box visually using [blank2].",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "transition"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "transform"
+      }
+    ],
+    "explanation": "Transitions interpolate supported property changes. Respect reduced-motion preferences.",
+    "codeSnippet": "button { transition: transform 0.2s; }\nbutton:hover { transform: scale(1.05); }\n@media (prefers-reduced-motion: reduce) { button { transition: none; } }"
+  },
+  {
+    "id": 63,
+    "title": "Keyframe animation",
+    "category": "CSS",
+    "difficulty": 1,
+    "classLevels": [
+      9
+    ],
+    "subject": "Web styling",
+    "description": "Keyframes describe intermediate styles. An animation has a name, duration, and optional repetition settings.",
+    "prerequisites": [
+      "CSS foundations"
+    ],
+    "template": "Define animation stages with [blank1]. Set how long one cycle lasts with [blank2].",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "@keyframes"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "animation-duration"
+      }
+    ],
+    "explanation": "Keyframes describe intermediate styles. An animation has a name, duration, and optional repetition settings.",
+    "codeSnippet": "@keyframes fade { from { opacity: 0; } to { opacity: 1; } }\n.notice { animation-name: fade; animation-duration: 1s; }\n@media (prefers-reduced-motion: reduce) { .notice { animation: none; } }"
+  },
+  {
+    "id": 64,
+    "title": "Flexible layouts",
+    "category": "CSS",
+    "difficulty": 2,
+    "classLevels": [
+      9
+    ],
+    "subject": "Web styling",
+    "description": "Wrapping and flexible grid tracks adapt a layout to the available space.",
+    "prerequisites": [
+      "CSS foundations"
+    ],
+    "template": "Allow flex items to wrap with flex-wrap: [blank1]. Let a grid choose the number of fitting columns with repeat([blank2], minmax(12rem, 1fr)).",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "wrap"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "auto-fit"
+      }
+    ],
+    "explanation": "Wrapping and flexible grid tracks adapt a layout to the available space.",
+    "codeSnippet": ".row { display: flex; flex-wrap: wrap; gap: 1rem; }\n.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: 1rem; }"
+  },
+  {
+    "id": 65,
+    "title": "Visibility and stacking",
+    "category": "CSS",
+    "difficulty": 2,
+    "classLevels": [
+      9
+    ],
+    "subject": "Web styling",
+    "description": "Opacity affects the entire element and its descendants. Z-index ordering is constrained by stacking contexts.",
+    "prerequisites": [
+      "CSS foundations"
+    ],
+    "template": "Use [blank1] to set transparency. Control stacking order for positioned boxes using [blank2].",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "opacity"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "z-index"
+      }
+    ],
+    "explanation": "Opacity affects the entire element and its descendants. Z-index ordering is constrained by stacking contexts.",
+    "codeSnippet": ".overlay { position: fixed; inset: 0; z-index: 10; background: rgb(0 0 0 / 50%); }\n.muted { opacity: 0.6; }"
+  },
+  {
+    "id": 66,
+    "title": "Sticky positioning",
+    "category": "CSS",
+    "difficulty": 2,
+    "classLevels": [
+      9
+    ],
+    "subject": "Web styling",
+    "description": "Sticky elements remain in normal flow and stick within their scroll container and containing block.",
+    "prerequisites": [
+      "CSS foundations"
+    ],
+    "template": "Use position: [blank1] for a heading that sticks after a scroll threshold. Set its upper threshold using [blank2].",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "sticky"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "top"
+      }
+    ],
+    "explanation": "Sticky elements remain in normal flow and stick within their scroll container and containing block.",
+    "codeSnippet": ".section-heading { position: sticky; top: 0; background: white; }"
+  },
+  {
+    "id": 67,
+    "title": "Array transformations",
+    "category": "JavaScript",
+    "difficulty": 1,
+    "classLevels": [
+      9
+    ],
+    "subject": "Programming fundamentals",
+    "description": "Map transforms each item; filter selects items. Neither method mutates the original array by itself.",
+    "prerequisites": [
+      "JavaScript foundations"
+    ],
+    "template": "Create a new array by transforming each item with [blank1](). Keep only matching items with [blank2]().",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "map"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "filter"
+      }
+    ],
+    "explanation": "Map transforms each item; filter selects items. Neither method mutates the original array by itself.",
+    "codeSnippet": "const scores = [2, 5, 8];\nconsole.log(scores.map(score => score * 2));\nconsole.log(scores.filter(score => score >= 5));"
+  },
+  {
+    "id": 68,
+    "title": "JSON and local storage",
+    "category": "JavaScript",
+    "difficulty": 1,
+    "classLevels": [
+      9
+    ],
+    "subject": "Programming fundamentals",
+    "description": "Local storage stores strings by origin. JSON converts structured data to text and back; malformed JSON throws an error.",
+    "prerequisites": [
+      "JavaScript foundations"
+    ],
+    "template": "Convert a value to JSON text with JSON.[blank1](). Restore a value with JSON.[blank2](). Save text locally with localStorage.[blank3]().",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "stringify"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "parse"
+      },
+      {
+        "id": "blank3",
+        "placeholder": "Blank 3",
+        "answer": "setItem"
+      }
+    ],
+    "explanation": "Local storage stores strings by origin. JSON converts structured data to text and back; malformed JSON throws an error.",
+    "codeSnippet": "const scores = [4, 8];\nlocalStorage.setItem(\"scores\", JSON.stringify(scores));\nconst saved = JSON.parse(localStorage.getItem(\"scores\") || \"[]\");\nconsole.log(saved);"
+  },
+  {
+    "id": 69,
+    "title": "Timers",
+    "category": "JavaScript",
+    "difficulty": 1,
+    "classLevels": [
+      9
+    ],
+    "subject": "Programming fundamentals",
+    "description": "Timer delays are measured in milliseconds and describe a minimum delay, not an exact execution time.",
+    "prerequisites": [
+      "JavaScript foundations"
+    ],
+    "template": "Run a callback once after a delay using [blank1](). Cancel that pending timer with [blank2]().",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "setTimeout"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "clearTimeout"
+      }
+    ],
+    "explanation": "Timer delays are measured in milliseconds and describe a minimum delay, not an exact execution time.",
+    "codeSnippet": "const timer = setTimeout(() => console.log(\"Time!\"), 1000);\nclearTimeout(timer);"
+  },
+  {
+    "id": 70,
+    "title": "Fetching JSON",
+    "category": "JavaScript",
+    "difficulty": 2,
+    "classLevels": [
+      9
+    ],
+    "subject": "Programming fundamentals",
+    "description": "Fetch returns a promise. Check the HTTP status and handle both request and parsing failures.",
+    "prerequisites": [
+      "JavaScript foundations"
+    ],
+    "template": "Request a URL with [blank1](). In an async function, wait for a promise using [blank2]. Parse a JSON response with response.[blank3]().",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "fetch"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "await"
+      },
+      {
+        "id": "blank3",
+        "placeholder": "Blank 3",
+        "answer": "json"
+      }
+    ],
+    "explanation": "Fetch returns a promise. Check the HTTP status and handle both request and parsing failures.",
+    "codeSnippet": "async function loadData() {\n  const response = await fetch(\"data.json\");\n  if (!response.ok) throw new Error(\"Request failed\");\n  return await response.json();\n}\nloadData().then(console.log).catch(console.error);"
+  },
+  {
+    "id": 71,
+    "title": "Error handling",
+    "category": "JavaScript",
+    "difficulty": 2,
+    "classLevels": [
+      9
+    ],
+    "subject": "Programming fundamentals",
+    "description": "Try and catch let a program handle errors and show useful feedback instead of stopping unexpectedly.",
+    "prerequisites": [
+      "JavaScript foundations"
+    ],
+    "template": "Place code that might throw inside [blank1]. Handle an exception in [blank2].",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "try"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "catch"
+      }
+    ],
+    "explanation": "Try and catch let a program handle errors and show useful feedback instead of stopping unexpectedly.",
+    "codeSnippet": "try {\n  const data = JSON.parse(\"invalid JSON\");\n  console.log(data);\n} catch (error) { console.log(\"Could not read data\"); }"
+  },
+  {
+    "id": 72,
+    "title": "Classes and event targets",
+    "category": "JavaScript",
+    "difficulty": 2,
+    "classLevels": [
+      9
+    ],
+    "subject": "Programming fundamentals",
+    "description": "ClassList changes styling classes. Target is the original event element; currentTarget is the listener element.",
+    "prerequisites": [
+      "JavaScript foundations"
+    ],
+    "template": "Toggle a CSS class using element.classList.[blank1](). The element that originally triggered an event is event.[blank2].",
+    "blanks": [
+      {
+        "id": "blank1",
+        "placeholder": "Blank 1",
+        "answer": "toggle"
+      },
+      {
+        "id": "blank2",
+        "placeholder": "Blank 2",
+        "answer": "target"
+      }
+    ],
+    "explanation": "ClassList changes styling classes. Target is the original event element; currentTarget is the listener element.",
+    "codeSnippet": "const button = document.querySelector(\"button\");\nif (button) button.addEventListener(\"click\", event => {\n  event.currentTarget.classList.toggle(\"active\");\n  console.log(event.target);\n});"
+  }
+]

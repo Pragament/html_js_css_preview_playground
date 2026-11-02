@@ -1,58 +1,45 @@
-// Default sample code
-const defaultHTML = `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Playground</title>
-    <!-- Uncomment the following line to include an external CSS file -->
-    <!-- <link rel="stylesheet" href="style.css"> -->
-    <style>
-        /* Add your internal CSS here */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            text-align: center;
-            padding: 50px;
-        }
-        h1 {
-            color: #333;
-        }
-    </style>
-</head>
-<body>
-    <h1>Hello, World!</h1>
-    <p>Welcome to the Code Playground.</p>
-    <!-- Uncomment the following line to include an external JS file -->
-    <!-- <script src="script.js"><\/script> -->
-    <script>
-        // Add your internal JavaScript here
-        console.log('Hello from the script!');
-    <\/script>
-</body>
-</html>`;
+// Default sample code (clean, compact & instant QR scannable)
+const defaultHTML = `<h1>Hello, World!</h1>
+<p>Welcome to Code Playground.</p>
+<button onclick="changeColor()">🎨 Change Color</button>`;
 
-const defaultCSS = `/* Add your CSS here */
-body {
-    background-color: #f0f0f0;
-    font-family: Arial, sans-serif;
-}
-
-h1 {
-    color: #333;
+const defaultCSS = `body {
+    font-family: system-ui, -apple-system, sans-serif;
+    background-color: #f8fafc;
     text-align: center;
+    padding: 40px 20px;
 }
-
+h1 {
+    color: #1e293b;
+    margin-bottom: 8px;
+}
 p {
-    color: #666;
+    color: #64748b;
+    margin-bottom: 24px;
+}
+button {
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    transition: transform 0.15s, background-color 0.15s;
+}
+button:hover {
+    background-color: #2563eb;
+    transform: translateY(-2px);
 }`;
 
-const defaultJS = `// Add your JavaScript here
-console.log('Hello from script.js!');
-
-document.querySelector('h1').addEventListener('click', () => {
-    alert('You clicked the heading!');
-});`;
+const defaultJS = `function changeColor() {
+    const colors = ['#f8fafc', '#ecfdf5', '#eff6ff', '#fef3c7', '#fdf2f8', '#f3e8ff'];
+    const random = colors[Math.floor(Math.random() * colors.length)];
+    document.body.style.backgroundColor = random;
+    console.log('Background updated to', random);
+};`;
 
 // Initialize CodeMirror editors with default content
 const htmlEditor = CodeMirror.fromTextArea(document.getElementById('html-code'), {
@@ -78,6 +65,26 @@ const jsEditor = CodeMirror.fromTextArea(document.getElementById('js-code'), {
     extraKeys: { "Ctrl-Space": "autocomplete" },
 });
 
+// Explicitly attach editors to window for interoperability
+window.htmlEditor = htmlEditor;
+window.cssEditor = cssEditor;
+window.jsEditor = jsEditor;
+window.updatePreview = updatePreview;
+
+// If editors only contain placeholder comments or are empty, populate with default template
+const initialHtml = htmlEditor.getValue().trim();
+if (!initialHtml || initialHtml === '<!-- Add your HTML code here -->') {
+    htmlEditor.setValue(defaultHTML);
+}
+const initialCss = cssEditor.getValue().trim();
+if (!initialCss || initialCss === '/* Add your CSS here */') {
+    cssEditor.setValue(defaultCSS);
+}
+const initialJs = jsEditor.getValue().trim();
+if (!initialJs || initialJs === '// Add your JavaScript here') {
+    jsEditor.setValue(defaultJS);
+}
+
 // Automatically show hints while typing
 cssEditor.on("inputRead", function (cm, event) {
     if (!cm.state.completionActive) {  // Prevent multiple popups
@@ -88,7 +95,7 @@ cssEditor.on("inputRead", function (cm, event) {
 // Automatically show hints while typing
 htmlEditor.on("inputRead", function (cm, event) {
     const autocompleteButton = document.getElementById('autocomplete-button');
-    const isOn = autocompleteButton.textContent.includes('On');
+    const isOn = autocompleteButton && autocompleteButton.textContent.includes('On');
     if (isOn && !cm.state.completionActive) {  // Prevent multiple popups
         CodeMirror.commands.autocomplete(cm, null, { completeSingle: false });
     }
@@ -103,18 +110,35 @@ jsEditor.on("inputRead", function (cm, event) {
 
 // Function to update the preview
 function updatePreview() {
-    const html = htmlEditor.getValue();
-    const css = `<style>${cssEditor.getValue()}</style>`;
-    const js = `<script>
-                try {
-                    ${jsEditor.getValue()}
-                } catch (error) {
-                    console.error(error);
-                }
-            <\/script>`;
+    const rawHtml = htmlEditor.getValue();
+    const rawCss = cssEditor.getValue();
+    const rawJs = jsEditor.getValue();
+
     const preview = document.getElementById('preview');
-    preview.srcdoc = html + css + js;
+    if (preview) {
+        if (window.PlaygroundFeatures && typeof window.PlaygroundFeatures.buildPreviewDoc === 'function') {
+            preview.srcdoc = window.PlaygroundFeatures.buildPreviewDoc(rawHtml, rawCss, rawJs);
+        } else {
+            const css = `<style>${rawCss}</style>`;
+            const js = `<script>try { ${rawJs} } catch(e){ console.error(e); }<\/script>`;
+            preview.srcdoc = rawHtml + css + js;
+        }
+    }
+
+    const fsIframe = document.getElementById('pf-fullscreen-iframe');
+    if (fsIframe) {
+        if (window.PlaygroundFeatures && typeof window.PlaygroundFeatures.buildPreviewDoc === 'function') {
+            fsIframe.srcdoc = window.PlaygroundFeatures.buildPreviewDoc(rawHtml, rawCss, rawJs);
+        } else {
+            const css = `<style>${rawCss}</style>`;
+            const js = `<script>try { ${rawJs} } catch(e){ console.error(e); }<\/script>`;
+            fsIframe.srcdoc = rawHtml + css + js;
+        }
+    }
 }
+
+// Initial preview render on startup
+updatePreview();
 
 // Update preview on editor change
 htmlEditor.on('change', updatePreview);
@@ -123,21 +147,20 @@ jsEditor.on('change', updatePreview);
 
 // Function to toggle files
 function toggleFile(type) {
-    const htmlEditorElement = htmlEditor.getWrapperElement();
-    const cssEditorElement = cssEditor.getWrapperElement();
-    const jsEditorElement = jsEditor.getWrapperElement();
+    const editors = { html: htmlEditor, css: cssEditor, js: jsEditor };
+    const filenames = { html: 'index.html', css: 'style.css', js: 'script.js' };
+    const selected = editors[type];
+    if (!selected) return;
 
-    htmlEditorElement.classList.add('hidden');
-    cssEditorElement.classList.add('hidden');
-    jsEditorElement.classList.add('hidden');
-
-    if (type === 'html') {
-        htmlEditorElement.classList.remove('hidden');
-    } else if (type === 'css') {
-        cssEditorElement.classList.remove('hidden');
-    } else if (type === 'js') {
-        jsEditorElement.classList.remove('hidden');
-    }
+    Object.entries(editors).forEach(([key, editor]) => {
+        editor.getWrapperElement().classList.toggle('hidden', key !== type);
+    });
+    document.getElementById('current-file-name').textContent = filenames[type];
+    // CodeMirror measures hidden editors at zero size; redraw when a file becomes visible.
+    requestAnimationFrame(() => {
+        if (typeof selected.refresh === 'function') selected.refresh();
+    });
+    updateUndoRedoButtons();
 }
 
 // Function to insert image path at cursor position
@@ -182,6 +205,18 @@ function insertLoremIpsum(dummyText) {
         activeEditor.replaceRange(wrappedText, cursor);
         activeEditor.focus(); // Focus back on the editor
     }
+}
+
+// Insert the selected number of words at the current file's cursor.
+function insertSampleText() {
+    const editor = getActiveEditor();
+    if (!editor) return;
+    const length = Math.max(1, Math.min(500, Number(document.getElementById('sample-text-length').value) || 50));
+    const words = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'.split(/\s+/);
+    let text = Array.from({length}, (_, index) => words[index % words.length]).join(' ');
+    if (!/[.!?]$/.test(text)) text += '.';
+    editor.replaceRange(text, editor.getCursor());
+    editor.focus();
 }
 
 // Function to get the active editor
@@ -468,56 +503,142 @@ function prettifyCode() {
     }
 }
 
-// Function to create a new file and autosave in local storage
+// New preserves the current file until the user successfully saves it.
 function createNewFile() {
-    // If there's text in active editor, ask user to save it
-    const activeEditor = getActiveEditor();
-    if (activeEditor) {
-        const code = activeEditor.getValue();
-        if (code) {
-            saveFile();
-            // Clear the active editor
-            clearEditor();
-        }
-    }
+    const editor = getActiveEditor();
+    if (!editor) return;
+    if (editor.getValue()) saveFile(true);
+    else document.getElementById('current-file-name').textContent = 'untitled.' + editorFileExtension(editor);
 }
 
-// Function to view autosaved files in the file explorer
+// Keep IDE files separate from authentication, settings, and other apps' storage.
+const IDE_FILE_PREFIX = 'html-ide:file:';
+const IDE_FILE_EXTENSION = /\.(html|css|js)$/i;
+
+function getSavedIdeFiles() {
+    const files = new Map();
+    for (let index = 0; index < localStorage.length; index++) {
+        const key = localStorage.key(index);
+        if (!key) continue;
+        const scoped = key.startsWith(IDE_FILE_PREFIX);
+        const name = scoped ? key.slice(IDE_FILE_PREFIX.length) : key;
+        // Recognize old code-file saves, while ignoring tokens and app settings.
+        if (!IDE_FILE_EXTENSION.test(name)) continue;
+        if (scoped || !files.has(name)) files.set(name, key);
+    }
+    return [...files].sort(([a], [b]) => a.localeCompare(b));
+}
+
 function viewAutosavedFiles() {
-    const fileExplorer = document.querySelector('.file-explorer ul');
-    fileExplorer.innerHTML = '';
-    for (let i = 0; i < localStorage.length; i++) {
-        const fileName = localStorage.key(i);
-        const li = document.createElement('li');
-        li.className = 'hover';
-        li.textContent = fileName;
-        li.onclick = () => loadFile(fileName);
-        fileExplorer.appendChild(li);
+    const list = document.getElementById('saved-files-list');
+    const heading = document.getElementById('saved-files-container');
+    list.replaceChildren();
+    heading.classList.remove('hidden');
+    list.classList.remove('hidden');
+    const files = getSavedIdeFiles();
+    const displayedKeys = new Set(files.map(([, key]) => key));
+    const storageDebug = [];
+    for (let index = 0; index < localStorage.length; index++) {
+        const key = localStorage.key(index);
+        if (!key) continue;
+        const scoped = key.startsWith(IDE_FILE_PREFIX);
+        const name = scoped ? key.slice(IDE_FILE_PREFIX.length) : key;
+        storageDebug.push({
+            key,
+            filename: name,
+            source: scoped ? 'HTML IDE' : 'Legacy / other storage',
+            result: displayedKeys.has(key) ? 'Displayed' :
+                IDE_FILE_EXTENSION.test(name) ? 'Skipped: newer scoped save exists' : 'Skipped: unsupported file extension'
+        });
     }
+    console.groupCollapsed(`[HTML IDE] viewAutosavedFiles: ${files.length} file(s), ${storageDebug.length} storage key(s)`);
+    console.table(storageDebug);
+    console.log('Displayed files:', files.map(([name]) => name));
+    if (!files.length) console.info('No saved HTML, CSS or JavaScript files found.');
+    console.groupEnd();
+    if (!files.length) {
+        const empty = document.createElement('li');
+        empty.textContent = 'No saved HTML, CSS or JavaScript files.';
+        list.appendChild(empty);
+    }
+    files.forEach(([name, key]) => {
+        const item = document.createElement('li');
+        item.className = 'hover';
+        item.textContent = name;
+        item.onclick = () => loadFile(name, key);
+        list.appendChild(item);
+    });
 }
 
-// Function to load a file from local storage
-function loadFile(fileName) {
-    console.log("loadFile " + fileName)
-    const content = localStorage.getItem(fileName);
-    console.log("content " + content)
-    const activeEditor = getActiveEditor();
-    if (activeEditor) {
-        activeEditor.setValue(content);
-    }
+function loadFile(fileName, storageKey) {
+    if (!IDE_FILE_EXTENSION.test(fileName)) return;
+    const key = storageKey || getSavedIdeFiles().find(([name]) => name === fileName)?.[1];
+    if (!key) return;
+    const content = localStorage.getItem(key);
+    if (content === null) return;
+    const type = fileName.split('.').pop().toLowerCase();
+    const editor = {html: htmlEditor, css: cssEditor, js: jsEditor}[type];
+    editor.setValue(content);
+    toggleFile(type);
+    document.getElementById('current-file-name').textContent = fileName;
 }
 
-// Save the content of the active editor to local storage
-function saveFile(fileName) {
-    console.log("saveFile " + fileName)
-    const activeEditor = getActiveEditor();
-    if (activeEditor) {
-        const fileName = prompt('Enter the name of the new file:');
-        if (fileName) {
-            const content = activeEditor.getValue();
-            console.log("content " + content)
-            localStorage.setItem(fileName, content);
-            viewAutosavedFiles();
-        }
+let pendingFileSave = null;
+
+function editorFileExtension(editor) {
+    return editor === cssEditor ? 'css' : editor === jsEditor ? 'js' : 'html';
+}
+
+function clearSaveFileError() {
+    document.getElementById('save-file-error').textContent = '';
+    document.getElementById('save-file-name').removeAttribute('aria-invalid');
+}
+
+function saveFile(createNew = false) {
+    const editor = getActiveEditor();
+    if (!editor) return;
+    pendingFileSave = {editor, createNew, previousFocus: document.activeElement};
+    const name = document.getElementById('save-file-name');
+    const currentName = document.getElementById('current-file-name').textContent.trim();
+    name.value = IDE_FILE_EXTENSION.test(currentName) ? currentName : 'untitled.' + editorFileExtension(editor);
+    clearSaveFileError();
+    document.getElementById('save-file-title').textContent = createNew ? 'Save before creating a new file' : 'Save file';
+    document.getElementById('save-file-submit').textContent = createNew ? 'Save & New' : 'Save';
+    const dialog = document.getElementById('save-file-dialog');
+    if (!dialog.open) dialog.showModal();
+    name.focus();
+    name.select();
+}
+
+function cancelSaveFile() {
+    const previousFocus = pendingFileSave?.previousFocus;
+    pendingFileSave = null;
+    document.getElementById('save-file-dialog').close();
+    previousFocus?.focus();
+}
+
+function submitSaveFile(event) {
+    event.preventDefault();
+    if (!pendingFileSave) return;
+    const input = document.getElementById('save-file-name');
+    const name = input.value.trim();
+    const error = document.getElementById('save-file-error');
+    if (!/^.+\.(html|css|js)$/i.test(name)) {
+        error.textContent = 'Enter a filename including .html, .css or .js (for example, index.html).';
+        input.setAttribute('aria-invalid', 'true');
+        input.focus();
+        return;
     }
+    const {editor, createNew} = pendingFileSave;
+    try {
+        localStorage.setItem(IDE_FILE_PREFIX + name, editor.getValue());
+    } catch (_) {
+        error.textContent = 'Could not save this file. Browser storage may be full or unavailable.';
+        return;
+    }
+    viewAutosavedFiles();
+    if (createNew) editor.setValue('');
+    document.getElementById('current-file-name').textContent = createNew ? 'untitled.' + editorFileExtension(editor) : name;
+    cancelSaveFile();
+    editor.focus();
 }

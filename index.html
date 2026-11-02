@@ -1,159 +1,1344 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Code Playground</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/codemirror.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/theme/material.min.css">
-    <link rel="stylesheet" href="app.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify-html.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify-css.min.js"></script>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Code Playground</title>
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/codemirror.min.css">
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/theme/material.min.css">
+        <link rel="stylesheet" href="app.css">
+        <link rel="stylesheet" href="playground-features.css">
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify.min.js"></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify-html.min.js"></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify-css.min.js"></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
-<body>
-    <!-- Toolbar with Undo/Redo Buttons -->
-    <div class="toolbar">
-        <!-- Undo/Redo Button Group -->
-        <div class="button-group">
-            <button onclick="togglePreviewLayout()" hidden id="preview-toggle-button"
-                title="Toggle Preview Layout">👁️🔄</button>
-            <button id="undo-button" onclick="undo()" disabled title="Undo the last action">↩️</button>
-            <button id="redo-button" onclick="redo()" disabled title="Redo the last undone action">↪️</button>
-            <button onclick="zoomIn()" title="Zoom in">🔍➕</button>
-            <button onclick="zoomOut()" title="Zoom out">🔍➖</button>
-            <button onclick="insertTemplate()" title="Insert Template">🔥📄</button>
-            <button onclick="selectAll()" title="Select All">Select All</button>
-            <button onclick="copyText()" title="Copy">Copy</button>
-            <button onclick="pasteText()" title="Paste">Paste</button>
-            <button onclick="clearEditor()" title="Clear Editor">Clear🚫📝</button>
-            <button onclick="toggleAutocomplete()" id="autocomplete-button" title="Toggle Autocomplete">💡:❌Off</button>
-            <button onclick="prettifyCode()" title="Prettify Code">✨ Prettify</button>
-            <button hidden onclick="createNewFile()" title="Create New File">🆕📄➕</button>
-            <button hidden onclick="saveFile()" title="Create New File">Save 💾📄</button>
-            <button hidden onclick="viewAutosavedFiles()" title="View Saved Files">👁️📄</button>
-            <button onclick="toggleSpecialChars()" title="Show/Hide Special Characters">👁️🎹</button>
-            <p id="capsWarning">⚠️ Caps Lock is ON!</p>
+        <style>
+        /* Existing inline styles from your original file */
+        .github-section { margin-top: 10px; }
+        .github-repos, .github-files { max-height: 280px; overflow-y: auto; }
+        .github-repos button, .github-files button {
+            display: block; width: 100%; margin: 2px 0; padding: 4px 8px;
+            background-color: #33334d; color: #ffffff; border: 1px solid #555;
+            border-radius: 3px; cursor: pointer; font-size: 12px; text-align: left;
+        }
+        .github-repos button:hover, .github-files button:hover { background-color: #3d3d5c; }
+        #github-login-btn { background-color: #238636; border-color: #238636; }
+        #github-login-btn:hover { background-color: #2ea043; }
+        #github-logout-btn { background-color: #da3633; border-color: #da3633; }
+        #github-logout-btn:hover { background-color: #e5484d; }
+        .file-explorer {
+            position: relative; resize: horizontal; overflow: auto; min-width: 200px; max-width: 500px;
+        }
+        .file-explorer-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 8px; background-color: #2d2d44; border-bottom: 1px solid #444; margin-bottom: 8px;
+        }
+        .file-explorer-header h3 { margin: 0; color: #ffffff; font-size: 14px; }
+        .file-explorer-toggle {
+            background-color: #da3633; color: #ffffff; border: 1px solid #da3633;
+            padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 12px;
+        }
+        .file-explorer-toggle:hover { background-color: #e5484d; }
+        .file-explorer.hidden { display: none; }
+        .main-container.full-width .editor-container { width: 100%; }
+        .show-explorer-btn {
+            position: fixed; top: 10px; left: 10px; z-index: 1000;
+            background-color: #238636; color: #ffffff; border: 1px solid #238636;
+            padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 14px;
+            display: none;
+        }
+        .show-explorer-btn:hover { background-color: #2ea043; }
+        .repo-search { margin-bottom: 8px; }
+        .repo-search input {
+            width: 100%; padding: 6px 8px; background-color: #2d2d44;
+            border: 1px solid #555; border-radius: 3px; color: #ffffff; font-size: 12px;
+        }
+        .repo-search input::placeholder { color: #888; }
+        .repo-search input:focus { outline: none; border-color: #238636; }
+
+        /* General layout adjustments using flexbox */
+        body {
+            background-color: #1a1a2e;
+            color: #f0f0f0;
+        }
+        .main-container {
+            display: flex;
+            height: calc(100vh - 50px); /* Adjust height, assuming 50px for toolbar */
+            width: 100%;
+            box-sizing: border-box;
+            flex-direction: row; /* Default to horizontal arrangement */
+        }
+        .editor-container {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        .CodeMirror {
+            height: 100% !important;
+        }
+        .preview-container {
+            flex-grow: 1;
+        }
+        #preview {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        @media (max-width: 600px) {
+            .main-container { flex-direction: column; }
+            .file-explorer {
+                width: 100%; height: auto; max-height: 200px; resize: vertical;
+            }
+        }
+    </style>
+
+    </head>
+
+    <body data-editor-mode="simple">
+        <button class="show-explorer-btn" id="show-explorer-btn"
+            onclick="showFileExplorer()">📁 Show Explorer</button>
+
+        <div class="toolbar" role="region" aria-label="HTML IDE tools">
+            <div class="toolbar-group toolbar-mode" role="group" aria-label="Editor mode">
+                <span class="toolbar-group-label" id="editor-mode-label">Simple editor</span>
+                <div class="toolbar-group-controls">
+                    <button id="editor-mode-toggle" type="button" aria-pressed="false" onclick="window.PlaygroundFeatures.toggleEditorMode()">Switch to Advanced</button>
+                </div>
+            </div>
+            <div class="toolbar-group toolbar-files" role="group" aria-label="Files">
+                <span class="toolbar-group-label">Files</span>
+                <div class="toolbar-group-controls">
+                    <button onclick="createNewFile()"
+                    title="Create New File">＋ New</button>
+                    <button onclick="saveFile()" title="Save the File">Save
+                    📄</button>
+                    <button onclick="viewAutosavedFiles()"
+                    title="View Saved Files">📂 Saved files</button>
+                </div>
+            </div>
+            <div class="toolbar-group toolbar-edit" role="group" aria-label="Edit">
+                <span class="toolbar-group-label">Edit</span>
+                <div class="toolbar-group-controls">
+                    <button id="undo-button" onclick="undo()" disabled
+                    title="Undo the last action">↩️</button>
+                    <button id="redo-button" onclick="redo()" disabled
+                    title="Redo the last undone action">↪️</button>
+                    <button onclick="selectAll()" title="Select All">Select
+                    All</button>
+                    <button onclick="copyText()" title="Copy">Copy</button>
+                    <button onclick="pasteText()" title="Paste">Paste</button>
+                    <button class="toolbar-danger" onclick="clearEditor()"
+                    title="Clear Editor">Clear</button>
+                </div>
+            </div>
+            <div class="toolbar-group toolbar-code" role="group" aria-label="Code tools">
+                <span class="toolbar-group-label">Code tools</span>
+                <div class="toolbar-group-controls">
+                    <button onclick="insertTemplate()"
+                    title="Insert Template">📄 Template</button>
+                    <button onclick="prettifyCode()" title="Prettify Code">✨
+                    Prettify</button>
+                    <button onclick="toggleAutocomplete()" id="autocomplete-button"
+                    title="Toggle Autocomplete">💡:❌Off</button>
+                    <button onclick="toggleSpecialChars()"
+                    title="Show/Hide Special Characters">👁️🎹</button>
+                </div>
+            </div>
+            <div class="toolbar-group toolbar-preview" role="group" aria-label="Preview">
+                <span class="toolbar-group-label">Preview</span>
+                <div class="toolbar-group-controls">
+                    <button onclick="zoomIn()" title="Zoom in">🔍➕</button>
+                    <button onclick="zoomOut()" title="Zoom out">🔍➖</button>
+                    <button onclick="togglePreviewLayout()" hidden
+                    id="preview-toggle-button"
+                    title="Toggle Preview Layout">👁️🔄</button>
+                    <button class="pf-btn pf-btn-phone" id="pf-phone-btn" onclick="window.PlaygroundFeatures.togglePhonePreview()" title="Toggle Smartphone Frame Preview">
+                        📱 Phone Preview
+                    </button>
+                    <button class="pf-btn pf-btn-fullscreen" onclick="window.PlaygroundFeatures.toggleFullscreenPreview()" title="Open preview in Fullscreen">
+                        ⛶ Fullscreen
+                    </button>
+                    <label class="pf-output-voice"><input type="checkbox" data-output-voice onchange="window.PlaygroundFeatures.setOutputSpeech(this.checked)"> Output speech</label>
+                </div>
+            </div>
+            <div class="toolbar-group toolbar-learn" role="group" aria-label="Learn">
+                <span class="toolbar-group-label">Learn</span>
+                <div class="toolbar-group-controls">
+                    <select id="pf-sample-select" class="pf-samples-dropdown" disabled onchange="if(this.value) window.PlaygroundFeatures.loadSample(this.value)" title="Choose a sample code to load">
+                        <option value="">Loading samples…</option>
+                    </select>
+                    <button class="pf-btn pf-btn-samples" onclick="window.PlaygroundFeatures.openSamplesModal()" title="Browse all sample codes">
+                        📚 Samples
+                    </button>
+                    <button class="pf-btn pf-btn-quiz" onclick="window.PlaygroundFeatures.openModal('pf-quiz-modal')" title="Fill in the blanks quiz challenge">
+                        🧩 Daily Quiz
+                    </button>
+                </div>
+            </div>
+            <div class="toolbar-group toolbar-share" role="group" aria-label="Share">
+                <span class="toolbar-group-label">Share</span>
+                <div class="toolbar-group-controls">
+                    <button class="pf-btn pf-btn-share" onclick="window.PlaygroundFeatures.openShareModal()" title="Share code via Permalink & QR Code">
+                        🔗 Share & QR
+                    </button>
+                </div>
+            </div>
+            <div class="toolbar-group toolbar-share" data-advanced-only role="group" aria-label="GitHub">
+                <span class="toolbar-group-label">GitHub</span>
+                <div class="toolbar-group-controls">
+                    <button onclick="UserSignin()" id="github-login-btn">🔐 Login
+                    GitHub</button>
+                    <button onclick="UserLogout()" id="github-logout-btn"
+                    style="display:none;">🔓 Logout</button>
+                    <button onclick="updateFileToGitHub()"
+                        title="Update GitHub">💾 Update to GitHub</button>
+                </div>
+            </div>
+            <div class="toolbar-group toolbar-record" data-advanced-only role="group" aria-label="Recording">
+                <span class="toolbar-group-label">Recording</span>
+                <div class="toolbar-group-controls">
+                    <button id="record-toggle-btn" onclick="toggleRecording()"
+                    title="Start/Stop Recording Keystrokes">
+                    🔴 Start Recording
+                </button>
+                    <button id="repeat-btn" onclick="openRepeatModal()"
+                    title="Repeat a Recording">
+                    🔁 Repeat Recording
+                </button>
+                    <button
+                    onclick="document.getElementById('recordingSessionsModal').classList.remove('hidden')"
+                    title="View Recordings">📹 View Recordings</button>
+                </div>
+            </div>
+            <div class="toolbar-group toolbar-code" id="special-char-buttons" role="group" aria-label="Insert symbols">
+                <span class="toolbar-group-label">Insert symbols</span>
+                <div class="toolbar-group-controls">
+                    <button onclick="insertLoremIpsum('<')"
+                        title="Less-than sign: <">&lt;</button>
+                    <button onclick="insertLoremIpsum('>')"
+                        title="Greater-than sign: >">&gt;</button>
+                    <button onclick="insertLoremIpsum('/')"
+                        title="Forward slash: /">/</button>
+                    <button onclick="insertLoremIpsum('&quot;')"
+                        title="Double quote: &quot;">"</button>
+                    <button onclick="insertLoremIpsum('\'')"
+                        title="Single quote: '">'</button>
+                    <button onclick="insertLoremIpsum('=')"
+                        title="Equals sign: =">=</button>
+                    <button onclick="insertLoremIpsum('&')"
+                        title="Ampersand: &">&amp;</button>
+                    <button onclick="insertLoremIpsum(';')"
+                        title="Semicolon: ;">;</button>
+                    <button onclick="insertLoremIpsum('#')"
+                        title="Hash/Pound sign: #">#</button>
+                    <button onclick="insertLoremIpsum('.')"
+                        title="Period/Dot: .">.</button>
+                    <button onclick="insertLoremIpsum(':')"
+                        title="Colon: :">:</button>
+                    <button onclick="insertLoremIpsum('-')"
+                        title="Hyphen: -">-</button>
+                    <button onclick="insertLoremIpsum('_')"
+                        title="Underscore: _">_</button>
+                    <button onclick="insertLoremIpsum('{')"
+                        title="Opening curly brace: {">{</button>
+                    <button onclick="insertLoremIpsum('}')"
+                        title="Closing curly brace: }">}</button>
+                    <button onclick="insertLoremIpsum('[')"
+                        title="Opening square bracket: [">[</button>
+                    <button onclick="insertLoremIpsum(']')"
+                        title="Closing square bracket: ]">]</button>
+                    <button onclick="insertLoremIpsum('(')"
+                        title="Opening parenthesis: (">(</button>
+                    <button onclick="insertLoremIpsum(')')"
+                        title="Closing parenthesis: )">)</button>
+                    <button onclick="insertLoremIpsum('!')"
+                        title="Exclamation mark: !">!</button>
+                    <button onclick="insertLoremIpsum('*')"
+                        title="Asterisk: *">*</button>
+                    <button onclick="insertLoremIpsum('|')"
+                        title="Vertical bar/Pipe: |">|</button>
+                    <button onclick="insertLoremIpsum('?')"
+                        title="Question mark: ?">?</button>
+                    <button onclick="insertLoremIpsum('@')"
+                        title="At symbol: @">@</button>
+                    <button onclick="insertLoremIpsum('~')"
+                        title="Tilde: ~">~</button>
+                    <button onclick="insertLoremIpsum('&copy;')"
+                        title="Copyright symbol: &copy;">&copy;</button>
+                    <button onclick="insertLoremIpsum('&reg;')"
+                        title="Registered trademark symbol: &reg;">&reg;</button>
+                    <button onclick="insertLoremIpsum('₹')"
+                        title="Indian Rupee symbol: ₹">₹</button>
+                    <button onclick="insertLoremIpsum('$')"
+                        title="Dollar sign: $">$</button>
+                </div>
+            </div>
+            <p id="capsWarning" role="status">⚠️ Caps Lock is ON!</p>
         </div>
 
-        <!-- Special Character Button Group -->
-        <div class="button-group" id="special-char-buttons">
-            <!-- Non-alphanumeric character buttons with hints -->
-            <button onclick="insertLoremIpsum('<')" title="Less-than sign: <">&lt;</button>
-            <button onclick="insertLoremIpsum('>')" title="Greater-than sign: >">&gt;</button>
-            <button onclick="insertLoremIpsum('/')" title="Forward slash: /">/</button>
-            <button onclick="insertLoremIpsum('&quot;')" title="Double quote: &quot;">"</button>
-            <button onclick="insertLoremIpsum('\'')" title="Single quote: '">'</button>
-            <button onclick="insertLoremIpsum('=')" title="Equals sign: =">=</button>
-            <button onclick="insertLoremIpsum('&')" title="Ampersand: &">&amp;</button>
-            <button onclick="insertLoremIpsum(';')" title="Semicolon: ;">;</button>
-            <button onclick="insertLoremIpsum('#')" title="Hash/Pound sign: #">#</button>
-            <button onclick="insertLoremIpsum('.')" title="Period/Dot: .">.</button>
-            <button onclick="insertLoremIpsum(':')" title="Colon: :">:</button>
-            <button onclick="insertLoremIpsum('-')" title="Hyphen: -">-</button>
-            <button onclick="insertLoremIpsum('_')" title="Underscore: _">_</button>
-            <button onclick="insertLoremIpsum('{')" title="Opening curly brace: {">{</button>
-            <button onclick="insertLoremIpsum('}')" title="Closing curly brace: }">}</button>
-            <button onclick="insertLoremIpsum('[')" title="Opening square bracket: [">[</button>
-            <button onclick="insertLoremIpsum(']')" title="Closing square bracket: ]">]</button>
-            <button onclick="insertLoremIpsum('(')" title="Opening parenthesis: (">(</button>
-            <button onclick="insertLoremIpsum(')')" title="Closing parenthesis: )">)</button>
-            <button onclick="insertLoremIpsum('!')" title="Exclamation mark: !">!</button>
-            <button onclick="insertLoremIpsum('*')" title="Asterisk: *">*</button>
-            <button onclick="insertLoremIpsum('|')" title="Vertical bar/Pipe: |">|</button>
-            <button onclick="insertLoremIpsum('?')" title="Question mark: ?">?</button>
-            <button onclick="insertLoremIpsum('@')" title="At symbol: @">@</button>
-            <button onclick="insertLoremIpsum('~')" title="Tilde: ~">~</button>
-            <button onclick="insertLoremIpsum('&copy;')" title="Copyright symbol: &copy;">&copy;</button>
-            <button onclick="insertLoremIpsum('&reg;')" title="Registered trademark symbol: &reg;">&reg;</button>
-            <button onclick="insertLoremIpsum('₹')" title="Indian Rupee symbol: ₹">₹</button>
-            <button onclick="insertLoremIpsum('$')" title="Dollar sign: $">$</button>
-        </div>
-    </div>
+                <!-- Repeat Modal -->
+                <div id="repeat-modal" data-advanced-only
+                    style="display:none; position:fixed; top:20%; left:35%; background:white; padding:20px; border:2px solid black; border-radius:10px; z-index:9999;">
+                    <h3>Select Recording & Speed</h3>
 
-    <div class="main-container preview-right" id="main-container">
-        <div class="file-explorer">
-            <ul>
-                <li class="hover" onclick="toggleFile('html')">index.html</li>
-                <li class="hover" onclick="toggleFile('css')">style.css</li>
-                <li class="hover" onclick="toggleFile('js')">script.js</li>
-            </ul>
-            <div class="divider-text">Text</div>
+                    <select id="repeat-session-select"></select>
 
-            <strong></strong>
-            <ul>
-                <li class="hover"
-                    onclick="insertLoremIpsum('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.')">
-                    Insert sample text
-                </li>
-            </ul>
-            <div class="divider-text">Images</div>
-            <strong></strong>
-            <ul>
-                <li class="hover" onclick="insertImagePath('./images/sample1.jpg')">
-                    sample1.jpg
-                    <img src="images/sample1.jpg" alt="Sample 1">
-                </li>
-                <li class="hover" onclick="insertImagePath('./images/sample2.jpg')">
-                    sample2.jpg
-                    <img src="images/sample2.jpg" alt="Sample 2">
-                </li>
-                <li class="hover" onclick="insertImagePath('./images/sample3.jpg')">
-                    sample3.jpg
-                    <img src="images/sample3.jpg" alt="Sample 3">
-                </li>
-            </ul>
-        </div>
-        <div class="editor-container">
-            <textarea id="html-code" class="hidden">
-<!-- Add your HTML code here -->
+                    <select id="repeat-speed-select">
+                        <option value="0.5">0.5x</option>
+                        <option value="0.75">0.75x</option>
+                        <option value="1" selected>1x</option>
+                        <option value="1.25">1.25x</option>
+                        <option value="1.5">1.5x</option>
+                        <option value="1.75">1.75x</option>
+                        <option value="2">2x</option>
+                    </select>
+
+                    <br><br>
+                    <button onclick="startRepeat()">▶️ Play</button>
+                    <button onclick="stopRepeat()">⏹️ Stop</button>
+                    <button onclick="closeRepeatModal()">❌ Cancel</button>
+                </div>
+
+
+            <div class="main-container" id="main-container">
+
+
+                <div class="file-explorer" id="file-explorer">
+                    <div class="file-explorer-header">
+                        <h3>File Explorer</h3>
+                        <button class="file-explorer-toggle"
+                            onclick="hideFileExplorer()">✕</button>
+                    </div>
+                    <div id="saved-files-container" class="divider-text hidden">
+                        Saved Files
+                    </div>
+                    <ul id="saved-files-list" class="hidden"></ul>
+                    <ul>
+                        <li class="hover"
+                            onclick="toggleFile('html')">index.html</li>
+                        <li class="hover"
+                            onclick="toggleFile('css')">style.css</li>
+                        <li class="hover"
+                            onclick="toggleFile('js')">script.js</li>
+                    </ul>
+
+                    <div class="github-section" id="github-section" data-advanced-only>
+                        <div class="divider-text">GitHub Repositories</div>
+                        <div class="repo-search">
+                            <input type="text" id="repo-search-input"
+                                placeholder="Search repositories..."
+                                onkeyup="searchRepositories()">
+                        </div>
+                        <div id="github-repos" class="github-repos"></div>
+
+                        <div class="divider-text">Repository Files</div>
+                        <div id="github-files" class="github-files"></div>
+                    </div>
+
+                    <div class="divider-text">Text</div>
+                    <div class="sample-text-controls">
+                        <label for="sample-text-length">Text length <output id="sample-text-count" for="sample-text-length">50 words</output></label>
+                        <input id="sample-text-length" type="range" min="1" max="500" step="1" value="50" oninput="document.getElementById('sample-text-count').value = this.value + ' words'">
+                        <button type="button" onclick="insertSampleText()">Insert sample text</button>
+                    </div>
+                    <div class="divider-text">Images</div>
+                    <strong></strong>
+                    <ul>
+                        <li class="hover"
+                            onclick="insertImagePath('./images/sample1.jpg')">
+                            sample1.jpg
+                            <img src="images/sample1.jpg" alt="Sample 1">
+                        </li>
+                        <li class="hover"
+                            onclick="insertImagePath('./images/sample2.jpg')">
+                            sample2.jpg
+                            <img src="images/sample2.jpg" alt="Sample 2">
+                        </li>
+                        <li class="hover"
+                            onclick="insertImagePath('./images/sample3.jpg')">
+                            sample3.jpg
+                            <img src="images/sample3.jpg" alt="Sample 3">
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="editor-container" id="editor-container">
+                    <div id="current-file-name"
+                        style="color: white; font-weight: bold; padding: 10px 15px; background-color: #222233; border-bottom: 1px solid #444;">
+                        No file loaded
+                    </div>
+
+
+                    <textarea id="html-code" class="hidden">
 </textarea>
-            <textarea id="css-code" class="hidden">
+                    <textarea id="css-code" class="hidden">
 /* Add your CSS here */
 </textarea>
-            <textarea id="js-code" class="hidden">
+                    <textarea id="js-code" class="hidden">
 // Add your JavaScript here
 </textarea>
-            <div class="preview-container">
-                <iframe id="preview"></iframe>
-            </div>
-        </div>
-    </div>
-    <!-- Floating Help Button -->
-    <button class="help-button" onclick="toggleChat()">?</button>
+                    <div class="preview-container" id="preview-container">
+                        <!-- Phone Preview Controls Bar (visible in phone mode) -->
+                        <div class="pf-phone-toolbar">
+                            <button class="pf-phone-tool-btn" id="pf-phone-rerun" onclick="window.PlaygroundFeatures.rerunPreview()" title="Rerun the current HTML, CSS and JavaScript">↻ Rerun</button>
+                            <label>📱 Device:
+                                <select class="pf-phone-select" onchange="window.PlaygroundFeatures.setPhoneDevice(this.value)">
+                                    <option value="iphone15">iPhone 15 Pro (393 × 780)</option>
+                                    <option value="pixel8">Google Pixel 8 (412 × 800)</option>
+                                    <option value="compact">Compact Phone (360 × 640)</option>
+                                    <option value="ipad">iPad Mini (580 × 780)</option>
+                                </select>
+                            </label>
+                            <label class="pf-output-voice"><input type="checkbox" data-output-voice onchange="window.PlaygroundFeatures.setOutputSpeech(this.checked)"> Output speech</label>
+                            <button class="pf-phone-tool-btn" onclick="window.PlaygroundFeatures.togglePhoneOrientation()">🔄 Rotate</button>
+                            <button class="pf-phone-tool-btn" onclick="window.PlaygroundFeatures.togglePhonePreview(false)">🖥️ Desktop</button>
+                        </div>
 
-    <!-- Chat Window -->
-    <div class="chat-window">
-        <div class="chat-header">Help Chat</div>
-        <div class="chat-body" id="chat-body">
-            <div class="message bot">
-                <p>Hello! How can I help you today?</p>
+                        <!-- Phone Shell Mockup (wraps preview iframe) -->
+                        <div class="pf-phone-shell device-iphone15" id="pf-phone-shell">
+                            <div class="pf-phone-island"></div>
+                            <div class="pf-phone-status-bar">
+                                <span id="pf-phone-time">9:41</span>
+                                <div class="pf-phone-status-icons">
+                                    <span>5G</span>
+                                    <span>📶</span>
+                                    <span>🔋</span>
+                                </div>
+                            </div>
+                            <div class="pf-phone-screen">
+                                <iframe id="preview"></iframe>
+                            </div>
+                            <div class="pf-phone-home-indicator"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="action-buttons">
-                <button onclick="showFAQs()">View FAQs</button>
-                <button onclick="showCustomMessageInput()">Send Custom Message</button>
+            <button class="help-button" onclick="toggleChat()">?</button>
+
+            <div class="chat-window">
+                <div class="chat-header">Help Chat</div>
+                <div class="chat-body" id="chat-body">
+                    <div class="message bot">
+                        <p>Hello! How can I help you today?</p>
+                    </div>
+                    <div class="action-buttons">
+                        <button onclick="showFAQs()">View FAQs</button>
+                        <button onclick="showCustomMessageInput()">Send Custom
+                            Message</button>
+                    </div>
+                </div>
+                <div class="chat-footer">
+                    <input type="text" id="chat-input"
+                        placeholder="Type your message...">
+                    <button onclick="sendMessage()">Send</button>
+                </div>
             </div>
-        </div>
-        <div class="chat-footer">
-            <input type="text" id="chat-input" placeholder="Type your message...">
-            <button onclick="sendMessage()">Send</button>
-        </div>
-    </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/codemirror.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/mode/xml/xml.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/mode/javascript/javascript.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/mode/css/css.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/mode/htmlmixed/htmlmixed.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/show-hint.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/xml-hint.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/javascript-hint.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/html-hint.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/css-hint.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/show-hint.min.css">
-    <script src="app.js"></script>
-</body>
+            <script
+                src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/codemirror.min.js"></script>
+            <script
+                src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/mode/xml/xml.min.js"></script>
+            <script
+                src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/mode/javascript/javascript.min.js"></script>
+            <script
+                src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/mode/css/css.min.js"></script>
+            <script
+                src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/mode/htmlmixed/htmlmixed.min.js"></script>
+            <script
+                src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/show-hint.min.js"></script>
+            <script
+                src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/xml-hint.min.js"></script>
+            <script
+                src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/javascript-hint.min.js"></script>
+            <script
+                src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/html-hint.min.js"></script>
+            <script
+                src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/css-hint.min.js"></script>
+            <link rel="stylesheet"
+                href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/addon/hint/show-hint.min.css">
+            <dialog id="save-file-dialog" class="save-file-dialog" aria-labelledby="save-file-title" oncancel="cancelSaveFile()">
+                <form onsubmit="submitSaveFile(event)" novalidate>
+                    <h2 id="save-file-title">Save file</h2>
+                    <label for="save-file-name">Filename</label>
+                    <input id="save-file-name" type="text" autocomplete="off" spellcheck="false" aria-describedby="save-file-help save-file-error" oninput="clearSaveFileError()">
+                    <p id="save-file-help">Include a .html, .css or .js extension.</p>
+                    <p id="save-file-error" role="alert"></p>
+                    <div class="save-file-actions">
+                        <button type="button" onclick="cancelSaveFile()">Cancel</button>
+                        <button type="submit" id="save-file-submit">Save</button>
+                    </div>
+                </form>
+            </dialog>
 
-</html>
+            <script src="app.js"></script>
+            <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+        import { getAuth, GithubAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA7qla4VwqZY5I7GAGGGzcR2sno8DodqhM",
+            authDomain: "codestudiodev-e38e8.firebaseapp.com",
+            projectId: "codestudiodev-e38e8",
+            storageBucket: "codestudiodev-e38e8",
+            messagingSenderId: "302367725207",
+            appId: "1:302367725207:web:fefb4c98c6f0c6c5f3fbd2"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GithubAuthProvider();
+        provider.addScope('repo');
+
+        let githubToken = localStorage.getItem('githubToken') || '';
+        let currentRepo = null;
+        let allRepos = []; // Store all repositories for search
+
+        onAuthStateChanged(auth, (user) => {
+            const loginBtn = document.getElementById('github-login-btn');
+            const logoutBtn = document.getElementById('github-logout-btn');
+            githubToken = localStorage.getItem('githubToken') || '';
+            loginBtn.style.display = user && githubToken ? 'none' : 'inline-block';
+            logoutBtn.style.display = user && githubToken ? 'inline-block' : 'none';
+            if (user && githubToken) {
+                listRepos();
+            } else {
+                clearGitHubUI();
+            }
+        });
+
+        window.UserSignin = function () {
+            signInWithPopup(auth, provider).then((result) => {
+                const credential = GithubAuthProvider.credentialFromResult(result);
+                githubToken = credential.accessToken;
+                if (githubToken) {
+                    localStorage.setItem('githubToken', githubToken);
+                    document.getElementById('github-login-btn').style.display = 'none';
+                    document.getElementById('github-logout-btn').style.display = 'inline-block';
+                    listRepos();
+                }
+            }).catch(console.error);
+        };
+
+        window.UserLogout = function () {
+            signOut(auth).then(() => {
+                localStorage.removeItem('githubToken');
+                githubToken = '';
+                currentRepo = null;
+                allRepos = [];
+                document.getElementById('github-login-btn').style.display = 'inline-block';
+                document.getElementById('github-logout-btn').style.display = 'none';
+                clearGitHubUI();
+            });
+        };
+
+        function listRepos() {
+            fetch('https://api.github.com/user/repos', {
+                headers: { Authorization: `token ${githubToken}` }
+            }).then(res => res.json()).then(repos => {
+                allRepos = repos; // Store all repositories
+                displayRepos(repos);
+            }).catch(err => {
+                console.error('Error fetching repos:', err);
+                document.getElementById('github-repos').innerHTML = '<p style="color: #ff6b6b;">Error loading repositories</p>';
+            });
+        }
+
+        function displayRepos(repos) {
+            const reposDiv = document.getElementById('github-repos');
+            reposDiv.innerHTML = '';
+            repos.forEach((repo, i) => {
+                const btn = document.createElement('button');
+                btn.textContent = `${i + 1}. ${repo.full_name}`;
+                btn.onclick = () => {
+                    currentRepo = repo;
+                    listFiles(repo);
+                };
+                reposDiv.appendChild(btn);
+            });
+        }
+
+        // Search repositories function
+        window.searchRepositories = function() {
+            const searchTerm = document.getElementById('repo-search-input').value.toLowerCase();
+            
+            if (searchTerm === '') {
+                // If search is empty, show all repos
+                displayRepos(allRepos);
+            } else {
+                // Filter repos based on search term
+                const filteredRepos = allRepos.filter(repo => 
+                    repo.name.toLowerCase().includes(searchTerm) || 
+                    repo.full_name.toLowerCase().includes(searchTerm)
+                );
+                displayRepos(filteredRepos);
+            }
+        };
+
+        function listFiles(repo) {
+            fetch(`https://api.github.com/repos/${repo.owner.login}/${repo.name}/contents/`, {
+                headers: { Authorization: `token ${githubToken}` }
+            }).then(res => res.json()).then(files => {
+                const filesDiv = document.getElementById('github-files');
+                filesDiv.innerHTML = '';
+                files.forEach(file => {
+                    if (file.name.endsWith('.html') || file.name.endsWith('.css') || file.name.endsWith('.js')) {
+                        const btn = document.createElement('button');
+                        btn.textContent = file.name;
+                        btn.onclick = () => loadGitHubFile({
+                            download_url: file.download_url,
+                            path: file.path,
+                            sha: file.sha,
+                            owner: repo.owner.login,
+                            repo: repo.name
+                        });
+                        filesDiv.appendChild(btn);
+                    }
+                });
+            }).catch(err => {
+                console.error('Error fetching files:', err);
+                document.getElementById('github-files').innerHTML = '<p style="color: #ff6b6b;">Error loading files</p>';
+            });
+        }
+
+        function clearGitHubUI() {
+            document.getElementById('github-repos').innerHTML = '<p style="color: #888;">Login to view repositories</p>';
+            document.getElementById('github-files').innerHTML = '<p style="color: #888;">Select a repository to view files</p>';
+            document.getElementById('repo-search-input').value = '';
+            allRepos = [];
+        }
+
+        async function loadGitHubFile(fileData) {
+            try {
+                const res = await fetch(fileData.download_url);
+                const content = await res.text();
+
+                // Store file metadata for updates
+                window.currentGitHubFile = fileData;
+
+                // Load content into appropriate editor
+                if (fileData.path.endsWith('.html')) {
+                    htmlEditor.setValue(content);
+                    toggleFile('html');
+                } else if (fileData.path.endsWith('.css')) {
+                    cssEditor.setValue(content);
+                    toggleFile('css');
+                } else if (fileData.path.endsWith('.js')) {
+                    jsEditor.setValue(content);
+                    toggleFile('js');
+                }
+
+                updatePreview();
+            } catch (err) {
+                alert('Failed to load file: ' + err.message);
+            }
+        }
+
+        // Make functions available globally
+        window.listRepos = listRepos;
+        window.listFiles = listFiles;
+        window.loadGitHubFile = loadGitHubFile;
+        window.githubToken = githubToken;
+        window.currentRepo = currentRepo;
+
+        // Initial UI setup
+        clearGitHubUI();
+    </script>
+
+            <script>
+        // File Explorer Toggle Functions (Keep existing)
+        function hideFileExplorer() {
+            const fileExplorer = document.getElementById('file-explorer');
+            const mainContainer = document.getElementById('main-container');
+            const showBtn = document.getElementById('show-explorer-btn');
+            
+            fileExplorer.classList.add('hidden');
+            mainContainer.classList.add('full-width');
+            showBtn.style.display = 'block';
+        }
+
+        function showFileExplorer() {
+            const fileExplorer = document.getElementById('file-explorer');
+            const mainContainer = document.getElementById('main-container');
+            const showBtn = document.getElementById('show-explorer-btn');
+            
+            fileExplorer.classList.remove('hidden');
+            mainContainer.classList.remove('full-width');
+            showBtn.style.display = 'none';
+        }
+        
+        // This window.onload is handled by the combined DOMContentLoaded in app.js now.
+        // The original onload will be commented out or removed, as it duplicates logic
+        /*
+        window.onload = async () => {
+            const params = new URLSearchParams(window.location.search);
+            const fileUrl = params.get('file');
+            if (!fileUrl) return;
+
+            try {
+                const res = await fetch(fileUrl);
+                const content = await res.text();
+
+                if (fileUrl.endsWith('.html')) {
+                    htmlEditor.setValue(content);
+                    toggleFile('html');
+                } else if (fileUrl.endsWith('.css')) {
+                    cssEditor.setValue(content);
+                    toggleFile('css');
+                } else if (fileUrl.endsWith('.js')) {
+                    jsEditor.setValue(content);
+                    toggleFile('js');
+                }
+
+                updatePreview();
+            } catch (err) {
+                alert('Failed to load file: ' + err.message);
+            }
+        };
+        */
+
+        async function updateFileToGitHub() {
+            const fileData = window.currentGitHubFile;
+            
+            if (!fileData) {
+                alert('No GitHub file selected. Please load a file from GitHub first.');
+                return;
+            }
+
+            const token = localStorage.getItem('githubToken');
+            if (!token) {
+                alert('Please login to GitHub first.');
+                return;
+            }
+
+            try {
+                const updatedContent = getCurrentEditorContent();
+                const base64Content = btoa(unescape(encodeURIComponent(updatedContent)));
+
+                const url = `https://api.github.com/repos/${fileData.owner}/${fileData.repo}/contents/${fileData.path}`;
+                const res = await fetch(url, {
+                    method: 'PUT',
+                    headers: {
+                        Authorization: `token ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: `Updated ${fileData.path} via Code Playground`,
+                        content: base64Content,
+                        sha: fileData.sha
+                    })
+                });
+
+                if (res.ok) {
+                    const result = await res.json();
+                    // Update the SHA for future updates
+                    window.currentGitHubFile.sha = result.content.sha;
+                    alert('✅ File updated successfully in GitHub!');
+                } else {
+                    const error = await res.json();
+                    alert('❌ Error updating file: ' + error.message);
+                }
+            } catch (err) {
+                alert('❌ Error updating file: ' + err.message);
+            }
+        }
+
+        function getCurrentEditorContent() {
+            const fileData = window.currentGitHubFile;
+            if (!fileData) return '';
+
+            const htmlCode = htmlEditor?.getValue?.() || '';
+            const cssCode = cssEditor?.getValue?.() || '';
+            const jsCode = jsEditor?.getValue?.() || '';
+
+            if (fileData.path.endsWith('.html')) return htmlCode;
+            if (fileData.path.endsWith('.css')) return cssCode;
+            if (fileData.path.endsWith('.js')) return jsCode;
+            return '';
+        }
+    </script>
+
+            <!-- Saved Files Modal -->
+            <div id="savedFilesModal" class="modal hidden">
+                <div class="modal-content">
+                    <span class="close"
+                        onclick="closeSavedFilesModal()">&times;</span>
+                    <h2>📁 Your Saved Files</h2>
+                    <ul id="saved-files-modal-list"></ul>
+                </div>
+            </div>
+
+            <!-- Recording Sessions Modal -->
+            <div id="recordingSessionsModal" data-advanced-only class="modal hidden">
+                <div class="modal-content">
+                    <span class="close"
+                        onclick="closeRecordingSessionsModal()">&times;</span>
+                    <h2>📹 Recording Sessions</h2>
+                    <div id="recording-sessions-list"></div>
+                </div>
+            </div>
+
+            <!-- Playback controls modal -->
+            <div id="playbackControlModal" data-advanced-only class="modal hidden">
+                <div class="modal-content playback-controls">
+                    <span class="close"
+                        onclick="stopPlayback()">&times;</span>
+                    <h3>🎬 Playback Controls</h3>
+                    <div class="playback-info">
+                        <p><strong>File:</strong> <span
+                                id="playback-filename"></span></p>
+                        <p><strong>Session:</strong> <span
+                                id="playback-session-name"></span></p>
+                    </div>
+                    <div class="playback-buttons">
+                        <button id="play-pause-btn"
+                            onclick="togglePlayback()">▶️ Play</button>
+                        <button onclick="stopPlayback()">⏹️ Stop</button>
+                        <div class="speed-controls">
+                            <label>Speed:</label>
+                            <button
+                                onclick="changePlaybackSpeed(0.5)">0.5x</button>
+                            <button onclick="changePlaybackSpeed(1)"
+                                class="active">1x</button>
+                            <button
+                                onclick="changePlaybackSpeed(2)">2x</button>
+                            <button
+                                onclick="changePlaybackSpeed(3)">3x</button>
+                        </div>
+                    </div>
+                    <div class="playback-progress">
+                        <div class="progress-bar">
+                            <div id="progress-fill"></div>
+                        </div>
+                        <p><span id="current-step">0</span> / <span
+                                id="total-steps">0</span> steps</p>
+                    </div>
+                </div>
+            </div>
+            <script>
+                /* ----------------- GLOBAL VARIABLES ----------------- */
+let isRecording = false;
+let keystrokes = [];
+let recordingSessions = [];
+let files = [
+    { name: "file1.html", sessions: [] },
+    { name: "file2.js", sessions: [] }
+];
+
+// Example cursor position tracker (row, column)
+let cursorRow = 0;
+let cursorCol = 0;
+
+/* ----------------- RECORDING ----------------- */
+function toggleRecording() {
+    const recordBtn = document.getElementById('record-toggle-btn');
+    isRecording = !isRecording;
+
+    if (isRecording) {
+        keystrokes = [];
+        recordBtn.textContent = '⏹️ Stop Recording';
+        document.addEventListener('keydown', recordKeystroke);
+    } else {
+        recordBtn.textContent = '🔴 Start Recording';
+        document.removeEventListener('keydown', recordKeystroke);
+
+        if (keystrokes.length > 0) {
+            const sessionName = `Session ${recordingSessions.length + 1} (${new Date().toLocaleString()})`;
+            const session = { name: sessionName, keystrokes };
+            recordingSessions.push(session);
+
+            // Attach to first file (demo purpose)
+            if (files.length > 0) {
+                files[0].sessions.push(session);
+            }
+        }
+
+        alert(`✅ Recording stopped. ${keystrokes.length} keystrokes captured.`);
+    }
+}
+
+function recordKeystroke(event) {
+    const now = new Date();
+    const timestamp = now.toTimeString().split(' ')[0]; // HH:MM:SS
+
+    // Update cursor position (for demo; replace with real editor cursor)
+    cursorCol++;
+    if (event.key === 'Enter') {
+        cursorRow++;
+        cursorCol = 0;
+    }
+
+    keystrokes.push({
+        char: event.key,
+        cursor: [cursorRow, cursorCol],
+        time: timestamp
+    });
+}
+
+/* ----------------- RECORDING SESSIONS MODAL ----------------- */
+function openRecordingSessionsModal() {
+    const listDiv = document.getElementById('recording-sessions-list');
+    listDiv.innerHTML = '';
+
+    if (recordingSessions.length === 0) {
+        listDiv.innerHTML = '<p>No recording sessions available.</p>';
+        return;
+    }
+
+    recordingSessions.forEach((session) => {
+        const div = document.createElement('div');
+        div.className = 'recording-session';
+        div.style.padding = '5px 10px';
+        div.style.borderBottom = '1px solid #444';
+        div.style.display = 'flex';
+        div.style.justifyContent = 'space-between';
+        div.style.alignItems = 'center';
+
+        const nameSpan = document.createElement('span');
+        nameSpan.textContent = session.name;
+
+        const exportBtn = document.createElement('button');
+        exportBtn.textContent = 'Export JSON';
+        exportBtn.onclick = () => exportSession(session);
+
+        div.appendChild(nameSpan);
+        div.appendChild(exportBtn);
+
+        listDiv.appendChild(div);
+    });
+}
+
+function closeRecordingSessionsModal() {
+    document.getElementById('recordingSessionsModal').classList.add('hidden');
+}
+
+/* ----------------- SAVED FILES MODAL ----------------- */
+function openSavedFilesModal() {
+    const list = document.getElementById('saved-files-modal-list');
+    list.innerHTML = '';
+
+    if (files.length === 0) {
+        list.innerHTML = '<p>No saved files.</p>';
+        return;
+    }
+
+    files.forEach(file => {
+        const fileItem = document.createElement('li');
+        fileItem.style.marginBottom = '10px';
+
+        const fileTitle = document.createElement('strong');
+        fileTitle.textContent = file.name;
+        fileItem.appendChild(fileTitle);
+
+        if (file.sessions.length > 0) {
+            const sessionList = document.createElement('ul');
+            sessionList.style.marginLeft = '15px';
+            file.sessions.forEach(session => {
+                const sessionItem = document.createElement('li');
+                sessionItem.style.display = 'flex';
+                sessionItem.style.justifyContent = 'space-between';
+                sessionItem.style.alignItems = 'center';
+                sessionItem.style.marginBottom = '3px';
+
+                const sessionName = document.createElement('span');
+                sessionName.textContent = session.name;
+
+                const exportBtn = document.createElement('button');
+                exportBtn.textContent = 'Export JSON';
+                exportBtn.onclick = () => exportSession(session);
+
+                sessionItem.appendChild(sessionName);
+                sessionItem.appendChild(exportBtn);
+                sessionList.appendChild(sessionItem);
+            });
+            fileItem.appendChild(sessionList);
+        } else {
+            const emptyMsg = document.createElement('p');
+            emptyMsg.textContent = 'No recording sessions for this file.';
+            emptyMsg.style.marginLeft = '15px';
+            fileItem.appendChild(emptyMsg);
+        }
+
+        list.appendChild(fileItem);
+    });
+}
+
+function closeSavedFilesModal() {
+    document.getElementById('savedFilesModal').classList.add('hidden');
+}
+
+/* ----------------- EXPORT SESSION ----------------- */
+function exportSession(session) {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(session.keystrokes, null, 2));
+    const dlAnchor = document.createElement('a');
+    dlAnchor.setAttribute("href", dataStr);
+    dlAnchor.setAttribute("download", `${session.name.replace(/[^a-z0-9]/gi, '_')}.json`);
+    dlAnchor.click();
+}
+
+/* ----------------- PLAYBACK PLACEHOLDERS ----------------- */
+let playbackSpeed = 1;
+function togglePlaybackSpeed() {
+    playbackSpeed = playbackSpeed === 1 ? 2 : 1;
+    const btn = document.getElementById('playback-speed-btn');
+    if (btn) btn.textContent = `⏯️ ${playbackSpeed}x`;
+}
+function togglePlayback() {
+    alert('Playback functionality not implemented yet.');
+}
+function stopPlayback() {
+    alert('Stop playback.');
+}
+
+document.querySelector('[title="View Recordings"]').onclick = function() {
+    openRecordingSessionsModal();
+    document.getElementById('recordingSessionsModal').classList.remove('hidden');
+};
+
+function openRepeatModal() {
+    const modal = document.getElementById('repeat-modal');
+    const select = document.getElementById('repeat-session-select');
+    select.innerHTML = '';
+
+    if (recordingSessions.length === 0) {
+        const opt = document.createElement('option');
+        opt.textContent = 'No recordings available';
+        opt.disabled = true;
+        select.appendChild(opt);
+    } else {
+        recordingSessions.forEach((session, index) => {
+            const opt = document.createElement('option');
+            opt.value = index;
+            opt.textContent = `Recording ${index + 1} (${session.length} actions)`;
+            select.appendChild(opt);
+        });
+    }
+
+    modal.style.display = 'block';
+}
+
+function closeRepeatModal() {
+    document.getElementById('repeat-modal').style.display = 'none';
+}
+
+function startRepeat() {
+    const sessionIndex = document.getElementById('repeat-session-select').value;
+    const speed = parseFloat(document.getElementById('repeat-speed-select').value);
+
+    if (sessionIndex === '' || recordingSessions.length === 0) return;
+
+    const selectedSession = recordingSessions[sessionIndex];
+    playRecording(selectedSession, speed);
+
+    closeRepeatModal();
+}
+
+
+
+// --- STATE MANAGEMENT ---
+let isRepeating = false;
+let repeatTimeoutId = null; // To hold the timeout ID for cancellation
+
+// --- MODAL & CONTROLS ---
+
+// Close Repeat Modal
+function closeRepeatModal() {
+    stopRepeat(); // Ensure playback stops when closing the modal
+    document.getElementById("repeat-modal").style.display = "none";
+}
+
+// Start Repeat from modal
+function startRepeat() {
+    // First, stop any currently running repeat
+    stopRepeat();
+
+    const sessionIndex = document.getElementById("repeat-session-select").value;
+    const speed = parseFloat(document.getElementById("repeat-speed-select").value);
+
+    if (sessionIndex === "" || !recordingSessions[sessionIndex]) {
+        alert("Please select a valid recording session.");
+        return;
+    }
+
+    closeRepeatModal();
+
+    isRepeating = true;
+    playRecording(recordingSessions[sessionIndex], speed, true);
+}
+
+// NEW: Function to stop the repeat
+function stopRepeat() {
+    isRepeating = false;
+    if (repeatTimeoutId) {
+        clearTimeout(repeatTimeoutId);
+        repeatTimeoutId = null;
+    }
+}
+
+
+// --- REFACTORED PLAYBACK LOGIC ---
+
+// Playback logic is now sequential and stoppable
+function playRecording(session, speed = 1, repeat = false) {
+    if (!session || !session.keystrokes || session.keystrokes.length === 0) return;
+
+    let keystrokeIndex = 0;
+
+    function playNextKeystroke() {
+        // Stop conditions
+        if (!isRepeating || keystrokeIndex >= session.keystrokes.length) {
+            // If it's the end and 'repeat' is true, loop the whole function
+            if (isRepeating && repeat && keystrokeIndex >= session.keystrokes.length) {
+                repeatTimeoutId = setTimeout(() => playRecording(session, speed, true), 500); // 500ms pause before repeating
+            }
+            return;
+        }
+
+        const action = session.keystrokes[keystrokeIndex];
+        
+        // Calculate delay from the previous keystroke
+        const baseTime = (keystrokeIndex > 0) ? timeToMs(session.keystrokes[keystrokeIndex - 1].time) : timeToMs(action.time);
+        const actionTime = timeToMs(action.time);
+        const delay = (actionTime - baseTime) / speed;
+
+        repeatTimeoutId = setTimeout(() => {
+            // Re-check in case stop was pressed during the delay
+            if (!isRepeating) return;
+
+            // Get the live editor and cursor position *just before* inserting
+            let activeEditor = getActiveEditor();
+            let cursorPos = activeEditor.getCursor();
+
+            // Insert character at the live cursor position
+            activeEditor.replaceRange(action.char, cursorPos);
+
+            // Move to the next keystroke
+            keystrokeIndex++;
+            playNextKeystroke();
+
+        }, delay);
+    }
+
+    playNextKeystroke(); // Start the playback chain
+}
+
+
+function timeToMs(timeStr) {
+    const [h, m, s] = timeStr.split(":").map(Number);
+    return ((h * 3600) + (m * 60) + s) * 1000;
+}
+
+            </script>
+
+            <!-- Fullscreen Live Preview Overlay -->
+            <div id="pf-fullscreen-overlay" class="pf-fullscreen-overlay">
+                <div class="pf-fullscreen-header">
+                    <div class="pf-fullscreen-header-title">
+                        <span>📱 Live Output</span>
+                        <span class="pf-live-badge">RUNNING</span>
+                    </div>
+                    <div class="pf-fullscreen-header-actions">
+                        <label class="pf-output-voice"><input type="checkbox" data-output-voice onchange="window.PlaygroundFeatures.setOutputSpeech(this.checked)"> Output speech</label>
+                        <button class="pf-fullscreen-action-btn" onclick="window.PlaygroundFeatures.toggleFullscreenPreview()" title="Refresh preview">
+                            🔄 Refresh
+                        </button>
+                        <button class="pf-fullscreen-action-btn pf-edit-code-btn" onclick="window.PlaygroundFeatures.closeFullscreenPreview()" title="View & Edit HTML/CSS/JS">
+                            💻 View / Edit Code
+                        </button>
+                        <button class="pf-fullscreen-close-btn" onclick="window.PlaygroundFeatures.closeFullscreenPreview()">
+                            ✕ Exit (Esc)
+                        </button>
+                    </div>
+                </div>
+                <div class="pf-fullscreen-body">
+                    <iframe id="pf-fullscreen-iframe"></iframe>
+                </div>
+            </div>
+
+            <!-- Sample Codes Modal -->
+            <div id="pf-samples-modal" class="pf-modal-backdrop">
+                <div class="pf-modal-card" style="max-width: 720px;">
+                    <div class="pf-modal-header">
+                        <h3 class="pf-modal-title">📚 Sample Codes Library</h3>
+                        <button class="pf-modal-close-btn" onclick="window.PlaygroundFeatures.closeModal('pf-samples-modal')">✕</button>
+                    </div>
+                    <div class="pf-modal-body">
+                        <p style="color: #94a3b8; font-size: 13px; margin: 0 0 10px;">Select any interactive sample project to load directly into the editor:</p>
+                        <div class="pf-samples-grid" id="pf-samples-grid"></div>
+                    </div>
+                    <div class="pf-modal-footer">
+                        <span style="font-size: 12px; color: #94a3b8;">Click any project to load into editor</span>
+                        <button class="pf-btn pf-btn-samples" onclick="window.PlaygroundFeatures.closeModal('pf-samples-modal')">Close</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Permalink & QR Code Share Modal -->
+            <div id="pf-share-modal" class="pf-modal-backdrop">
+                <div class="pf-modal-card pf-share-card" style="max-width: 540px;">
+                    <div class="pf-modal-header">
+                        <h3 class="pf-modal-title">🔗 Share Code & Mobile QR</h3>
+                        <button class="pf-modal-close-btn" onclick="window.PlaygroundFeatures.closeModal('pf-share-modal')">✕</button>
+                    </div>
+                    <div class="pf-modal-body">
+                        <div class="pf-share-container">
+                            <!-- Scan Target Selector for Mobile Phones -->
+                            <div class="pf-share-host-picker">
+                                <label style="font-size: 11px; color: #94a3b8; font-weight: 600; text-transform: uppercase;">1. Choose Target Network:</label>
+                                <div class="pf-host-options">
+                                    <button class="pf-host-btn" id="pf-host-cloud" onclick="window.PlaygroundFeatures.setShareHost('cloud')" title="Works anywhere on any phone worldwide (4G/5G/any Wi-Fi)">
+                                        🌐 Cloud Web (codestudio.pragament.com)
+                                    </button>
+                                    <button class="pf-host-btn active" id="pf-host-wifi" onclick="window.PlaygroundFeatures.setShareHost('wifi')" title="Use when phone and laptop are on the same Wi-Fi">
+                                        🏠 Same Wi-Fi (192.168.1.6)
+                                    </button>
+                                    <button class="pf-host-btn" id="pf-host-local" onclick="window.PlaygroundFeatures.setShareHost('local')" title="For laptop browser only">
+                                        💻 Localhost
+                                    </button>
+                                </div>
+
+                                <!-- Editable Cloud URL row -->
+                                <div class="pf-cloud-url-row" id="pf-cloud-url-row" style="display: none;">
+                                    <span style="font-size: 11px; color: #94a3b8;">Public URL:</span>
+                                    <input type="text" id="pf-cloud-url-input" class="pf-cloud-url-input" value="https://codestudio.pragament.com" placeholder="https://..." />
+                                    <button class="pf-cloud-url-save-btn" onclick="window.PlaygroundFeatures.updateCloudUrl()">Save URL</button>
+                                </div>
+
+                                <!-- Editable Wi-Fi IP row -->
+                                <div class="pf-wifi-ip-row" id="pf-wifi-ip-row" style="display: flex;">
+                                    <span style="font-size: 11px; color: #94a3b8;">Laptop Wi-Fi IP:</span>
+                                    <input type="text" id="pf-wifi-ip-input" class="pf-wifi-ip-input" value="192.168.1.6" placeholder="192.168.x.x" />
+                                    <button class="pf-wifi-ip-save-btn" onclick="window.PlaygroundFeatures.updateWifiIp()">Save IP</button>
+                                </div>
+                            </div>
+
+                            <!-- Output vs Editor View Selector -->
+                            <div class="pf-share-view-picker">
+                                <label style="font-size: 11px; color: #94a3b8; font-weight: 600; text-transform: uppercase;">2. When Scanned on Mobile, Open:</label>
+                                <div class="pf-view-options">
+                                    <button class="pf-view-btn active" id="pf-view-output" onclick="window.PlaygroundFeatures.setShareView('output')" title="Phone immediately shows live rendered output">
+                                        📱 Live Output Only (Recommended)
+                                    </button>
+                                    <button class="pf-view-btn" id="pf-view-editor" onclick="window.PlaygroundFeatures.setShareView('editor')" title="Phone opens code editor and preview">
+                                        💻 Full Playground (Code + Output)
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="pf-qr-box" id="pf-qr-container">
+                                <!-- QR code rendered here -->
+                            </div>
+
+                            <div class="pf-qr-actions" id="pf-qr-actions">
+                                <button class="pf-qr-action-btn" id="pf-qr-zoom-btn" onclick="window.PlaygroundFeatures.toggleZoomQr()" title="Enlarge QR code for effortless camera scanning">
+                                    🔍 Enlarge QR
+                                </button>
+                                <button class="pf-qr-action-btn" id="pf-qr-mode-btn" onclick="window.PlaygroundFeatures.toggleQrMode()" title="Switch to simple URL for ultra-fast camera scanning">
+                                    ⚡ Simple URL QR
+                                </button>
+                                <button class="pf-qr-action-btn" onclick="window.PlaygroundFeatures.downloadQrImage()" title="Save QR code image file">
+                                    💾 Save Image
+                                </button>
+                            </div>
+
+                            <!-- Contextual Instructions and Warnings -->
+                            <div class="pf-share-hints-box" id="pf-share-hint">
+                                <!-- Populated dynamically based on wifi vs cloud -->
+                            </div>
+
+                            <div class="pf-permalink-input-wrap">
+                                <input type="text" id="pf-permalink-input" class="pf-permalink-input" readonly>
+                                <button id="pf-copy-btn" class="pf-copy-btn" onclick="window.PlaygroundFeatures.copyPermalink()">
+                                    📋 Copy Link
+                                </button>
+                                <button id="pf-test-btn" class="pf-test-btn" onclick="window.PlaygroundFeatures.testPermalink()" title="Open this link in a new tab">
+                                    ↗️ Open
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pf-modal-footer">
+                        <span style="font-size: 12px; color: #94a3b8;">Full HTML/CSS/JS is stored in the URL permalink</span>
+                        <button class="pf-btn pf-btn-share" onclick="window.PlaygroundFeatures.closeModal('pf-share-modal')">Done</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fill in the Blanks Challenge Modal (Popup on refresh with multiple blanks) -->
+            <div id="pf-quiz-modal" class="pf-modal-backdrop">
+                <div class="pf-modal-card pf-quiz-card">
+                    <div class="pf-modal-header">
+                        <h3 class="pf-modal-title">
+                            🧩 Fill in the Blanks Challenge
+                        </h3>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+
+                            <button class="pf-modal-close-btn" onclick="window.PlaygroundFeatures.closeModal('pf-quiz-modal')" title="Close quiz">✕</button>
+                        </div>
+                    </div>
+                    <div class="pf-modal-body">
+                        <details class="pf-quiz-filters" open>
+                            <summary>Filters</summary>
+                            <div class="pf-quiz-filter-grid">
+                                <label>Category<select id="pf-filter-category"></select></label>
+                                <label>Class<select id="pf-filter-classLevels"></select></label>
+                                <label>Subject<select id="pf-filter-subject"></select></label>
+                                <label>Difficulty<select id="pf-filter-difficulty"></select></label>
+                            </div>
+                            <details><summary>Exclude questions by prerequisite</summary>
+                                <div id="pf-quiz-prerequisites"></div>
+                                <button class="pf-btn pf-btn-samples" onclick="window.PlaygroundFeatures.clearQuizExclusions()">Clear exclusions</button>
+                            </details>
+                        </details>
+                        <div class="pf-quiz-meta" id="pf-quiz-meta"></div>
+                        <div class="pf-quiz-title" id="pf-quiz-title">
+                            <span id="pf-quiz-title-text">Challenge</span>
+                        </div>
+
+                        <p id="pf-quiz-description"></p>
+                        <div class="pf-quiz-sentence-box" id="pf-quiz-sentence">
+                            <!-- Inline question with multiple blanks rendered here -->
+                        </div>
+
+                        <button id="pf-quiz-show-hints" class="pf-btn pf-btn-samples" data-quiz-needs-question aria-expanded="false" aria-controls="pf-quiz-word-bank-wrap" onclick="window.PlaygroundFeatures.showQuizHints()">Show Hints</button>
+                        <div id="pf-quiz-word-bank-wrap" class="pf-word-bank-wrap" hidden>
+                            <span class="pf-word-bank-label">Word Bank:</span>
+                            <div id="pf-quiz-word-bank" style="display: inline-flex; flex-wrap: wrap; gap: 6px;"></div>
+                        </div>
+
+                        <div id="pf-quiz-feedback" class="pf-quiz-feedback"></div>
+
+
+                    </div>
+                    <div class="pf-modal-footer">
+                        <div class="pf-quiz-nav">
+                            <button class="pf-btn pf-btn-samples" style="padding: 5px 10px !important; font-size: 12px !important;" id="pf-quiz-prev" data-quiz-needs-question onclick="window.PlaygroundFeatures.prevQuizQuestion()">⏮️ Prev</button>
+                            <div class="pf-quiz-dots" id="pf-quiz-dots"></div>
+                            <button class="pf-btn pf-btn-samples" style="padding: 5px 10px !important; font-size: 12px !important;" id="pf-quiz-next" data-quiz-needs-question onclick="window.PlaygroundFeatures.nextQuizQuestion()">Next ⏭️</button>
+                        </div>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+
+                            <button class="pf-btn pf-btn-samples" data-quiz-needs-question onclick="window.PlaygroundFeatures.showQuizAnswers()">Show Answer</button>
+                            <button class="pf-btn pf-btn-quiz" data-quiz-needs-question onclick="window.PlaygroundFeatures.checkQuizAnswers()">
+                                ✓ Check Answers
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Playground Features Script -->
+            <script src="playground-features.js"></script>
+        </body>
+    </html>
